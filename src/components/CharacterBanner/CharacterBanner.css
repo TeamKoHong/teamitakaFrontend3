@@ -1,0 +1,10 @@
+.character-banner {
+  padding: 0;
+  margin: 16px 16px 0 16px;
+}
+
+.banner-image {
+  width: 100%;
+  border-radius: 12px;
+  display: block;
+}

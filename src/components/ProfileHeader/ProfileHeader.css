@@ -1,0 +1,121 @@
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #F5F5F5;
+  padding: 16px;
+  border-bottom: 1px solid #F5F5F5;
+}
+
+.profile-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* 프로필 이미지 감싸는 div */
+.avatar-wrapper {
+  position: relative;
+  width: 111px;
+  height: 111px;
+  flex-shrink: 0;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  background-color: #eee;
+  object-fit: cover;
+}
+
+/* 인증 뱃지 위치 */
+.verified-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 42px;
+  height: 42px;
+}
+
+/* 텍스트 그룹 */
+.profile-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* 제목 */
+.profile-title {
+  margin: 0;
+  color: var(--black, #140805);
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: capitalize;
+}
+
+/* 대학교명 라인 */
+.profile-sub {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--grey-3, #807C7C);
+  text-align: justify;
+  font-family: Pretendard;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: capitalize;
+}
+
+.univ-icon {
+  width: 13px;
+  height: 10px;
+}
+
+.profile-project-bold {
+  margin: 0;
+  color: var(--black, #140805);
+  font-family: Pretendard;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  text-transform: capitalize;
+}
+
+.profile-project-light {
+  margin: 0;
+  color: var(--grey-4, #403E3E);
+  font-family: Pretendard;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: capitalize;
+}
+
+.profile-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px 0 24px;
+}
+
+.title-text {
+  font-family: 'KIMM_Bold', 'Pretendard', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #F76241;
+}
+
+.setting-icon {
+  width: 23px;
+  height: 24px;
+  flex-shrink: 0;
+}

@@ -1,0 +1,335 @@
+{
+  "project": {
+    "name": "TeamitakaFrontend2 → Capacitor Migration & Design Sync",
+    "version": "1.0.0",
+    "created": "2026-01-31",
+    "description": "Frontend2의 디자인/기능을 Frontend3 Capacitor 환경에 통합하는 마이그레이션 계획"
+  },
+  "context": {
+    "source": {
+      "path": "/Users/_woo_s.j/Desktop/woo/workspace/teamitakaFrontend2",
+      "type": "web-only",
+      "strengths": ["상세 문서화", "안정적 기능", "테스트 커버리지"]
+    },
+    "target": {
+      "path": "/Users/_woo_s.j/Desktop/woo/workspace/teamitakaFrontend3",
+      "type": "capacitor-hybrid",
+      "strengths": ["네이티브 지원", "haptic feedback", "SafeArea 처리"]
+    }
+  },
+  "phases": [
+    {
+      "id": "phase-1",
+      "name": "디자인 분석 및 비교",
+      "type": "parallel",
+      "priority": "high",
+      "estimated_duration": "2-3시간",
+      "tasks": [
+        {
+          "id": "1.1",
+          "name": "컴포넌트 스타일 비교",
+          "description": "두 프로젝트의 공통 컴포넌트 CSS/SCSS 차이점 분석",
+          "command": "diff -r Frontend2/src/components/Common Frontend3/src/components/Common --exclude=node_modules",
+          "files": [
+            "src/components/Common/Button/",
+            "src/components/Common/BottomNav/",
+            "src/components/Common/DesignSystem/"
+          ],
+          "output": "design-diff-report.md",
+          "can_parallel": true
+        },
+        {
+          "id": "1.2",
+          "name": "글로벌 스타일 비교",
+          "description": "전역 CSS 변수, 색상, 타이포그래피 차이점",
+          "files": [
+            "src/styles/_variables.scss",
+            "src/styles/global.css",
+            "tailwind.config.js"
+          ],
+          "output": "global-styles-diff.md",
+          "can_parallel": true
+        },
+        {
+          "id": "1.3",
+          "name": "페이지 레이아웃 비교",
+          "description": "주요 페이지 구조 및 레이아웃 차이점",
+          "files": [
+            "src/pages/",
+            "src/App.js"
+          ],
+          "output": "layout-diff-report.md",
+          "can_parallel": true
+        }
+      ]
+    },
+    {
+      "id": "phase-2",
+      "name": "Frontend2 → Frontend3 코드 동기화",
+      "type": "sequential",
+      "priority": "high",
+      "estimated_duration": "4-6시간",
+      "depends_on": ["phase-1"],
+      "tasks": [
+        {
+          "id": "2.1",
+          "name": "신규 컴포넌트 복사",
+          "description": "Frontend2에만 있는 컴포넌트를 Frontend3로 복사",
+          "action": "copy",
+          "source_files": [
+            "Frontend2/src/components/Common/*",
+            "Frontend2/src/components/UI/*"
+          ],
+          "strategy": "merge-preserve-native",
+          "preserve": ["NativeButton", "NativeHeader", "CollapsibleHeader", "PageTransition", "PullToRefresh"]
+        },
+        {
+          "id": "2.2",
+          "name": "스타일 병합",
+          "description": "Frontend2의 스타일을 Frontend3에 병합 (네이티브 스타일 유지)",
+          "action": "merge",
+          "files": [
+            "_variables.scss",
+            "global.css"
+          ],
+          "strategy": "append-with-prefix"
+        },
+        {
+          "id": "2.3",
+          "name": "페이지 컴포넌트 업데이트",
+          "description": "Frontend2의 페이지 로직을 Frontend3에 반영",
+          "action": "update",
+          "files": ["src/pages/**/*.js"],
+          "strategy": "selective-merge"
+        },
+        {
+          "id": "2.4",
+          "name": "API 서비스 동기화",
+          "description": "API 클라이언트 및 서비스 코드 동기화",
+          "action": "sync",
+          "files": [
+            "src/api/**/*",
+            "src/services/**/*"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "phase-3",
+      "name": "Capacitor 네이티브 통합",
+      "type": "parallel",
+      "priority": "high",
+      "estimated_duration": "3-4시간",
+      "depends_on": ["phase-2"],
+      "tasks": [
+        {
+          "id": "3.1",
+          "name": "SafeArea 적용",
+          "description": "모든 페이지에 SafeArea 지원 추가",
+          "components": ["DefaultHeader", "BottomNav", "모든 페이지 컨테이너"],
+          "css_variables": [
+            "--safe-area-inset-top",
+            "--safe-area-inset-bottom",
+            "--safe-area-inset-left",
+            "--safe-area-inset-right"
+          ],
+          "can_parallel": true
+        },
+        {
+          "id": "3.2",
+          "name": "Haptic Feedback 통합",
+          "description": "주요 인터랙션에 햅틱 피드백 추가",
+          "target_components": ["Button", "BottomNav", "모달 버튼"],
+          "hook": "useNativeApp.js",
+          "can_parallel": true
+        },
+        {
+          "id": "3.3",
+          "name": "키보드 처리",
+          "description": "입력 폼에 네이티브 키보드 처리 추가",
+          "target_pages": ["로그인", "회원가입", "채팅", "검색"],
+          "css_variable": "--keyboard-height",
+          "can_parallel": true
+        },
+        {
+          "id": "3.4",
+          "name": "푸시 알림 설정",
+          "description": "Push Notifications 권한 및 핸들러 설정",
+          "config": "capacitor.config.ts",
+          "permissions": ["ios", "android"],
+          "can_parallel": true
+        }
+      ]
+    },
+    {
+      "id": "phase-4",
+      "name": "빌드 및 테스트",
+      "type": "sequential",
+      "priority": "critical",
+      "estimated_duration": "2-3시간",
+      "depends_on": ["phase-3"],
+      "tasks": [
+        {
+          "id": "4.1",
+          "name": "웹 빌드 검증",
+          "command": "npm run build",
+          "success_criteria": "빌드 에러 없음"
+        },
+        {
+          "id": "4.2",
+          "name": "Capacitor 동기화",
+          "command": "npx cap sync",
+          "success_criteria": "iOS/Android 프로젝트 동기화 완료"
+        },
+        {
+          "id": "4.3",
+          "name": "iOS 빌드",
+          "command": "npx cap open ios && xcodebuild",
+          "success_criteria": "시뮬레이터에서 실행 가능"
+        },
+        {
+          "id": "4.4",
+          "name": "Android 빌드",
+          "command": "npx cap open android && ./gradlew build",
+          "success_criteria": "에뮬레이터에서 실행 가능"
+        },
+        {
+          "id": "4.5",
+          "name": "E2E 테스트",
+          "command": "npm run test:e2e",
+          "success_criteria": "모든 테스트 통과"
+        }
+      ]
+    },
+    {
+      "id": "phase-5",
+      "name": "문서화 및 정리",
+      "type": "parallel",
+      "priority": "medium",
+      "estimated_duration": "1-2시간",
+      "depends_on": ["phase-4"],
+      "tasks": [
+        {
+          "id": "5.1",
+          "name": "README 업데이트",
+          "file": "README.md",
+          "sections": ["설치 방법", "Capacitor 명령어", "네이티브 빌드 가이드"],
+          "can_parallel": true
+        },
+        {
+          "id": "5.2",
+          "name": "마이그레이션 완료 보고서",
+          "file": "MIGRATION_REPORT.md",
+          "content": ["변경 사항", "신규 기능", "알려진 이슈"],
+          "can_parallel": true
+        },
+        {
+          "id": "5.3",
+          "name": "불필요한 파일 정리",
+          "action": "cleanup",
+          "targets": ["중복 파일", "사용하지 않는 의존성", "임시 파일"],
+          "can_parallel": true
+        }
+      ]
+    }
+  ],
+  "execution_order": {
+    "parallel_groups": [
+      {
+        "group": 1,
+        "tasks": ["1.1", "1.2", "1.3"],
+        "description": "디자인 분석 (동시 실행)"
+      },
+      {
+        "group": 2,
+        "tasks": ["3.1", "3.2", "3.3", "3.4"],
+        "description": "Capacitor 통합 (동시 실행)"
+      },
+      {
+        "group": 3,
+        "tasks": ["5.1", "5.2", "5.3"],
+        "description": "문서화 (동시 실행)"
+      }
+    ],
+    "sequential_chain": [
+      "phase-1 (병렬)",
+      "phase-2 (순차)",
+      "phase-3 (병렬)",
+      "phase-4 (순차)",
+      "phase-5 (병렬)"
+    ]
+  },
+  "resources": {
+    "capacitor_plugins": [
+      "@capacitor/core",
+      "@capacitor/ios",
+      "@capacitor/android",
+      "@capacitor/app",
+      "@capacitor/haptics",
+      "@capacitor/keyboard",
+      "@capacitor/push-notifications",
+      "@capacitor/splash-screen",
+      "@capacitor/status-bar"
+    ],
+    "native_components": [
+      "NativeButton",
+      "NativeHeader",
+      "CollapsibleHeader",
+      "PageTransition",
+      "PullToRefresh"
+    ],
+    "hooks": [
+      "useNativeApp"
+    ]
+  },
+  "risk_assessment": {
+    "high_risk": [
+      {
+        "risk": "스타일 충돌",
+        "mitigation": "Tailwind prefix 사용, CSS Module 유지",
+        "fallback": "기존 Frontend3 스타일 유지"
+      }
+    ],
+    "medium_risk": [
+      {
+        "risk": "API 버전 불일치",
+        "mitigation": "API 엔드포인트 비교 후 최신 버전 사용"
+      },
+      {
+        "risk": "의존성 충돌",
+        "mitigation": "package.json 병합 시 버전 검토"
+      }
+    ],
+    "low_risk": [
+      {
+        "risk": "문서 불일치",
+        "mitigation": "마이그레이션 완료 후 문서 통합"
+      }
+    ]
+  },
+  "success_criteria": {
+    "functional": [
+      "모든 기존 기능 정상 동작",
+      "네이티브 앱 빌드 성공",
+      "E2E 테스트 100% 통과"
+    ],
+    "performance": [
+      "앱 시작 시간 < 3초",
+      "페이지 전환 < 300ms",
+      "메모리 사용량 안정적"
+    ],
+    "ux": [
+      "SafeArea 정상 적용",
+      "Haptic feedback 동작",
+      "키보드 인터랙션 자연스러움"
+    ]
+  },
+  "commands": {
+    "start_migration": "cd Frontend3 && npm run cap:build",
+    "sync_capacitor": "npx cap sync",
+    "open_ios": "npx cap open ios",
+    "open_android": "npx cap open android",
+    "run_tests": "npm run test:e2e",
+    "build_production": "npm run build && npx cap sync"
+  }
+}
