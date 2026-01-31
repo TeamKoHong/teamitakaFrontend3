@@ -2,9 +2,11 @@ import './ProfileHeader.css';
 import settingIcon from '../../assets/setting.png';
 import defaultProfile from '../../assets/profile_default.png';
 import verifiedBadge from '../../assets/university_verified.png';
+import { useNativeApp } from '../../hooks/useNativeApp';
 
 // 부모 컴포넌트에서 userData와 isVerified를 넘겨준다고 가정합니다.
-export default function ProfileHeader({ userData, isVerified }) {
+export default function ProfileHeader({ userData, isVerified, onSettingClick }) {
+  const { hapticFeedback } = useNativeApp();
 
   // 데이터가 없을 때를 대비한 기본값 설정 (ProfileMainPage와 동일한 로직)
   const university = userData?.university || '대학교 미인증';
@@ -14,12 +16,25 @@ export default function ProfileHeader({ userData, isVerified }) {
   // 프로필이 비어있는지 확인 (이름, 학교 등이 없는 경우)
   const isProfileEmpty = !userData?.university && !userData?.major;
 
+  const handleSettingClick = () => {
+    hapticFeedback('light');
+    onSettingClick?.();
+  };
+
   return (
     <>
       {/* 상단 제목 + 설정 아이콘 영역 */}
       <div className="profile-header-top">
         <span className="title-text">티미타카</span>
-        <img src={settingIcon} alt="설정 아이콘" className="setting-icon" />
+        <img
+          src={settingIcon}
+          alt="설정 아이콘"
+          className="setting-icon"
+          onClick={handleSettingClick}
+          role="button"
+          tabIndex={0}
+          style={{ cursor: 'pointer' }}
+        />
       </div>
 
       {/* 프로필 카드 */}

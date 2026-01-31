@@ -1,6 +1,9 @@
 .character-banner {
   padding: 0;
   margin: 16px 16px 0 16px;
+  /* iOS SafeArea 수평 지원 */
+  margin-left: calc(16px + env(safe-area-inset-left, 0px));
+  margin-right: calc(16px + env(safe-area-inset-right, 0px));
 }
 
 .banner-image {
