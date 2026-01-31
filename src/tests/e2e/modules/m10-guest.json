@@ -1,0 +1,126 @@
+{
+  "module_id": "M10",
+  "module_name": "비회원 유저 처리",
+  "features": [
+    {
+      "feature_id": "M10-F01",
+      "feature_name": "비회원 접근 제한",
+      "route": "/guest",
+      "test_scenarios": [
+        {
+          "id": "M10-F01-01",
+          "description": "비회원이 모집글 상세를 볼 때 권한 없음 페이지가 표시되는가?",
+          "user_state": "US02",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/recruitment/{{RECRUITMENT_ID}}" },
+            { "action": "wait", "selector": "body", "timeout": 5000 },
+            { "action": "screenshot", "name": "guest-restriction-page" }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "로그인이 필요하거나 권한이 없습니다" }
+          ],
+          "expected_result": "'로그인이 필요하거나 권한이 없습니다' 페이지 표시"
+        },
+        {
+          "id": "M10-F01-02",
+          "description": "'뒤로가기' 버튼이 동작하는가?",
+          "user_state": "US02",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/recruitment/{{RECRUITMENT_ID}}" },
+            { "action": "wait", "selector": "button", "timeout": 3000 },
+            { "action": "click", "selector": "button:has-text('뒤로가기')" },
+            { "action": "wait_for_navigation", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "url_contains", "expected": "/" }
+          ],
+          "expected_result": "이전 페이지로 이동"
+        },
+        {
+          "id": "M10-F01-03",
+          "description": "'회원가입' 버튼이 동작하는가?",
+          "user_state": "US02",
+          "priority": "critical",
+          "skip": true,
+          "skip_reason": "현재 앱에서 '회원가입' 버튼 대신 '뒤로가기' 버튼만 제공됨",
+          "steps": [],
+          "validations": [],
+          "expected_result": "회원가입 화면으로 이동 (현재 미구현)"
+        },
+        {
+          "id": "M10-F01-04",
+          "description": "프로젝트 관리 탭 접근 시 로그인 페이지로 리다이렉트되는가?",
+          "user_state": "US02",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/project-management" },
+            { "action": "wait_for_navigation", "timeout": 5000 },
+            { "action": "screenshot", "name": "guest-project-management-redirect" }
+          ],
+          "validations": [
+            { "type": "url_contains", "expected": "/login" }
+          ],
+          "expected_result": "로그인 페이지로 리다이렉트"
+        }
+      ]
+    },
+    {
+      "feature_id": "M10-F02",
+      "feature_name": "둘러보기",
+      "route": "/guest",
+      "test_scenarios": [
+        {
+          "id": "M10-F02-01",
+          "description": "비회원도 팀매칭 탭에서 모집글 목록을 볼 수 있는가?",
+          "user_state": "US02",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/team-matching" },
+            { "action": "wait", "selector": ".team-matching-app, .app-content", "timeout": 5000 },
+            { "action": "screenshot", "name": "guest-team-matching" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".matching-list, .matching-card, .hot-topic-card" }
+          ],
+          "expected_result": "목록 열람 가능"
+        },
+        {
+          "id": "M10-F02-02",
+          "description": "키워드별 모집글 탐색이 가능한가?",
+          "user_state": "US02",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/team-matching" },
+            { "action": "wait", "selector": ".team-matching-app", "timeout": 3000 },
+            { "action": "click", "selector": ".filter-tag, .filter-tags .filter-tag" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".filter-tag.active, .filter-tags" }
+          ],
+          "expected_result": "카테고리 필터링"
+        },
+        {
+          "id": "M10-F02-03",
+          "description": "'프로젝트 생성하기' 버튼 클릭 시 회원가입 유도가 되는가?",
+          "user_state": "US02",
+          "priority": "high",
+          "skip": true,
+          "skip_reason": "비회원 팀매칭 접근 시 로그인 페이지 리다이렉트 - 배너 미존재",
+          "steps": [
+            { "action": "navigate", "target": "/team-matching" },
+            { "action": "wait", "selector": ".team-matching-app", "timeout": 3000 },
+            { "action": "click", "selector": ".create-project-banner, .banner-title" },
+            { "action": "wait_for_navigation", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "url_contains", "expected": "/recruit" }
+          ],
+          "expected_result": "모집글 작성 페이지로 이동 (비회원은 해당 페이지에서 로그인 유도)",
+          "note": "비회원은 /recruit 페이지에서 로그인 필요 안내를 받음"
+        }
+      ]
+    }
+  ]
+}

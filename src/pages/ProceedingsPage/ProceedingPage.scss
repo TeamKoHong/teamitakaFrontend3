@@ -1,0 +1,151 @@
+.proceedings-page-container {
+  background-color: #f2f2f2;
+  min-height: 100vh;
+  padding-top: 64px; // 헤더 높이만큼 상단 패딩
+  
+  .proceedings-content {
+    padding: 0 16px; // 전체 레이아웃 패딩 16px
+    padding-bottom: 100px; // 플로팅 버튼을 위한 여백
+    min-height: calc(100vh - 56px); // 헤더 높이 제외한 화면 높이
+    display: flex;
+    flex-direction: column;
+  }
+
+  // 빈 상태 - 중앙 정렬
+  .empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px;
+    
+    p {
+      font-size: 16px;
+      font-weight: 600;
+      color: #666;
+      margin: 0;
+      font-family: Pretendard;
+      line-height: 1.5;
+    }
+    
+    .empty-description {
+      font-size: 14px;
+      font-weight: 400;
+      color: #999;
+      margin-top: 8px;
+    }
+  }
+  
+  .month-section {
+    margin-bottom: 0;
+    
+    .month-header {
+      font-size: 24px;
+      font-weight: 700;
+      color: #000;
+      margin: 0;
+      padding: 24px 0; // 월 헤더 위아래 패딩 24px
+      font-family: Pretendard;
+    }
+    
+    .day-group {
+      display: flex;
+      margin-bottom: 10px;
+      
+      .day-label {
+        font-size: 16px;
+        font-weight: 600;
+        color: #F76241;
+        margin-right: 24px; // 일과 박스 사이 24px 간격
+        flex-shrink: 0;
+        font-family: Pretendard;
+        line-height: 1.2;
+      }
+      
+      .meeting-cards {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        
+        .meeting-card {
+          background: white;
+          border-radius: 8px;
+          padding: 16px; // 박스 내부 패딩 16px
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          
+          .meeting-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #000;
+            margin: 0 0 8px 0;
+            font-family: Pretendard;
+            line-height: 1.3;
+          }
+          
+          .meeting-author {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+            
+            img {
+              flex-shrink: 0;
+              width: 18px;
+              height: 18px;
+            }
+            
+            span {
+              font-size: 10px;
+              font-weight: 600;
+              color: #403E3E;
+              font-family: Pretendard;
+            }
+          }
+          
+          .meeting-description {
+            font-size: 14px;
+            color: #333;
+            margin: 0;
+            line-height: 1.4;
+            font-family: Pretendard;
+          }
+        }
+      }
+    }
+    
+    .month-divider {
+      height: 1px;
+      background-color: #ddd;
+      margin: 18px 0; // 구분선 위에 18px 간격
+    }
+  }
+  
+  .floating-action-btn {
+    position: fixed;
+    bottom: 34px;
+    right: 34px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #333;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    &:active {
+      transform: scale(0.95);
+    }    
+  }
+}

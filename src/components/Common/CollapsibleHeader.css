@@ -1,0 +1,62 @@
+.collapsible-container {
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.collapsible-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #F2F2F7;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  transition: background 0.2s ease;
+}
+
+.collapsible-header.collapsed {
+  background: rgba(242, 242, 247, 0.9);
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+}
+
+.collapsible-header__small {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 16px;
+  position: relative;
+}
+
+.collapsible-header__small-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #000000;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.collapsible-header__right {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.collapsible-content {
+  padding: 0 16px;
+}
+
+.collapsible-header__large {
+  padding: 8px 0 16px;
+  will-change: transform, opacity;
+}
+
+.collapsible-header__large-title {
+  font-size: 34px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}

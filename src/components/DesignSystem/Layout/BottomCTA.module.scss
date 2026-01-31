@@ -1,0 +1,21 @@
+@use '../../../styles/variables' as *;
+
+.container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background: linear-gradient(to top, $background 80%, rgba(242, 242, 242, 0));
+    pointer-events: none; // Allow clicks through transparent part
+    z-index: 100;
+}
+
+.inner {
+    width: 100%;
+    max-width: 390px;
+    padding: 16px;
+    padding-bottom: 34px; // Safe area for iPhone X+
+    pointer-events: auto;
+}

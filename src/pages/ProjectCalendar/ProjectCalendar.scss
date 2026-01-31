@@ -1,0 +1,9 @@
+.project-calendar-page-container {
+  background: #f2f2f2;
+  min-height: 100vh;
+  padding-top: 64px; // DefaultHeader 높이만큼
+  
+  .calendar-container {
+    padding: 16px;
+  }
+}

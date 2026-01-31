@@ -1,0 +1,264 @@
+.container {
+    min-height: 100vh;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1;
+    padding: 67px 16px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.stepContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.description {
+    margin-top: 24px;
+    margin-bottom: 32px;
+
+    p {
+        color: #000;
+        font-family: Pretendard, sans-serif;
+        font-size: 24px;
+        font-weight: 600;
+        line-height: 36px;
+        margin: 0;
+    }
+}
+
+.subDescription {
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    color: #403e3e !important;
+    margin-top: 8px !important;
+}
+
+.formSection {
+    margin-bottom: 20px;
+}
+
+.label {
+    display: block;
+    color: #140805;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.input {
+    width: 100%;
+    height: 64px;
+    padding: 26px 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    color: #140805;
+    box-sizing: border-box;
+    outline: none;
+    transition: background-color 0.2s;
+
+    &::placeholder {
+        color: #807C7C;
+    }
+
+    &:focus {
+        background-color: #eeeeee;
+    }
+}
+
+.phoneRow {
+    display: flex;
+    gap: 8px;
+}
+
+.carrierSelect {
+    width: 120px;
+    height: 64px;
+    padding: 26px 12px;
+    border: none;
+    border-radius: 8px;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    color: #807C7C;
+    background-color: #f5f5f5;
+    cursor: pointer;
+    outline: none;
+
+    &:focus {
+        background-color: #eeeeee;
+    }
+}
+
+.phoneInput {
+    flex: 1;
+    height: 64px;
+    padding: 26px 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    color: #140805;
+    outline: none;
+
+    &::placeholder {
+        color: #807C7C;
+    }
+
+    &:focus {
+        background-color: #eeeeee;
+    }
+}
+
+.codeInputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.codeInput {
+    width: 100%;
+    height: 64px;
+    padding: 26px 16px;
+    padding-right: 70px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    color: #140805;
+    box-sizing: border-box;
+    outline: none;
+    letter-spacing: 2px;
+
+    &::placeholder {
+        color: #807C7C;
+        letter-spacing: normal;
+    }
+
+    &:focus {
+        background-color: #eeeeee;
+    }
+}
+
+.timer {
+    position: absolute;
+    right: 16px;
+    color: #F76241;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+
+    &.expired {
+        color: #807C7C;
+    }
+}
+
+.successMessage {
+    color: #12a76d;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.errorMessage {
+    color: #F76241;
+    font-family: Pretendard, sans-serif;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+.resendText {
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    color: #807C7C;
+    margin-top: 16px;
+}
+
+.resendButton {
+    background: none;
+    border: none;
+    color: #ff5252;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.bottomButton {
+    margin-top: auto;
+    padding-bottom: 32px;
+}
+
+// 결과 페이지 스타일
+.resultContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-top: 0;
+}
+
+.resultMessage {
+    text-align: left;
+    color: #000;
+    font-family: Pretendard, sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 36px;
+    margin-bottom: 40px;
+}
+
+.resultCard {
+    border: 1px solid #d1cccb;
+    border-radius: 8px;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.resultCardInner {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.resultRow {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.resultLabel {
+    color: #403e3e;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 36px;
+}
+
+.resultValue {
+    color: #333;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 36px;
+}

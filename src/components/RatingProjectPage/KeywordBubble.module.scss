@@ -1,0 +1,23 @@
+@use '../../styles/variables' as *;
+.bubble {
+  position: relative;
+  background: $white;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 12px 14px;
+  margin-top: 4px;
+}
+.bubble::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 18px;
+  width: 0; height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid $white;
+  filter: drop-shadow(0 -1px 0 rgba(0,0,0,0.06));
+}
+.list { margin: 0; padding-left: 18px; }
+.list li { margin: 6px 0; font-size: 14px; color: $gray-dark; line-height: 1.6; }
+

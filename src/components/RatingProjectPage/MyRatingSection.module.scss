@@ -1,0 +1,36 @@
+@use '../../styles/variables' as *;
+
+// Figma: MyRatingSection 스펙
+.section {
+	background: transparent;
+	border-radius: 0;
+	box-shadow: none;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+}
+
+// Figma: 16px, weight 600
+.title {
+	margin: 0 0 8px;
+	font-weight: 600;
+	font-size: 16px;
+	color: #000;
+	text-align: center;
+}
+
+// Figma: stars gap 4px
+.row {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+}
+
+// Figma: 15px, weight 600, color #F76241
+.score {
+	font-weight: 600;
+	color: #F76241;
+	font-size: 15px;
+	margin-left: 4px;
+}

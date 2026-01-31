@@ -1,0 +1,205 @@
+{
+  "request_title": "E2E 테스트를 위한 테스트 데이터 요청",
+  "version": "1.0.0",
+  "created_at": "2024-12-21",
+  "priority": "high",
+  "requester": "프론트엔드 팀",
+
+  "background": {
+    "context": "E2E 테스트 통과율 향상을 위해 테스트 데이터 필요",
+    "current_status": {
+      "total_tests": 46,
+      "passing": 36,
+      "failing": 8,
+      "skipped": 2,
+      "pass_rate": "78.3%"
+    },
+    "target_pass_rate": "90%+",
+    "blocking_issues": "테스트 데이터 부재로 인한 테스트 실패"
+  },
+
+  "requests": [
+    {
+      "id": "REQ-001",
+      "title": "만료된 모집공고 테스트 데이터",
+      "priority": "critical",
+      "priority_emoji": "🔴",
+      "affected_tests": ["M06-F06-01", "M06-F06-02", "M06-F06-03", "M06-F06-04"],
+      "current_issue": {
+        "description": "테스트에서 'expired-1' 문자열을 UUID로 사용하여 오류 발생",
+        "error": "invalid input syntax for type uuid: \"expired-1\""
+      },
+      "requested_solution": {
+        "option_a": {
+          "type": "API 엔드포인트",
+          "endpoint": "GET /api/test/expired-recruitment",
+          "response_format": {
+            "recruitment_id": "uuid-string",
+            "status": "expired",
+            "expired_at": "ISO8601 timestamp"
+          }
+        },
+        "option_b": {
+          "type": "테스트 데이터 시드",
+          "description": "테스트 DB에 만료된 모집공고 레코드 삽입",
+          "seed_script": "npm run seed:expired-recruitment"
+        }
+      },
+      "acceptance_criteria": [
+        "만료된 상태의 유효한 모집공고 UUID 반환",
+        "테스트 환경에서 접근 가능",
+        "프론트엔드에서 모집 종료 UI 표시 가능"
+      ]
+    },
+    {
+      "id": "REQ-002",
+      "title": "테스트 계정 알림 데이터",
+      "priority": "medium",
+      "priority_emoji": "🟡",
+      "affected_tests": ["M03-F01-01", "M03-F01-02"],
+      "current_issue": {
+        "description": "테스트 계정에 알림이 없어 빈 상태만 테스트됨"
+      },
+      "requested_solution": {
+        "test_account": "sjwoo1999@korea.ac.kr",
+        "notifications_to_create": [
+          {
+            "type": "application_received",
+            "title": "[테스트] 새로운 지원자",
+            "body": "테스트 프로젝트에 새로운 지원자가 있습니다.",
+            "created_at": "today"
+          },
+          {
+            "type": "team_matched",
+            "title": "[테스트] 팀 매칭 완료",
+            "body": "축하합니다! 팀 매칭이 완료되었습니다.",
+            "created_at": "yesterday"
+          },
+          {
+            "type": "deadline_reminder",
+            "title": "[테스트] 마감 임박",
+            "body": "프로젝트 마감이 3일 남았습니다.",
+            "created_at": "3 days ago"
+          }
+        ]
+      },
+      "acceptance_criteria": [
+        "알림 목록 API에서 알림 데이터 반환",
+        "날짜별 그룹화 가능 (오늘, 어제, N일 전)",
+        "테스트 환경에서 지속적으로 유지"
+      ]
+    },
+    {
+      "id": "REQ-003",
+      "title": "모집공고 지원자 데이터",
+      "priority": "medium",
+      "priority_emoji": "🟡",
+      "affected_tests": ["M06-F03-*", "M06-F04-*"],
+      "current_issue": {
+        "description": "테스트 모집공고에 지원자가 없어 지원자 관리 테스트 불가"
+      },
+      "requested_solution": {
+        "recruitment_id": "{{테스트 모집공고 ID}}",
+        "applicants_to_create": [
+          {
+            "status": "pending",
+            "profile": {
+              "name": "테스트 지원자1",
+              "school": "테스트대학교",
+              "major": "컴퓨터공학과"
+            }
+          },
+          {
+            "status": "accepted",
+            "profile": {
+              "name": "테스트 지원자2",
+              "school": "테스트대학교",
+              "major": "디자인학과"
+            }
+          },
+          {
+            "status": "rejected",
+            "profile": {
+              "name": "테스트 지원자3",
+              "school": "테스트대학교",
+              "major": "경영학과"
+            }
+          }
+        ]
+      },
+      "acceptance_criteria": [
+        "지원자 목록 API에서 데이터 반환",
+        "지원자 상세 정보 조회 가능",
+        "팀원 선정/거절 액션 가능"
+      ]
+    },
+    {
+      "id": "REQ-004",
+      "title": "지원 완료 프로젝트 데이터",
+      "priority": "medium",
+      "priority_emoji": "🟡",
+      "affected_tests": ["M06-F02-*"],
+      "current_issue": {
+        "description": "테스트 계정에서 지원한 프로젝트가 없어 지원 취소 테스트 불가"
+      },
+      "requested_solution": {
+        "test_account": "sjwoo1999@korea.ac.kr",
+        "applications_to_create": [
+          {
+            "recruitment_id": "{{모집공고 ID}}",
+            "status": "applied",
+            "applied_at": "recent",
+            "can_cancel": true
+          }
+        ]
+      },
+      "acceptance_criteria": [
+        "북마크/지원 내역 API에서 데이터 반환",
+        "지원 취소 액션 가능",
+        "취소 후 상태 변경 확인 가능"
+      ]
+    }
+  ],
+
+  "timeline_suggestion": {
+    "phase_1": {
+      "duration": "1-2일",
+      "items": ["REQ-001 (Critical)"],
+      "impact": "+4 테스트 통과"
+    },
+    "phase_2": {
+      "duration": "3-5일",
+      "items": ["REQ-002", "REQ-003", "REQ-004"],
+      "impact": "+6-8 테스트 통과"
+    }
+  },
+
+  "api_improvements": [
+    {
+      "id": "API-001",
+      "title": "UUID 유효성 검증 에러 처리 개선",
+      "priority": "low",
+      "priority_emoji": "🔵",
+      "issue": "잘못된 UUID 형식 입력 시 PostgreSQL 에러가 그대로 클라이언트에 노출",
+      "current_error": "invalid input syntax for type uuid: \"expired-1\"",
+      "suggested_fix": "400 Bad Request 응답과 사용자 친화적 에러 메시지 반환",
+      "example_response": {
+        "status": 400,
+        "error": "INVALID_UUID_FORMAT",
+        "message": "유효하지 않은 ID 형식입니다."
+      }
+    }
+  ],
+
+  "expected_impact": {
+    "current_pass_rate": "78.3% (36/46)",
+    "after_phase1": "87.0% (40/46)",
+    "after_phase2": "91%+ (42+/46)"
+  },
+
+  "contact": {
+    "frontend_lead": "프론트엔드 담당자",
+    "preferred_communication": "Slack #e2e-testing",
+    "response_requested_by": "테스트 완성을 위해 가능한 빨리"
+  }
+}

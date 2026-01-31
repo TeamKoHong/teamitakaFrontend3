@@ -1,0 +1,73 @@
+.consent-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.consent-section {
+    .consent-section-title {
+        color: #000;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 36px;
+        margin-bottom: 16px;
+    }
+}
+
+.consent-items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* 2단계(약관 상세) 카드 스타일 */
+.consent-sections {
+    .consent-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 24px 16px;
+        background-color: #F5F5F5;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        
+        .check-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 17px;
+            color: #807C7C;
+            flex-shrink: 0;
+            margin-right: 16px;
+        }
+        
+        span {
+            flex: 1;
+            font-size: 14px;
+            color: #807C7C;
+            font-weight: 500;
+        }
+        
+        .arrow-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 8px;
+            color: #807C7C;
+            flex-shrink: 0;
+        }
+        
+        &.checked {
+            background-color: #F76241;
+            
+            .check-icon,
+            span,
+            .arrow-icon {
+                color: #FFF;
+            }
+        }
+    }
+}
+
+

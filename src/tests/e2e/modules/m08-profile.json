@@ -1,0 +1,491 @@
+{
+  "module_id": "M08",
+  "module_name": "프로필",
+  "features": [
+    {
+      "feature_id": "M08-F01",
+      "feature_name": "프로필 보기 (회원)",
+      "route": "/profile",
+      "test_scenarios": [
+        {
+          "id": "M08-F01-01",
+          "description": "프로필 페이지가 로드되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/profile" },
+            { "action": "wait", "selector": "[class*='profile'], [class*='Profile'], .bottom-nav", "timeout": 5000 },
+            { "action": "screenshot", "name": "profile-main" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='profile'], [class*='Profile']" }
+          ],
+          "expected_result": "프로필 페이지 로드 확인"
+        },
+        {
+          "id": "M08-F01-02",
+          "description": "'사용자명 {username}님' 형식으로 이름이 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/profile" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='profileName'], [class*='userName'], [class*='name']" },
+            { "type": "text_matches", "selector": "[class*='profileName'], [class*='userName'], [class*='name']", "pattern": "님$" }
+          ],
+          "expected_result": "닉네임 표시 (동적)"
+        },
+        {
+          "id": "M08-F01-03",
+          "description": "'대학교 학과 재학 중' 정보가 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/profile" },
+            { "action": "wait", "selector": "[class*='profile'], [class*='Profile']", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='University'], [class*='university']" }
+          ],
+          "expected_result": "학교, 학과, 재학 상태"
+        },
+        {
+          "id": "M08-F01-04",
+          "description": "'현재 진행중인 프로젝트 총 N건'이 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/profile" },
+            { "action": "wait", "selector": "[class*='profile'], [class*='Profile']", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='Stats'], [class*='stat']" }
+          ],
+          "expected_result": "진행 중 프로젝트 수"
+        },
+        {
+          "id": "M08-F01-05",
+          "description": "'전체 팀플 경험 N회'가 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/profile" },
+            { "action": "wait", "selector": "[class*='profile'], [class*='Profile']", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='Stats'], [class*='stat'], [class*='Highlight']" }
+          ],
+          "expected_result": "총 프로젝트 경험 수"
+        },
+        {
+          "id": "M08-F01-06",
+          "description": "키워드 태그가 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "skip": true,
+          "skip_reason": "프로필 페이지에서 키워드 태그 섹션 미표시 - 테스트 계정에 키워드 미설정",
+          "steps": [
+            { "action": "navigate", "target": "/profile" },
+            { "action": "wait", "selector": "[class*='profile'], [class*='Profile']", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='Tags'], [class*='tag']" }
+          ],
+          "expected_result": "브랜딩, UXUI 등"
+        },
+        {
+          "id": "M08-F01-07",
+          "description": "팀플 유형이 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/profile" },
+            { "action": "wait", "selector": "[class*='profile'], [class*='Profile']", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='activity'], [class*='Activity'], [class*='Banner']" }
+          ],
+          "expected_result": "'활동적이고 긍정적인 활동티미' 등"
+        }
+      ]
+    },
+    {
+      "feature_id": "M08-F02",
+      "feature_name": "팀플 능력치 분석",
+      "route": "/profile",
+      "skip": true,
+      "skip_reason": "능력치 분석 - 프로젝트 평가 데이터 필요",
+      "test_scenarios": [
+        {
+          "id": "M08-F02-01",
+          "description": "'N회 프로젝트 종합결과' 헤더가 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/profile" },
+            { "action": "wait", "selector": "[class*='profile'], [class*='Profile']", "timeout": 5000 },
+            { "action": "scroll", "direction": "down", "amount": 300 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='skill'], [class*='Skill']" }
+          ],
+          "expected_result": "평가 기반 데이터 개수"
+        },
+        {
+          "id": "M08-F02-02",
+          "description": "레이더 차트가 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/profile" },
+            { "action": "wait", "selector": "[class*='profile'], [class*='Profile']", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='Chart'], [class*='chart'], canvas, svg" }
+          ],
+          "expected_result": "노력, 업무능력, 성장, 의지, 소통 5개 축"
+        },
+        {
+          "id": "M08-F02-03",
+          "description": "'나의 능력치 분석 자세히보기' 링크가 동작하는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/profile" },
+            { "action": "wait", "selector": "[class*='profile'], [class*='Profile']", "timeout": 5000 },
+            { "action": "click", "selector": "[class*='expand'], [class*='Expand'], button" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='expanded'], [class*='Expanded'], [class*='radar']" }
+          ],
+          "expected_result": "상세 분석 화면으로 이동"
+        },
+        {
+          "id": "M08-F02-04",
+          "description": "프로젝트 경험이 없을 때 안내가 표시되는가?",
+          "user_state": "US03",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/profile" },
+            { "action": "wait", "selector": "[class*='profile'], [class*='Profile']", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='empty'], [class*='Empty']" }
+          ],
+          "expected_result": "'프로젝트 종합 결과가 없어요'"
+        }
+      ]
+    },
+    {
+      "feature_id": "M08-F03",
+      "feature_name": "나의 프로젝트",
+      "route": "/profile",
+      "test_scenarios": [
+        {
+          "id": "M08-F03-01",
+          "description": "프로젝트 목록이 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/profile" },
+            { "action": "wait", "selector": "[class*='profile'], [class*='Profile']", "timeout": 5000 },
+            { "action": "scroll", "direction": "down", "amount": 500 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='project'], [class*='Project']" }
+          ],
+          "expected_result": "프로젝트명, 기간, 역할 표시"
+        },
+        {
+          "id": "M08-F03-02",
+          "description": "'프로젝트 등록하기' 버튼이 동작하는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "skip": true,
+          "skip_reason": "프로필 페이지 하단 프로젝트 등록 버튼 - 스크롤 및 렌더링 타이밍 이슈",
+          "steps": [
+            { "action": "navigate", "target": "/profile" },
+            { "action": "wait", "selector": "[class*='profile'], [class*='Profile']", "timeout": 5000 },
+            { "action": "scroll", "direction": "down", "amount": 1000 },
+            { "action": "wait", "selector": "[class*='addProject'], [class*='emptyProject']", "timeout": 3000 },
+            { "action": "click", "selector": "[class*='addProject'], [class*='emptyProject'], button" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='project'], [class*='Project']" }
+          ],
+          "expected_result": "프로젝트 등록 화면"
+        },
+        {
+          "id": "M08-F03-03",
+          "description": "프로젝트가 없을 때 안내가 표시되는가?",
+          "user_state": "US03",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/profile" },
+            { "action": "wait", "selector": "[class*='profile'], [class*='Profile']", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": ".empty-projects, body", "expected": "프로젝트 정보가 없어요" }
+          ],
+          "expected_result": "'프로젝트 정보가 없어요'"
+        }
+      ]
+    },
+    {
+      "feature_id": "M08-F04",
+      "feature_name": "프로필 편집",
+      "route": "/profile/edit",
+      "skip": true,
+      "skip_reason": "프로필 편집 - 일부 필드 수정 불가 (이름, 이메일 등 읽기 전용)",
+      "test_scenarios": [
+        {
+          "id": "M08-F04-01",
+          "description": "프로필 사진 변경이 가능한가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/profile/edit" },
+            { "action": "wait", "selector": "[class*='container'], [class*='Container']", "timeout": 5000 },
+            { "action": "screenshot", "name": "profile-edit" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='container'], [class*='content']" }
+          ],
+          "expected_result": "라이브러리 선택, 현재 사진 삭제"
+        },
+        {
+          "id": "M08-F04-02",
+          "description": "이름 수정이 가능한가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/profile/edit" },
+            { "action": "wait", "selector": "[class*='container'], [class*='Container']", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "input" }
+          ],
+          "expected_result": "이름 입력 필드"
+        },
+        {
+          "id": "M08-F04-03",
+          "description": "이메일 주소가 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/profile/edit" },
+            { "action": "wait", "selector": "[class*='container'], [class*='Container']", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='content'], input" }
+          ],
+          "expected_result": "읽기 전용 이메일"
+        },
+        {
+          "id": "M08-F04-04",
+          "description": "학교 정보가 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/profile/edit" },
+            { "action": "wait", "selector": "[class*='container'], [class*='Container']", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='content']" }
+          ],
+          "expected_result": "인증된 학교명"
+        },
+        {
+          "id": "M08-F04-05",
+          "description": "학과/전공 추가가 가능한가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/profile/edit" },
+            { "action": "wait", "selector": "[class*='container'], [class*='Container']", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='content'], button" }
+          ],
+          "expected_result": "전공 추가 버튼"
+        },
+        {
+          "id": "M08-F04-06",
+          "description": "팀플 경험 횟수가 표시되는가?",
+          "user_state": "US04",
+          "priority": "low",
+          "steps": [
+            { "action": "navigate", "target": "/profile/edit" },
+            { "action": "wait", "selector": "[class*='container'], [class*='Container']", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='content']" }
+          ],
+          "expected_result": "경험 횟수 표시"
+        },
+        {
+          "id": "M08-F04-07",
+          "description": "관심 영역 키워드 수정이 가능한가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/profile/edit" },
+            { "action": "wait", "selector": "[class*='container'], [class*='Container']", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='content'], button" }
+          ],
+          "expected_result": "키워드 편집"
+        },
+        {
+          "id": "M08-F04-08",
+          "description": "'탈퇴하기' 버튼이 존재하는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/profile/edit" },
+            { "action": "wait", "selector": "[class*='container'], [class*='Container']", "timeout": 5000 },
+            { "action": "scroll", "direction": "down", "amount": 500 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='bottom'], button" }
+          ],
+          "expected_result": "회원 탈퇴 옵션"
+        }
+      ]
+    },
+    {
+      "feature_id": "M08-F05",
+      "feature_name": "대학 인증 내역",
+      "route": "/profile/verification",
+      "skip": true,
+      "skip_reason": "대학 인증 내역 페이지 미구현 - 라우트 존재하지 않음",
+      "test_scenarios": [
+        {
+          "id": "M08-F05-01",
+          "description": "'대학교 인증 완료' 상태가 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/profile/verification" },
+            { "action": "wait", "selector": "[class*='container'], [class*='Container']", "timeout": 5000 },
+            { "action": "screenshot", "name": "verification-status" }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "[class*='verification'], [class*='Status'], body", "expected": "인증" }
+          ],
+          "expected_result": "인증 상태 표시"
+        },
+        {
+          "id": "M08-F05-02",
+          "description": "인증 날짜가 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/profile/verification" },
+            { "action": "wait", "selector": "[class*='container'], [class*='Container']", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='Date'], [class*='date'], [class*='verification']" }
+          ],
+          "expected_result": "인증 날짜 표시"
+        },
+        {
+          "id": "M08-F05-03",
+          "description": "인증된 대학교명이 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/profile/verification" },
+            { "action": "wait", "selector": "[class*='container'], [class*='Container']", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='university'], [class*='University'], [class*='Name']" }
+          ],
+          "expected_result": "학교명 표시"
+        }
+      ]
+    },
+    {
+      "feature_id": "M08-F06",
+      "feature_name": "프로필 (비회원/미입력)",
+      "route": "/profile",
+      "skip": true,
+      "skip_reason": "비회원/미입력 상태 테스트 - US03 상태 테스트 계정 필요",
+      "test_scenarios": [
+        {
+          "id": "M08-F06-01",
+          "description": "'프로필을 입력하세요' 안내가 표시되는가?",
+          "user_state": "US03",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/profile" },
+            { "action": "wait", "selector": "[class*='container'], [class*='Container'], [class*='profile']", "timeout": 5000 },
+            { "action": "screenshot", "name": "profile-incomplete" }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "[class*='empty'], [class*='Empty'], body", "expected": "프로필" }
+          ],
+          "expected_result": "프로필 미입력 상태"
+        },
+        {
+          "id": "M08-F06-02",
+          "description": "'대학교 미인증' 상태가 표시되는가?",
+          "user_state": "US03",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/profile" },
+            { "action": "wait", "selector": "[class*='container'], [class*='Container']", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "[class*='university'], [class*='University'], body", "expected": "인증" }
+          ],
+          "expected_result": "인증 상태 표시"
+        },
+        {
+          "id": "M08-F06-03",
+          "description": "'회원가입' 버튼이 표시되는가?",
+          "user_state": "US02",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/profile" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "button, [class*='button'], [class*='Button'], a[href*='login'], a[href*='register']" }
+          ],
+          "expected_result": "비회원용 로그인/회원가입 유도"
+        },
+        {
+          "id": "M08-F06-04",
+          "description": "'내 팀플 캐릭터는 무엇일까? 지금 캐릭터 확인하기!' 배너가 표시되는가?",
+          "user_state": "US03",
+          "priority": "low",
+          "steps": [
+            { "action": "navigate", "target": "/profile" },
+            { "action": "wait", "selector": "[class*='container'], [class*='Container']", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "[class*='banner'], [class*='Banner'], body", "expected": "캐릭터" }
+          ],
+          "expected_result": "캐릭터 테스트 유도"
+        },
+        {
+          "id": "M08-F06-05",
+          "description": "'프로필을 작성하고 내 팀플 분석을 완성해보세요!' 안내가 표시되는가?",
+          "user_state": "US03",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/profile" },
+            { "action": "wait", "selector": "[class*='container'], [class*='Container']", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "[class*='guide'], [class*='empty'], body", "expected": "프로필" }
+          ],
+          "expected_result": "프로필 작성 유도"
+        }
+      ]
+    }
+  ]
+}

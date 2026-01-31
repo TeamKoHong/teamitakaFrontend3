@@ -1,0 +1,33 @@
+.project-management-container {
+  width: 100%;
+  background-color: #f9f9f9;
+  height: 100dvh; // min-height 대신 height로 강제 고정
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; // 전체 스크롤 없애기
+  background-color: #f2f2f2;
+
+  main {
+    width: 100%;
+
+    overflow-y: auto; // Allow vertical scrolling
+    flex: 1; // Fill remaining space
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-filter {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.5rem;
+
+    .project-select {
+      width: fit-content;
+      border: none;
+      background-color: transparent;
+      text-align: right; // 텍스트를 오른쪽 정렬
+    }
+  }
+
+}

@@ -1,0 +1,39 @@
+.categoryRow {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  margin-bottom: 8px; // Added consistent vertical spacing
+}
+
+.categoryName {
+  flex: 0 0 90px;
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+  color: #222;
+  margin-right: 8px;
+}
+
+.starsAndScore {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1 1 auto;
+}
+
+.categoryScore {
+  min-width: 28px;
+  margin-left: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #222;
+  white-space: nowrap;
+}
+
+.bold .categoryName,
+.bold .categoryScore {
+  font-weight: 700;
+  color: #222;
+}

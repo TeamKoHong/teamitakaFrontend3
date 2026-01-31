@@ -1,0 +1,121 @@
+.container {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #fff;
+  padding-bottom: 40px;
+}
+
+/* 1번, 8번: 헤더 폰트 및 하단 선 보정 */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: 56px; // 일반적인 헤더 높이로 조정
+  border-bottom: 2px solid #F8F8F8; // weight 2 적용
+  height: 80px;
+
+  .headerTitle { 
+    font-size: 17px; // 8번: 17px
+    font-weight: 600; // 8번: semibold
+    color: #000;
+  }
+}
+
+/* 2번: 뒤로가기 버튼 크기 조절 */
+.backButton {
+  background: none;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  .backIconImg {
+    width: 10px;
+    height: 15px;
+  }
+}
+
+/* 4번: 이미지 세로 121px, 좌우 여백 16px */
+.mainImageArea {
+  width: 100%;
+  padding: 16px; // 좌우 여백 16px
+  box-sizing: border-box;
+
+  .mainImage { 
+    width: 100%; 
+    height: 121px; // 세로 121px
+    object-fit: cover; 
+    border-radius: 8px; // 디자인에 따라 선택
+  }
+}
+
+.infoSection {
+  padding: 12px 20px 24px 20px;
+  .projectTitle { font-size: 20px; font-weight: 800; margin-bottom: 24px; color: #1A1A1A; }
+}
+
+.infoGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* 5번: 내용 우측 정렬 */
+.infoRow {
+  display: flex;
+  justify-content: space-between; // 양 끝 정렬
+  font-size: 14px;
+  .label { color: #1A1A1A; font-weight: 700; }
+  .value { color: #666; text-align: right; } // 우측 정렬
+}
+
+/* 7번: 키워드 폰트 600 */
+.tagWrapper {
+  margin-top: 20px;
+  .keywordLabel { 
+    display: block; 
+    font-weight: 600; // 7번: bold 600
+    font-size: 14px; 
+    margin-bottom: 12px; 
+  }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    background: #FFF0ED;
+    color: #F76241;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+}
+
+/* 6번: 별점 위 선 weight 2 */
+.thickDivider {
+  border: 0;
+  height: 2px; // weight 2
+  background: #F8F8F8;
+  margin: 0;
+}
+
+.ratingSection {
+  padding: 40px 20px;
+  text-align: center;
+  .ratingTitle { font-size: 16px; font-weight: 800; margin-bottom: 16px; }
+  .starContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    .starActive { color: #FFB800; font-size: 28px; }
+    .starInactive { color: #E0E0E0; font-size: 28px; }
+    .ratingScore { font-size: 20px; font-weight: 800; color: #F76241; margin-left: 12px; }
+  }
+}

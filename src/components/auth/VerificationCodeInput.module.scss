@@ -1,0 +1,100 @@
+@use '../../styles/variables' as *;
+
+// 성공 색상 (기존 variables에 없으면 여기서 정의)
+$success-color: #12A76D;
+
+.container {
+    width: 100%;
+}
+
+.successMessage {
+    margin-bottom: 16px;
+    color: #12A76D;
+    font-family: 'Pretendard';
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.inputWrapper {
+    display: flex;
+    align-items: center;
+    height: 64px;
+    padding: 0 16px;
+    background-color: $card-bg;
+    border: 1px solid $gray-lighter;
+    border-radius: $border-radius-base;
+    transition: border-color 0.2s ease;
+
+    &:focus-within {
+        border-color: $primary-color;
+    }
+
+    &.error {
+        border-color: $error-color;
+    }
+}
+
+.input {
+    flex: 1;
+    height: 100%;
+    border: none;
+    outline: none;
+    font-size: $font-size-body;
+    font-family: $font-family-base;
+    color: $text-primary;
+    background: transparent;
+    letter-spacing: 4px;
+
+    &::placeholder {
+        color: $gray-light;
+        letter-spacing: 0;
+    }
+}
+
+.timer {
+    font-size: $font-size-body;
+    font-weight: $font-weight-medium;
+    color: $primary-color;
+    font-variant-numeric: tabular-nums;
+
+    &.expired {
+        color: $error-color;
+    }
+}
+
+.errorText {
+    margin-top: 8px;
+    font-size: $font-size-caption;
+    color: $error-color;
+}
+
+.resendText {
+    margin-top: 16px;
+    font-size: 16px;
+    color: $gray-light;
+    text-align: left;
+}
+
+.resendButton {
+    display: inline;
+    padding: 0;
+    border: none;
+    background: none;
+    color: $primary-color;
+    font-size: 16px;
+    font-family: $font-family-base;
+    font-weight: $font-weight-medium;
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover {
+        color: darken($primary-color, 10%);
+    }
+
+    &.disabled {
+        color: $gray-light;
+        cursor: not-allowed;
+        text-decoration: none;
+        pointer-events: none;
+    }
+}

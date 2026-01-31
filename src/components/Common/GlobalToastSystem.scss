@@ -1,0 +1,73 @@
+// src/components/Common/GlobalToastSystem.scss
+
+.toast-notification-v2 {
+  position: fixed;
+  bottom: calc(24px + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+
+  display: flex;
+  align-items: center;
+  gap: 16px; // Figma: 16px gap
+
+  width: calc(100% - 32px); // Full width with margins
+  max-width: 428px; // Max container width
+  height: 61px; // Figma: 61px height
+  padding: 20px; // Figma: 20px padding
+  box-sizing: border-box;
+
+  background: #807c7c; // Figma: #807c7c
+  border-radius: 12px; // Figma: 12px
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  animation: toast-slide-up 0.3s ease-out forwards;
+
+  .toast-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 21px; // Figma: 21px
+    height: 21px; // Figma: 21px
+    border-radius: 10.5px; // Half of 21px for perfect circle
+  }
+
+  .toast-message {
+    flex: 1;
+    color: #fff; // Figma: white
+    font-size: 15px; // Figma: 15px
+    line-height: 1.5;
+    font-weight: 700; // Figma: bold
+    font-family: Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  // Toast types
+  &.toast-info {
+    background: #807c7c;
+  }
+
+  &.toast-warning {
+    background: #807c7c; // Figma design color
+  }
+
+  &.toast-error {
+    background: #807c7c; // Keep consistent for now
+  }
+
+  &.toast-success {
+    background: #807c7c; // Keep consistent for now
+  }
+}
+
+@keyframes toast-slide-up {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}

@@ -1,0 +1,56 @@
+@use '../../styles/variables' as *;
+
+.summaryCardContainer {
+  background: $white;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  padding: 20px 16px;
+  margin-bottom: 16px;
+}
+
+.summaryTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+  color: $gray-dark;
+  margin-bottom: $spacing-sm;
+}
+
+.totalScore {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-xs;
+  margin-bottom: $spacing-sm;
+}
+
+.scoreNumber {
+  font-size: 22px;
+  color: $primary-color;
+  font-weight: 700;
+}
+
+.maxScore {
+  font-size: $font-size-sm;
+  color: $gray;
+}
+
+.categoryScores {
+  margin-top: $spacing-md;
+}
+
+.categoryItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.categoryName {
+  font-size: $font-size-sm;
+  color: $gray-dark;
+}
+
+.progressBarFill {
+  height: 14px;
+  border-radius: 7px;
+  background: $primary-color;
+} 

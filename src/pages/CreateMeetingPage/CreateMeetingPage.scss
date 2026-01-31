@@ -1,0 +1,140 @@
+.create-meeting-page-container {
+  background-color: #f2f2f2;
+  min-height: 100vh;
+  padding-top: 64px; // DefaultHeader 높이만큼
+  
+  .create-meeting-content {
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 64px); // 헤더 높이 제외
+    box-sizing: border-box;
+    
+    .form-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 32px; // 회의 제목 섹션과 회의 설명 섹션 간 32px 간격
+      
+      .create-input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px; // 라벨과 입력 필드 간 8px 간격
+        margin-bottom: 0 !important; // 다른 페이지의 input-group 스타일 오버라이드
+        
+        .input-label {
+          font-size: 18px;
+          font-weight: 600;
+          line-height: 22px;
+          color: #403E3E;
+          font-family: Pretendard;
+          margin: 0;
+        }
+        
+        .form-input {
+          background: white;
+          border: 1px solid #e0e0e0;
+          border-radius: 8px;
+          padding: 18px 21px; // 위아래 18px, 좌우 21px
+          font-size: 16px;
+          font-family: Pretendard;
+          color: #333;
+          outline: none;
+          transition: border-color 0.2s ease;
+          
+          &::placeholder {
+            color: #999;
+          }
+          
+          &:focus {
+            border-color: #F76241;
+          }
+        }
+        
+        .form-textarea {
+          background: white;
+          border: 1px solid #e0e0e0;
+          border-radius: 8px;
+          padding: 18px 21px; // 위아래 18px, 좌우 21px
+          font-size: 16px;
+          font-family: Pretendard;
+          color: #333;
+          outline: none;
+          resize: vertical;
+          min-height: 120px;
+          transition: border-color 0.2s ease;
+          
+          &::placeholder {
+            color: #999;
+          }
+          
+          &:focus {
+            border-color: #F76241;
+          }
+        }
+      }
+    }
+    
+    .next-button {
+      width: 100%;
+      height: 56px;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 600;
+      font-family: Pretendard;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: auto;
+      
+      &.disabled {
+        background-color: #D1CCCB;
+        color: white;
+        cursor: not-allowed;
+      }
+      
+      &.active {
+        background-color: #F76241;
+        color: white;
+        
+        &:hover {
+          background-color: #F76241;
+        }
+        
+        &:active {
+          transform: scale(0.98);
+        }
+      }
+    }
+  }
+}
+
+// 반응형 디자인
+@media (max-width: 375px) {
+  .create-meeting-page-container {
+    .create-meeting-content {
+      padding: 20px 12px;
+      
+      .form-section {
+        gap: 24px;
+        
+        .create-input-group {
+          .input-label {
+            font-size: 14px;
+          }
+          
+          .form-input,
+          .form-textarea {
+            padding: 16px 18px;
+            font-size: 14px;
+          }
+        }
+      }
+      
+      .next-button {
+        height: 50px;
+        font-size: 16px;
+      }
+    }
+  }
+}

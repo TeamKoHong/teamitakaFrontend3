@@ -1,0 +1,127 @@
+.phone-auth-form {
+  max-width: 400px;
+  margin: 0 auto;
+
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.2s;
+
+      &:focus {
+        outline: none;
+        border-color: #F76241;
+      }
+
+      &:disabled {
+        background-color: #f5f5f5;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .recaptcha-container {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .info-message {
+    padding: 12px;
+    background-color: #e7f3ff;
+    border: 1px solid #2196F3;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1976D2;
+    margin-bottom: 16px;
+  }
+
+  .error-message {
+    padding: 12px;
+    background-color: #ffebee;
+    border: 1px solid #ef5350;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #c62828;
+  }
+
+  .submit-button {
+    width: 100%;
+    padding: 14px;
+    background-color: #F76241;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover:not(:disabled) {
+      background-color: #e55230;
+    }
+
+    &:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  }
+
+  .secondary-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #e0e0e0;
+    }
+  }
+
+  .success-message {
+    text-align: center;
+    padding: 40px 20px;
+
+    h3 {
+      font-size: 24px;
+      color: #4CAF50;
+      margin-bottom: 16px;
+    }
+
+    p {
+      font-size: 16px;
+      color: #666;
+      margin: 8px 0;
+    }
+
+    .redirect-message {
+      font-size: 14px;
+      color: #999;
+      margin-top: 20px;
+    }
+  }
+}

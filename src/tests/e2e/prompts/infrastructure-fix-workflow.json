@@ -1,0 +1,179 @@
+{
+  "workflow_name": "E2E 테스트 인프라 수정 워크플로우",
+  "version": "1.0.0",
+  "created_at": "2024-12-21",
+  "description": "테스트 실행 전 동적 데이터(RECRUITMENT_ID, PROJECT_ID 등)를 미리 추출하여 플레이스홀더를 치환하는 인프라 수정",
+
+  "problem_analysis": {
+    "root_cause": "extractRecruitmentId()가 로그인 성공 후에만 호출됨",
+    "affected_tests": ["M10-F01-01", "M10-F01-02", "M10-F01-03", "M06-*"],
+    "current_flow": [
+      "1. 테스트 시작",
+      "2. user_state 확인 (US02 = Guest)",
+      "3. Guest이면 로그인 스킵",
+      "4. extractRecruitmentId() 호출 안됨",
+      "5. TEST_DATA.recruitmentId = null",
+      "6. {{RECRUITMENT_ID}} 치환 실패"
+    ]
+  },
+
+  "solution_architecture": {
+    "approach": "테스트 스위트 시작 전 공개 API를 통해 recruitment ID 추출",
+    "key_changes": [
+      "beforeAll hook에서 공개 모집공고 ID 추출",
+      "인증 없이 접근 가능한 API 엔드포인트 활용",
+      "또는 팀매칭 페이지 DOM에서 직접 추출"
+    ]
+  },
+
+  "implementation_steps": [
+    {
+      "step": 1,
+      "name": "test-config.ts 수정",
+      "file": "src/tests/e2e/utils/test-config.ts",
+      "changes": [
+        "초기화 함수 추가: initializeTestData()",
+        "공개 API를 통한 recruitment ID 추출 로직",
+        "fallback: DOM 기반 추출"
+      ],
+      "code_sample": {
+        "description": "추가할 함수",
+        "function_name": "initializeTestData",
+        "summary": [
+          "팀매칭 페이지로 이동하여 첫 번째 모집공고 ID 추출",
+          "방법 1: API 호출 (인증 불필요) - /api/recruitments",
+          "방법 2: DOM에서 a[href*='/recruitment/'] 링크 추출",
+          "setTestRecruitmentId()로 전역 상태에 저장"
+        ]
+      }
+    },
+    {
+      "step": 2,
+      "name": "test-runner.spec.ts 수정",
+      "file": "src/tests/e2e/test-runner.spec.ts",
+      "changes": [
+        "beforeAll hook에 initializeTestData() 호출 추가",
+        "테스트 시작 전 동적 데이터 미리 추출"
+      ],
+      "code_sample": {
+        "description": "beforeAll hook 추가/수정",
+        "location": "파일 최상단, modules 로드 후"
+      }
+    },
+    {
+      "step": 3,
+      "name": "test-executor.ts 수정",
+      "file": "src/tests/e2e/utils/test-executor.ts",
+      "changes": [
+        "Guest 테스트에서도 recruitment ID 사용 가능하도록 수정",
+        "replacePlaceholders() 개선: 치환 실패 시 경고만 출력"
+      ]
+    }
+  ],
+
+  "alternative_solutions": [
+    {
+      "name": "하드코딩된 테스트 데이터",
+      "description": "테스트 전용 모집공고 ID를 고정값으로 사용",
+      "pros": ["간단한 구현", "빠른 수정"],
+      "cons": ["테스트 데이터 삭제 시 실패", "유지보수 어려움"],
+      "recommended": false
+    },
+    {
+      "name": "테스트 데이터 시드",
+      "description": "테스트 시작 전 API를 통해 테스트용 모집공고 생성",
+      "pros": ["항상 유효한 데이터", "독립적인 테스트"],
+      "cons": ["복잡한 구현", "API 인증 필요"],
+      "recommended": false
+    },
+    {
+      "name": "공개 API 활용 (권장)",
+      "description": "인증 없이 접근 가능한 모집공고 목록 API 사용",
+      "pros": ["인증 불필요", "실제 데이터 사용", "비교적 간단"],
+      "cons": ["API 가용성에 의존"],
+      "recommended": true
+    }
+  ],
+
+  "validation_steps": [
+    {
+      "step": 1,
+      "action": "M10 테스트 실행",
+      "command": "npx playwright test --workers=1 --grep 'M10' --reporter=list"
+    },
+    {
+      "step": 2,
+      "action": "로그 확인",
+      "expected": "📋 Pre-extracted recruitment ID: [UUID]"
+    },
+    {
+      "step": 3,
+      "action": "M10-F01-01 통과 확인",
+      "expected": "{{RECRUITMENT_ID}}가 실제 UUID로 치환됨"
+    }
+  ],
+
+  "files_to_modify": [
+    {
+      "path": "src/tests/e2e/utils/test-config.ts",
+      "type": "add",
+      "description": "initializeTestData() 함수 추가"
+    },
+    {
+      "path": "src/tests/e2e/test-runner.spec.ts",
+      "type": "modify",
+      "description": "beforeAll hook 추가"
+    },
+    {
+      "path": "src/tests/e2e/utils/test-executor.ts",
+      "type": "modify",
+      "description": "replacePlaceholders() 개선 (선택)"
+    }
+  ],
+
+  "expected_results": {
+    "before": {
+      "M10_tests": "M10-F01-* 실패 (RECRUITMENT_ID 미치환)",
+      "error_message": "⚠️ RECRUITMENT_ID placeholder found but no recruitment ID available"
+    },
+    "after": {
+      "M10_tests": "M10-F01-* 통과",
+      "log_message": "📋 Pre-extracted recruitment ID: [UUID]"
+    }
+  },
+
+  "commands": {
+    "run_M10_tests": "npx playwright test --workers=1 --grep 'M10' --reporter=list",
+    "run_M06_tests": "npx playwright test --workers=1 --grep 'M06' --reporter=list",
+    "run_all_tests": "npx playwright test --workers=1 --reporter=list",
+    "debug_mode": "DEBUG=true npx playwright test --workers=1 --grep 'M10' --reporter=list"
+  },
+
+  "additional_considerations": {
+    "api_authentication": {
+      "description": "API 인증 없이 접근 가능한 경우",
+      "note": "/api/recruitments 엔드포인트가 공개인 경우 위 방법으로 충분, 인증이 필요한 경우 팀매칭 페이지 DOM 추출 방법 사용"
+    },
+    "no_recruitments": {
+      "description": "모집공고가 없는 경우",
+      "solutions": [
+        "테스트를 skip 처리하는 로직 추가 권장",
+        "또는 테스트 전 더미 모집공고 생성 API 호출"
+      ]
+    },
+    "environment_urls": {
+      "description": "환경별 API URL",
+      "note": "REACT_APP_API_BASE_URL 환경변수 활용하여 로컬/스테이징/프로덕션 환경 구분"
+    }
+  },
+
+  "current_status": {
+    "implementation": "완료",
+    "M10_results": {
+      "passed": 6,
+      "skipped": 1,
+      "pass_rate": "85.7%"
+    },
+    "note": "이 인프라 수정은 이미 적용되어 M10 테스트가 정상 동작함"
+  }
+}

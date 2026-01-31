@@ -1,0 +1,152 @@
+.unratedCard {
+    position: relative;
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    padding: 16px 20px 16px 16px; // Updated padding (Right: 20px)
+    width: calc(100% - 8px);
+    height: 130px; // Spec: 130px fixed height
+    box-sizing: border-box;
+    margin: 10px auto;
+
+    // JSON Spec: Container Flex Column
+    display: flex;
+    flex-direction: column;
+    gap: 0; // Gap handled by internal spacing logic
+
+    @media (max-width: 480px) {
+        width: 100%;
+    }
+
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+}
+
+.badge {
+    position: absolute;
+    top: -10px; // Overhang
+    left: 11px;
+    background: #F76241;
+    color: #FFFFFF;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 0; // Padding handled by fixed size
+    width: 88px; // Spec: 88px
+    height: 20px; // Spec: 20px
+    border-radius: 2.86px;
+    font-family: 'Inter', sans-serif;
+    text-transform: capitalize;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media (max-width: 480px) {
+        position: absolute;
+        top: -10px;
+        left: 11px;
+    }
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+}
+
+.info {
+    // Top section: Title + Description
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.titleRow {
+    // Row 1
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    // Ensure titleRow has height to align items
+    min-height: 20px;
+}
+
+.title {
+    // Row 1 Left
+    font-size: 16px;
+    font-weight: 700;
+    color: #000000;
+    margin: 0;
+    line-height: normal;
+    letter-spacing: -0.03em;
+    // ensure block behavior
+    display: block;
+}
+
+.nextArrow {
+    // Row 1 Right
+    width: 5px;
+    height: 11px;
+    flex-shrink: 0;
+    object-fit: contain;
+    display: block;
+    margin-right: 4px; // Add margin-right
+}
+
+.subtitle {
+    // Row 2
+    font-size: 14px;
+    font-weight: 400;
+    color: #999899;
+    margin: 0;
+    margin-top: 8px; // Spec: margin_top 8px
+    line-height: 21px;
+    letter-spacing: -0.03em;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.avatars {
+    // Row 3
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: auto; // Push to bottom if content is short
+    height: 35px;
+    min-height: 35px;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 2px solid #FFFFFF;
+    margin-left: -12px; // overlap
+    object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    &:first-child {
+        margin-left: 0;
+    }
+}
+
+.moreIndicator {
+    font-size: 12px;
+    color: #807C7C;
+    margin-left: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}

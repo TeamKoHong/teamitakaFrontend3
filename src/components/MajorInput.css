@@ -1,0 +1,126 @@
+
+
+/* 학과 라벨 + 버튼 줄 */
+.major-header {
+  width: 100%;                /* 반응형 */
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding-left: 0;          /* 부모에서 padding 처리 */
+  padding-right: 0;
+
+  height: auto;                /* 콘텐츠 높이에 맞춤 */
+  box-sizing: border-box;
+
+  margin-bottom: 8px;          /* 아래 입력창과 간격 */
+  margin-top: 24px;            /* 위 요소와 간격 */
+}
+
+
+
+
+/* 학과 텍스트 (Figma 값 그대로 적용) */
+.major-label {
+  font-family: "Pretendard";
+  font-size: 15px;
+  font-weight: 600; /* SemiBold */
+  line-height: 100%;
+  color: #000000;
+}
+
+.required-dot {
+  width: 5px;
+  height: 5px;
+  background-color: #F76241;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 0px;   /* ← 이 간격 줄이면 됨 */
+  transform: translateY(-10px);
+}
+
+/* + 전공 추가 버튼 */
+.major-add-btn {
+  background-color: #807C7C;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 24px;
+  gap: 5px;
+
+  font-family: "Pretendard";
+  font-weight: 400;
+  font-size: 14px;
+  color: #FFFDFC;
+}
+
+/* 입력박스 */
+.major-input-wrapper {
+  width: 100%;              /* 반응형 */
+  height: 54px;              /* Fixed 54px */
+  margin-left: 0;
+  background-color: #F5F5F5; /* 연한 회색 배경 */
+  border-radius: 8px;
+  padding: 16px;             /* padding 16px */
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  margin-top: 0;          /* 음수 margin 제거 */
+}
+
+/* 입력 텍스트 */
+.major-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 400; /* SemiBold */
+  line-height: 100%;
+  color: #000000;
+  font-family: Pretendard;
+}
+
+.major-input::placeholder {
+  color: #807C7C;
+}
+
+
+/* 전공 입력창 */
+.major-add-input {
+  width: 358px;
+  height: 40px;
+  margin-left: 16px;
+  margin-bottom: 8px;
+
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid #D1CCCB;
+  outline: none;
+  font-family: Pretendard;
+  font-size: 14px;
+}
+
+/* 추가된 전공 태그 컨테이너 */
+.major-tag-container {
+  margin-left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* 태그 박스 */
+.major-tag {
+  width: 358px;
+  height: 54px;
+  background-color: #F5F5F5;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+
+  font-family: Pretendard;
+  font-size: 14px;
+  color: #000;
+}

@@ -1,0 +1,41 @@
+/* 1) 백드롭 */
+.rps-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  z-index: 9998;
+
+  &.open {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* 2) 패널 */
+.rps-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  width: 100%; /* 모바일 기준 전체 */
+  background: #f2f2f2;
+
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 9999;
+
+  display: flex;
+  flex-direction: column;
+
+  &.open {
+    transform: translateX(0);
+  }
+}

@@ -1,0 +1,59 @@
+@use '../../styles/variables' as *;
+
+.reviewContainer {
+  background: $white;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  padding: 20px 16px;
+  margin-bottom: 16px;
+}
+
+.reviewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-xs;
+}
+
+.reviewerName {
+  font-weight: 700;
+  color: $gray-dark;
+}
+
+.ratingDate {
+  font-size: 12px;
+  color: $gray;
+}
+
+.averageScore {
+  color: $primary-color;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.categoryRatings {
+  margin-top: $spacing-xs;
+}
+
+.categoryItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.categoryName {
+  min-width: 80px;
+  font-size: $font-size-xs;
+  color: $gray;
+}
+
+.categoryStars {
+  font-size: 18px;
+  color: $accent-color;
+}
+
+.reviewComment {
+  margin-top: 8px;
+  color: $gray-dark;
+  font-style: italic;
+} 

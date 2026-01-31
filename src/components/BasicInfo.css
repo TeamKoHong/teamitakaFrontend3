@@ -1,0 +1,63 @@
+.basic-info-container {
+  /* position: absolute 제거 - Flexbox 레이아웃과 호환 */
+  width: 100%;
+  margin-top: 16px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  /* 배경색 없음 — 화면과 동일 */
+}
+
+
+.section-title {
+  font-family: "Pretendard", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #140805;
+
+  text-align: left;   /* ← 가운데 정렬 제거 */
+}
+
+
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;   /* 행 간격 8px */
+}
+
+
+.info-label {
+  font-size: 16px;
+  color: #8a8a8a;
+}
+
+.info-value {
+  font-family: "Pretendard", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+
+.verified-icon {
+  width: 24.3px;
+  height: 24.3px;
+}
+
+
+.required-dot {
+  width: 5px;
+  height: 5px;
+  background-color: #F76241;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 0px;   /* ← 이 간격 줄이면 됨 */
+  transform: translateY(-10px);
+}
+

@@ -1,0 +1,83 @@
+@use '../../styles/variables' as *;
+
+.cardContainer {
+  background: $white;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.projectInfo {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.projectName {
+  font-size: 18px;
+  font-weight: 700;
+  color: $gray-dark;
+  margin-bottom: 4px;
+}
+
+.projectPeriod {
+  font-size: 12px;
+  color: $gray;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.projectImageWrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: $gray-light;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.projectImage {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+}
+
+.cardBody {
+  margin-top: $spacing-sm;
+}
+
+.ratingInfo {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.myRatingLabel {
+  font-size: $font-size-xs;
+  color: $gray;
+}
+
+.myRatingStars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.myRatingScore {
+  font-size: 18px;
+  color: $primary-color;
+  font-weight: 700;
+} 

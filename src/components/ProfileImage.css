@@ -1,0 +1,142 @@
+/* 프로필 이미지 전체 영역 */
+.profile-wrapper {
+  /* position: absolute 제거 - Flexbox 레이아웃과 호환 */
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 16px auto;
+
+  width: 111px;
+  height: 111px;
+  border-radius: 24px;
+}
+
+/* 프로필 사진 */
+.profile-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 24px;
+}
+
+/* 수정 버튼 컨테이너 */
+.edit-icon-btn {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: none;
+
+  cursor: pointer;
+}
+
+/* 회색 원 배경 */
+.edit-back {
+  width: 32px;
+  height: 32px;
+  border: 3px;
+ position: relative;   /* ← 위치 조정 가능하게 만듦 */
+  left: 7px;            /* → 오른쪽으로 밀림 */
+  top: 7px; 
+}
+
+/* 펜 아이콘 */
+.edit-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 11.92px;
+  height: 11.92px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  position: relative;   /* ← 위치 조정 가능하게 만듦 */
+  left: 13px;            /* → 오른쪽으로 밀림 */
+  top: -13px; 
+}
+
+
+/* ------------------------- */
+/* 👇 여기까지는 기존 CSS 유지 */
+/* ------------------------- */
+
+
+/* -------------------------------------------------- */
+/* ⬇⬇⬇ “추가된 부분만” 모달 기능을 위해 필요한 CSS */
+/* -------------------------------------------------- */
+
+
+/* ---------------- 모달 추가 ---------------- */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  z-index: 1000;
+}
+
+/* 전체 시트 */
+.modal-sheet {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 32px;
+}
+
+/* 상단 박스 */
+.modal-top-box {
+  width: 371px;
+  background: white;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 23px;
+  padding-bottom: 23px;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 텍스트 버튼 */
+.modal-item {
+  font-family: "Pretendard";
+  font-size: 15px;
+  color: #1C1C1C;
+  text-align: center;
+  cursor: pointer;
+}
+
+/* 구분선 */
+.modal-divider {
+  width: 90%;
+  height: 1px;
+  background-color: #e6e6e6;
+}
+
+/* 취소 버튼 */
+.modal-cancel {
+  width: 371px;
+  height: 50px;
+  background: white;
+  border-radius: 14px;
+  margin-top: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: "Pretendard";
+  font-size: 15px;
+  color: #1C1C1C;
+  cursor: pointer;
+}

@@ -1,0 +1,38 @@
+.project-header {
+  width: 100%;
+
+  .project-explain {
+    color: #000;
+    font-family: Pretendard;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 600;
+
+    text-transform: capitalize;
+
+    strong {
+      color: #f76241;
+      font-family: Pretendard;
+      font-size: 15px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 0%;
+      text-transform: capitalize;
+    }
+  }
+
+  .project-filter {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.5rem;
+
+    .project-select {
+      border: none;
+      background-color: transparent;
+      text-align: right;
+      outline: none;
+      color: #403e3e;
+    }
+  }
+}

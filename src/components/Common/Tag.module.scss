@@ -1,0 +1,56 @@
+@use '../../styles/variables' as *;
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $border-radius-sm;
+  font-family: $font-family-base;
+  font-weight: $font-weight-bold;
+  padding: 0 $spacing-md;
+  height: 2em;
+  font-size: $font-size-sm;
+  background: $gray-light;
+  color: $gray-dark;
+  margin-right: $spacing-xs;
+  margin-bottom: $spacing-xs;
+  white-space: nowrap;
+}
+
+.default {
+  background: $gray-light;
+  color: $gray-dark;
+}
+
+.primary {
+  background: $primary-color;
+  color: $white;
+}
+
+.gray {
+  background: $gray;
+  color: $white;
+}
+
+.danger {
+  background: $error;
+  color: $white;
+}
+
+.sm {
+  font-size: $font-size-xs;
+  height: 1.5em;
+  padding: 0 $spacing-sm;
+}
+
+.md {
+  font-size: $font-size-sm;
+  height: 2em;
+  padding: 0 $spacing-md;
+}
+
+.lg {
+  font-size: $font-size-md;
+  height: 2.5em;
+  padding: 0 $spacing-lg;
+} 

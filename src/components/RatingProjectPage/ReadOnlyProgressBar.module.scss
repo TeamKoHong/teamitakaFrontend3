@@ -1,0 +1,70 @@
+// Figma: CategorySliders 스펙
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 16px;
+  background: #FFFDFC;
+  // box-shadow: 0 1px 3px rgba(0,0,0,0.03); // Optional subtle lift
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// Figma: 13px, weight 600, color #403E3E
+.label {
+  font-size: 14px; // Slightly bumped for readability
+  font-weight: 700;
+  color: #333;
+}
+
+.value {
+  font-size: 14px;
+  color: #f76241;
+  font-weight: 700;
+}
+
+// Figma: height 7px -> 8px for cleaner render
+.track {
+  height: 8px;
+  background: #EFEFEF; // Slightly softer gray
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+// Branding Orange Fill
+.fill {
+  height: 100%;
+  background: linear-gradient(90deg, #F76241 0%, #FF8A65 100%); // Premium gradient
+  border-radius: 10px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); // Smooth easing
+  box-shadow: 0 1px 2px rgba(247, 98, 65, 0.2); // Soft glow
+}
+
+// Figma: gap 14px from track
+.scale {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px; // Align numbers with track ends
+  margin-top: 6px;
+}
+
+// Figma: 10px, color #807C7C
+.scaleNum {
+  font-size: 11px;
+  color: #999;
+  font-weight: 500;
+  width: 16px;
+  text-align: center;
+}
+
+.scaleNum.active {
+  color: #F76241;
+  font-weight: 700;
+  transform: scale(1.1); // Subtle pop for active value
+  transition: all 0.2s ease;
+}

@@ -1,0 +1,109 @@
+.progress-container {
+  box-sizing: border-box;
+  width: 100%;
+  height: calc(100dvh - 110px); // 전체 높이 - 헤더 높이
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 0.5rem 1rem calc(88px + 0.5rem) 1rem; // 상단 0.5rem, 좌우 1rem, 하단 바텀네비(88px) + 0.5rem
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .project-info {
+    margin-bottom: 1rem;
+  }
+
+  .project-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .load-more-wrapper {
+    text-align: center;
+    margin: 1rem 0;
+
+    button {
+      padding: 8px 16px;
+      background: #F76241;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.06s ease;
+
+      &:active {
+        transform: translateY(1px);
+      }
+    }
+  }
+
+  .loading-state,
+  .error-state {
+    padding: 40px 16px;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+
+    button {
+      margin-top: 12px;
+      padding: 8px 16px;
+      background: #F76241;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.06s ease;
+
+      &:active {
+        transform: translateY(1px);
+      }
+    }
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100dvh - 110px - 88px - 1rem); // 전체 높이 - 헤더 - 바텀네비 - 상하 여백
+    padding: 0 2rem;
+    text-align: center;
+
+    .empty-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #000;
+      margin-bottom: 8px;
+    }
+
+    .empty-description {
+      font-size: 13px;
+      color: #999;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .create-project-btn {
+      background: #F76241;
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 1rem 0;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.06s ease;
+
+      &:active {
+        transform: translateY(1px);
+      }
+    }
+  }
+}

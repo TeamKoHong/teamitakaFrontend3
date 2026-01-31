@@ -1,0 +1,463 @@
+{
+  "meta": {
+    "app_name": "티미타카 (Teamitaka)",
+    "version": "1.0",
+    "description": "대학생 팀 프로젝트 매칭 및 관리 앱 - AI 에이전트 테스트 시뮬레이션 프롬프트",
+    "test_agent": "Claude/AI with Playwright MCP",
+    "base_url": "http://localhost:3000",
+    "created_at": "2025-12-20",
+    "total_test_cases": 240,
+    "modules_count": 10
+  },
+
+  "test_config": {
+    "browser": "chromium",
+    "viewport": {
+      "width": 390,
+      "height": 844,
+      "device_name": "iPhone 14 Pro"
+    },
+    "timeout_ms": 30000,
+    "navigation_timeout_ms": 15000,
+    "screenshot_on_failure": true,
+    "screenshot_on_success": true,
+    "video_recording": false,
+    "retry_on_failure": 2,
+    "slow_mo_ms": 100
+  },
+
+  "user_states": [
+    {
+      "state_id": "US01",
+      "name": "신규 유저",
+      "description": "앱을 처음 설치하고 온보딩을 거치지 않은 사용자",
+      "setup": {
+        "clear_local_storage": true,
+        "clear_session_storage": true,
+        "auth_token": null,
+        "onboarding_complete": false
+      },
+      "entry_point": "/",
+      "expected_redirect": null
+    },
+    {
+      "state_id": "US02",
+      "name": "비회원 (둘러보기)",
+      "description": "회원가입 없이 앱을 둘러보는 비회원 사용자",
+      "setup": {
+        "clear_local_storage": false,
+        "auth_token": null,
+        "onboarding_complete": true
+      },
+      "entry_point": "/guest",
+      "expected_redirect": null
+    },
+    {
+      "state_id": "US03",
+      "name": "회원 (프로필 미입력)",
+      "description": "회원가입 완료, 프로필 정보 미입력",
+      "setup": {
+        "auth_token": "mock_token_no_profile",
+        "user_profile": {
+          "email": "test@hongik.ac.kr",
+          "has_profile": false
+        }
+      },
+      "entry_point": "/profile-setup",
+      "expected_redirect": "/profile-setup"
+    },
+    {
+      "state_id": "US04",
+      "name": "회원 (프로필 완료)",
+      "description": "회원가입과 프로필 입력을 모두 완료한 정상 사용자",
+      "setup": {
+        "auth_token": "mock_token_full",
+        "user_profile": {
+          "email": "test@hongik.ac.kr",
+          "nickname": "테스트티미",
+          "school": "홍익대학교",
+          "major": "디자인학과",
+          "has_profile": true
+        }
+      },
+      "entry_point": "/main",
+      "expected_redirect": null
+    },
+    {
+      "state_id": "US05",
+      "name": "재방문 유저",
+      "description": "이전에 온보딩을 완료하여 바로 홈으로 이동하는 사용자",
+      "setup": {
+        "auth_token": "mock_token_full",
+        "onboarding_complete": true
+      },
+      "entry_point": "/main",
+      "expected_redirect": null
+    }
+  ],
+
+  "test_data": {
+    "valid_user": {
+      "email": "test@hongik.ac.kr",
+      "password": "Test1234!",
+      "phone": "01012345678",
+      "verification_code": "123456",
+      "nickname": "테스트티미",
+      "school": "홍익대학교",
+      "major": "디자인학과",
+      "sub_major": "경영학과",
+      "keywords": ["마케팅", "브랜딩", "UXUI", "기획", "서비스개발"]
+    },
+    "invalid_data": {
+      "invalid_email": "invalid@gmail.com",
+      "weak_password": "1234",
+      "wrong_verification_code": "000000",
+      "empty_nickname": "",
+      "long_nickname": "가나다라마바사아자차카타파하가나다라마바"
+    },
+    "mock_project": {
+      "id": "project-001",
+      "title": "마케팅 프로젝트",
+      "description": "브랜드 마케팅 전략 수립",
+      "start_date": "2025-01-01",
+      "end_date": "2025-02-28",
+      "members": 4
+    },
+    "mock_recruitment": {
+      "id": "recruit-001",
+      "title": "브랜드 마케팅 팀원 모집",
+      "description": "함께 성장할 팀원을 찾습니다",
+      "deadline": "2025-01-15",
+      "required_members": 3
+    }
+  },
+
+  "selectors": {
+    "common": {
+      "bottom_nav": ".bottom-nav",
+      "nav_item": ".nav-item",
+      "nav_item_active": ".nav-item.active",
+      "loading_state": ".loading-state",
+      "error_state": ".error-state",
+      "alert_modal_overlay": ".alert-modal-overlay",
+      "alert_modal_container": ".alert-modal-container",
+      "alert_modal_button": ".alert-modal-button",
+      "toast_container": ".toast-container",
+      "toast_message": ".toast-message",
+      "default_header": ".default-header",
+      "back_button": ".back-button",
+      "primary_btn": ".primary-btn",
+      "page_layout": ".page-layout"
+    },
+    "onboarding": {
+      "container": ".onboarding-page-container",
+      "slide": ".swiper-slide",
+      "skip_button": ".skip-button",
+      "next_button": ".next-button"
+    },
+    "login": {
+      "container": ".login-page-container",
+      "content": ".login-content",
+      "welcome_text": ".welcome-text",
+      "input_field": ".input-field",
+      "login_button": ".login-button",
+      "find_links": ".find-links",
+      "find_links_button": ".find-links-button",
+      "guest_mode": ".look-without-register"
+    },
+    "register": {
+      "container": ".register-page-container",
+      "header": ".header",
+      "back_button": ".back-button",
+      "main_content": ".main-content",
+      "step_content": ".step-content",
+      "progress_step": ".progress-step",
+      "progress_step_active": ".progress-step.active",
+      "progress_step_completed": ".progress-step.completed",
+      "standard_input_field": ".standard-input-field",
+      "consent_section": ".consent-section",
+      "consent_item": ".consent-item",
+      "all_consent": ".all-consent",
+      "checkbox": ".checkbox",
+      "code_input_wrapper": ".code-input-wrapper",
+      "code_box": ".code-box",
+      "resend_code_link": ".resend-code-link",
+      "input_error_text": ".input-error-text",
+      "toast_message": ".register-toast-message",
+      "next_button": ".next-button",
+      "next_button_active": ".next-button.active",
+      "terms_container": ".terms-page-container",
+      "terms_agree_button": ".terms-agree-button"
+    },
+    "main": {
+      "container": ".main-page",
+      "top_card": ".top-card",
+      "header": ".header",
+      "logo": ".logo",
+      "alarm_icon": ".alarm-icon",
+      "badge": ".badge",
+      "profile_card": ".profile-card",
+      "name": ".name",
+      "school": ".school",
+      "stats": ".stats",
+      "count": ".count",
+      "tags": ".tags",
+      "tag": ".tag",
+      "profile_img": ".profile-img",
+      "section_title": ".section-title",
+      "my_projects": ".my-projects",
+      "empty_card": ".empty-card",
+      "empty_text": ".empty-text",
+      "project_list": ".project-list"
+    },
+    "notifications": {
+      "empty_container": ".notifications-empty-container",
+      "list_container": ".notifications-list-container",
+      "notification_item": ".notification-item",
+      "notification_unread": ".notification-item.unread",
+      "settings_container": ".notification-settings-container",
+      "settings_item": ".settings-item",
+      "settings_toggle": ".settings-toggle"
+    },
+    "project_management": {
+      "container": ".project-management-container",
+      "project_card": ".project-card",
+      "project_card_image": ".project-card-image",
+      "project_card_content": ".project-card-content",
+      "project_card_title": ".project-card-title",
+      "project_card_status": ".project-card-status",
+      "project_card_date": ".project-card-date",
+      "progress_component": ".progress-component-container",
+      "recruiting_component": ".recruiting-component-container",
+      "completed_component": ".completed-component-container"
+    },
+    "project_detail": {
+      "header": ".project-detail-header",
+      "todo_box": ".todo-box",
+      "timeline_box": ".timeline-box",
+      "notification_box": ".notification-box",
+      "member_card": ".member-detail-card",
+      "calendar": ".calendar"
+    },
+    "team_matching": {
+      "container": ".team-matching-app",
+      "app_content": ".app-content",
+      "section": ".section",
+      "section_header": ".section-header",
+      "section_title": ".section-title",
+      "create_project_banner": ".create-project-banner",
+      "banner_title": ".banner-title",
+      "filter_tags": ".filter-tags",
+      "filter_tag": ".filter-tag",
+      "filter_tag_active": ".filter-tag.active",
+      "hot_topic_card": ".hot-topic-card",
+      "hot_topic_title": ".hot-topic-card-title",
+      "bookmark_icon": ".bookmark-icon",
+      "matching_card": ".matching-card",
+      "matching_card_title": ".matching-card-title",
+      "best_badge": ".best-badge",
+      "matching_list": ".matching-list"
+    },
+    "recruitment": {
+      "container": ".recruitment-page-container",
+      "recruitment_card": ".recruitment-card",
+      "recruitment_title": ".recruitment-title",
+      "recruitment_description": ".recruitment-description",
+      "apply_button": ".apply-button"
+    },
+    "application": {
+      "container": ".apply-page",
+      "topbar": ".topbar",
+      "title": ".title",
+      "section": ".section",
+      "headline": ".headline",
+      "editor": ".editor",
+      "editor_filled": ".editor.filled",
+      "char_count": ".count",
+      "footer": ".footer",
+      "cta": ".cta",
+      "cta_active": ".cta.active",
+      "cta_disabled": ".cta.disabled",
+      "complete_container": ".apply-complete-container",
+      "complete_message": ".complete-message",
+      "select_container": ".apply-select-container",
+      "select_item": ".select-item"
+    },
+    "evaluation": {
+      "step1_container": ".evaluation-step-1",
+      "step2_container": ".evaluation-step-2",
+      "step3_container": ".evaluation-step-3",
+      "member_selector": ".member-selector",
+      "category_ratings": ".category-ratings",
+      "overall_rating": ".overall-rating",
+      "role_description": ".role-description",
+      "complete_message": ".complete-message",
+      "next_member_btn": ".next-member-btn",
+      "home_btn": ".home-btn",
+      "rating_management_container": ".container",
+      "project_list": ".projectList",
+      "rating_section": ".ratingSection",
+      "summary_section": ".summarySection"
+    },
+    "profile": {
+      "main_container": ".profile-main-container",
+      "edit_container": ".profile-edit-container",
+      "verification_container": ".profile-verification-container",
+      "profile_image": ".profile-image",
+      "profile_name": ".profile-name",
+      "profile_school": ".profile-school",
+      "profile_stats": ".profile-stats",
+      "edit_button": ".edit-button",
+      "keyword_tags": ".keyword-tags"
+    },
+    "bookmark": {
+      "container": ".bookmark-page-container",
+      "main": ".bookmark-main",
+      "summary": ".bookmark-summary",
+      "urgent_count": ".urgent-count",
+      "stats": ".bookmark-stats",
+      "stat_item": ".stat-item",
+      "tab_navigation": ".tab-navigation",
+      "tab_button": ".tab-button",
+      "tab_button_active": ".tab-button.active",
+      "project_list": ".bookmark-project-list",
+      "project_card": ".bookmark-project-card",
+      "loading": ".bookmark-loading",
+      "error": ".bookmark-error",
+      "empty": ".bookmark-empty"
+    },
+    "guest": {
+      "container": ".guest-landing-page",
+      "header": ".header",
+      "logo": ".logo",
+      "welcome_card": ".welcome-card",
+      "welcome_title": ".welcome-title",
+      "register_btn": ".register-btn",
+      "empty_card": ".empty-card",
+      "empty_text": ".empty-text",
+      "projects_preview": ".projects-preview"
+    }
+  },
+
+  "action_types": {
+    "navigate": "페이지 이동",
+    "click": "요소 클릭",
+    "type": "텍스트 입력",
+    "clear": "입력 필드 초기화",
+    "wait": "요소 대기",
+    "wait_for_navigation": "페이지 전환 대기",
+    "screenshot": "스크린샷 캡처",
+    "scroll": "스크롤",
+    "swipe": "스와이프 (모바일)",
+    "assert_visible": "요소 표시 확인",
+    "assert_text": "텍스트 확인",
+    "assert_count": "요소 개수 확인",
+    "assert_url": "URL 확인",
+    "hover": "마우스 호버",
+    "select": "드롭다운 선택",
+    "check": "체크박스 선택",
+    "uncheck": "체크박스 해제"
+  },
+
+  "validation_types": {
+    "element_visible": "요소가 화면에 표시되는가",
+    "element_hidden": "요소가 숨겨져 있는가",
+    "element_enabled": "요소가 활성화되어 있는가",
+    "element_disabled": "요소가 비활성화되어 있는가",
+    "text_contains": "특정 텍스트를 포함하는가",
+    "text_equals": "텍스트가 정확히 일치하는가",
+    "element_count": "요소 개수가 일치하는가",
+    "url_contains": "URL이 특정 문자열을 포함하는가",
+    "url_equals": "URL이 정확히 일치하는가",
+    "attribute_equals": "속성값이 일치하는가",
+    "class_contains": "클래스명을 포함하는가",
+    "input_value": "입력값이 일치하는가",
+    "screenshot_match": "스크린샷이 기준과 일치하는가"
+  },
+
+  "modules": [
+    {
+      "module_id": "M01",
+      "module_name": "온보딩 & 회원가입",
+      "description": "신규 사용자 온보딩 및 회원가입 플로우 테스트",
+      "applicable_user_states": ["US01", "US02"],
+      "test_file": "./modules/m01-onboarding.json"
+    },
+    {
+      "module_id": "M02",
+      "module_name": "메인 화면",
+      "description": "메인 홈 화면 및 대시보드 기능 테스트",
+      "applicable_user_states": ["US04", "US05"],
+      "test_file": "./modules/m02-main.json"
+    },
+    {
+      "module_id": "M03",
+      "module_name": "알림",
+      "description": "알림 목록 및 설정 기능 테스트",
+      "applicable_user_states": ["US04", "US05"],
+      "test_file": "./modules/m03-notifications.json"
+    },
+    {
+      "module_id": "M04",
+      "module_name": "프로젝트 관리",
+      "description": "프로젝트 목록, 상세, 팀원 관리 테스트",
+      "applicable_user_states": ["US04", "US05"],
+      "test_file": "./modules/m04-project.json"
+    },
+    {
+      "module_id": "M05",
+      "module_name": "팀매칭",
+      "description": "팀 매칭 및 모집글 탐색 테스트",
+      "applicable_user_states": ["US02", "US04", "US05"],
+      "test_file": "./modules/m05-matching.json"
+    },
+    {
+      "module_id": "M06",
+      "module_name": "지원하기 & 지원자 관리",
+      "description": "프로젝트 지원 및 지원자 관리 테스트",
+      "applicable_user_states": ["US04", "US05"],
+      "test_file": "./modules/m06-application.json"
+    },
+    {
+      "module_id": "M07",
+      "module_name": "상호평가 & 별점관리",
+      "description": "팀원 상호 평가 및 별점 시스템 테스트",
+      "applicable_user_states": ["US04", "US05"],
+      "test_file": "./modules/m07-evaluation.json"
+    },
+    {
+      "module_id": "M08",
+      "module_name": "프로필",
+      "description": "프로필 보기/편집 및 대학 인증 테스트",
+      "applicable_user_states": ["US03", "US04", "US05"],
+      "test_file": "./modules/m08-profile.json"
+    },
+    {
+      "module_id": "M09",
+      "module_name": "북마크 & 지원 내역",
+      "description": "북마크 및 지원 내역 관리 테스트",
+      "applicable_user_states": ["US04", "US05"],
+      "test_file": "./modules/m09-bookmark.json"
+    },
+    {
+      "module_id": "M10",
+      "module_name": "비회원 유저 처리",
+      "description": "비회원 접근 제한 및 둘러보기 테스트",
+      "applicable_user_states": ["US02"],
+      "test_file": "./modules/m10-guest.json"
+    }
+  ],
+
+  "ai_agent_instructions": {
+    "execution_mode": "sequential",
+    "language": "ko",
+    "report_format": "markdown",
+    "on_failure": "continue_and_log",
+    "prompts": {
+      "before_test": "다음 테스트를 실행합니다: {test_id} - {description}",
+      "after_success": "✅ 테스트 통과: {test_id}",
+      "after_failure": "❌ 테스트 실패: {test_id} - 원인: {error_message}",
+      "summary": "테스트 완료. 총 {total}건 중 {passed}건 통과, {failed}건 실패"
+    }
+  }
+}

@@ -1,0 +1,243 @@
+{
+  "workflow_name": "E2E 테스트 셀렉터 수정 워크플로우",
+  "version": "1.0.0",
+  "description": "테스트 JSON 파일의 잘못된 셀렉터를 실제 UI 컴포넌트 클래스명으로 수정하는 워크플로우",
+  "created": "2025-12-21",
+  "proven_results": {
+    "module": "M04",
+    "before": "13/44 (29.5%)",
+    "after": "20/44 (45.5%)",
+    "improvement": "+53.8%"
+  },
+
+  "steps": [
+    {
+      "step": 1,
+      "name": "실패 테스트 분석",
+      "actions": [
+        "npx playwright test --workers=1 --grep '{MODULE_ID}' --reporter=list 실행",
+        "test-results/**/error-context.md 파일에서 실패 원인 확인",
+        "실패 패턴 분류: SELECTOR, TIMING, API, DATA"
+      ],
+      "output": "실패 테스트 목록 및 에러 메시지"
+    },
+    {
+      "step": 2,
+      "name": "실제 UI 컴포넌트 탐색",
+      "actions": [
+        "src/components/**/*.scss 파일에서 실제 클래스명 확인",
+        "src/pages/**/*.scss 파일에서 페이지 컨테이너 클래스명 확인",
+        "해당 컴포넌트 .js 파일에서 렌더링 구조 확인"
+      ],
+      "tools": ["Glob", "Read", "Grep"],
+      "output": "실제 CSS 클래스명 목록"
+    },
+    {
+      "step": 3,
+      "name": "셀렉터 매핑 생성",
+      "actions": [
+        "테스트 JSON의 잘못된 셀렉터와 실제 클래스명 매핑",
+        "fallback 셀렉터 추가 (selector1, selector2 형식)"
+      ],
+      "output": "잘못된 셀렉터 → 올바른 셀렉터 매핑 테이블"
+    },
+    {
+      "step": 4,
+      "name": "테스트 JSON 수정",
+      "actions": [
+        "steps 배열에 wait 액션 추가 (렌더링 대기)",
+        "validations 배열의 selector 값 교체",
+        "클릭 가능한 요소 셀렉터 정확성 확인"
+      ],
+      "tools": ["Edit"],
+      "output": "수정된 테스트 JSON 파일"
+    },
+    {
+      "step": 5,
+      "name": "수정 검증",
+      "actions": [
+        "수정된 모듈 테스트 재실행",
+        "통과율 비교 및 결과 기록"
+      ],
+      "output": "개선된 통과율 보고서"
+    }
+  ],
+
+  "common_selector_mappings": {
+    "project_management": {
+      "wrong": ".project-title",
+      "correct": ".project-detail-header, .project-name",
+      "context": "프로젝트 제목 표시 영역"
+    },
+    "tabs": {
+      "wrong": ".tab-container",
+      "correct": ".tab-container",
+      "note": "이 셀렉터는 정확함"
+    },
+    "menus": {
+      "wrong": "[href*='/path']",
+      "correct": ".icon-container:nth-child(N) .icon",
+      "context": "아이콘 메뉴 클릭 - React Router 대신 onClick 핸들러 사용"
+    },
+    "timeline": {
+      "wrong": ".timeline-box",
+      "correct": ".timeLineBox-container",
+      "context": "프로젝트 피드/타임라인 영역"
+    },
+    "progress": {
+      "wrong": ".d-day, .deadline",
+      "correct": ".today-icon, .progress-wrapper",
+      "context": "D-Day 및 진행률 표시"
+    },
+    "goal_date": {
+      "wrong": ".goal-date, .deadline-info",
+      "correct": ".progress-subtext",
+      "context": "목표일까지 남은 일수 안내"
+    },
+    "description": {
+      "wrong": ".project-description, .project-motto",
+      "correct": ".project-subtitle, .slide-card",
+      "context": "프로젝트 설명/다짐 입력란"
+    },
+    "member_task": {
+      "wrong": ".member-task, .task-list",
+      "correct": ".member-meta, .member-detail-card",
+      "context": "팀원 담당 업무 표시"
+    }
+  },
+
+  "timing_fix_patterns": {
+    "tab_click": {
+      "description": "탭 클릭 후 컨텐츠 렌더링 대기",
+      "before": [
+        { "action": "click", "selector": ".tab-item:nth-child(2)" }
+      ],
+      "after": [
+        { "action": "navigate", "target": "/page" },
+        { "action": "wait", "selector": ".tab-container", "timeout": 5000 },
+        { "action": "click", "selector": ".tab-item:nth-child(2)" },
+        { "action": "wait", "selector": ".content-container", "timeout": 3000 }
+      ]
+    },
+    "menu_navigation": {
+      "description": "메뉴 클릭 후 페이지 이동 대기",
+      "before": [
+        { "action": "click", "selector": ".menu-item" }
+      ],
+      "after": [
+        { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}" },
+        { "action": "wait", "selector": ".main-floating-box", "timeout": 5000 },
+        { "action": "click", "selector": ".icon-container:nth-child(N) .icon" },
+        { "action": "wait_for_navigation", "timeout": 3000 }
+      ]
+    },
+    "modal_open": {
+      "description": "모달 열기 후 렌더링 대기",
+      "before": [
+        { "action": "click", "selector": ".open-modal-btn" }
+      ],
+      "after": [
+        { "action": "click", "selector": ".open-modal-btn" },
+        { "action": "wait", "selector": ".modal-container, .bottom-sheet", "timeout": 3000 }
+      ]
+    }
+  },
+
+  "modules_to_fix": [
+    {
+      "module_id": "M01",
+      "file": "m01-onboarding.json",
+      "name": "온보딩/회원가입",
+      "priority": "high",
+      "current_pass_rate": "~35%",
+      "estimated_selectors_to_fix": 15,
+      "key_components": ["auth", "RegisterPage", "OnboardingPage"]
+    },
+    {
+      "module_id": "M02",
+      "file": "m02-main.json",
+      "name": "메인 화면",
+      "priority": "low",
+      "current_pass_rate": "~77%",
+      "estimated_selectors_to_fix": 3,
+      "key_components": ["Home", "BottomNav"]
+    },
+    {
+      "module_id": "M03",
+      "file": "m03-notifications.json",
+      "name": "알림",
+      "priority": "medium",
+      "current_pass_rate": "0%",
+      "estimated_selectors_to_fix": 5,
+      "key_components": ["NotificationsPage"]
+    },
+    {
+      "module_id": "M05",
+      "file": "m05-matching.json",
+      "name": "팀 매칭",
+      "priority": "high",
+      "current_pass_rate": "~26%",
+      "estimated_selectors_to_fix": 20,
+      "key_components": ["TeamMatching", "MatchingCard"]
+    },
+    {
+      "module_id": "M06",
+      "file": "m06-application.json",
+      "name": "지원 기능",
+      "priority": "high",
+      "current_pass_rate": "~33%",
+      "estimated_selectors_to_fix": 18,
+      "key_components": ["ProjectApply", "ApplicantListSlide"]
+    },
+    {
+      "module_id": "M07",
+      "file": "m07-evaluation.json",
+      "name": "평가",
+      "priority": "high",
+      "current_pass_rate": "~31%",
+      "estimated_selectors_to_fix": 20,
+      "key_components": ["RatingManagement", "RatingProjectPage"]
+    },
+    {
+      "module_id": "M08",
+      "file": "m08-profile.json",
+      "name": "프로필",
+      "priority": "high",
+      "current_pass_rate": "~17%",
+      "estimated_selectors_to_fix": 22,
+      "key_components": ["Profile", "ProfileEditPage"]
+    },
+    {
+      "module_id": "M09",
+      "file": "m09-bookmark.json",
+      "name": "북마크",
+      "priority": "medium",
+      "current_pass_rate": "~36%",
+      "estimated_selectors_to_fix": 6,
+      "key_components": ["BookmarkPage"]
+    },
+    {
+      "module_id": "M10",
+      "file": "m10-guest.json",
+      "name": "게스트",
+      "priority": "low",
+      "current_pass_rate": "~28%",
+      "estimated_selectors_to_fix": 4,
+      "key_components": ["GuestLandingPage"]
+    }
+  ],
+
+  "commands": {
+    "run_single_module": "npx playwright test --workers=1 --grep '{MODULE_ID}' --reporter=list",
+    "run_all_tests": "npx playwright test --workers=1 --reporter=list",
+    "run_failed_only": "npx playwright test --last-failed --workers=1",
+    "generate_html_report": "npx playwright test --workers=1 --reporter=html",
+    "show_report": "npx playwright show-report",
+    "run_specific_test": "npx playwright test --workers=1 --grep '{TEST_ID}' --reporter=list"
+  },
+
+  "usage_instructions": {
+    "for_claude": "이 JSON 파일을 참조하여 {MODULE_ID}를 수정할 모듈 ID로 교체하고, steps의 각 단계를 순서대로 실행하세요. common_selector_mappings를 참고하여 비슷한 패턴의 셀렉터를 수정하고, timing_fix_patterns를 적용하여 렌더링 대기 문제를 해결하세요.",
+    "expected_improvement": "각 모듈당 평균 50% 이상 통과율 개선 예상"
+  }
+}

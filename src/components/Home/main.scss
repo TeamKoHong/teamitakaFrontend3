@@ -1,0 +1,403 @@
+@use '../../styles/variables' as *;
+
+/* ========== Tokens ========== */
+$brand: $primary-color;
+$brand-strong: $primary-color;
+$ink: #111;
+$ink-2: #373737;
+$ink-3: #6b7280;
+$ink-4: #9ca3af;
+$bg: #f7f7fb;
+$card: #ffffff;
+$shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+$line: #e5e7eb;
+$radius-lg: 16px;
+$radius-md: 12px;
+$header-h: 64px;
+
+$card-gap-top: 0px;
+$pull-up: $header-h;
+$keywords-bottom-space: 16px;
+
+.main-page {
+  background: $bg;
+  min-height: 100vh;
+  padding: 0 16px;
+  padding-top: $header-h;
+  color: $ink;
+
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    height: $header-h;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: $card;
+    padding: 16px 20px;
+    border-bottom: none;
+    box-sizing: border-box;
+  }
+
+  .logo {
+    color: $brand;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+  }
+
+  .icon-btn {
+    border: 0;
+    background: transparent;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+
+    .alarm-icon {
+      width: 14.999924659729004px;
+      height: 18.461538314819336px;
+      display: block;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .profile-card {
+    position: relative;
+    background: $card;
+    border-radius: 0 0 24px 24px;
+    box-shadow: none;
+    padding: 64px 16px 16px 16px;
+    margin: -$pull-up -16px 20px;
+
+    display: grid;
+    grid-template-columns: 1fr 108px;
+    column-gap: 14px;
+    align-items: start;
+
+    .profile-right {
+      grid-column: 2;
+      display: grid;
+      align-items: start;
+      justify-items: start;
+      position: relative;
+
+      .profile-img {
+        width: 100px;
+        height: 100px;
+
+        border-radius: 24px;
+        overflow: hidden;
+
+        background: #e9e9ec;
+        display: grid;
+        place-items: center;
+        margin-bottom: 0;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+      }
+    }
+
+    .profile-middle {
+      grid-column: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+      align-self: start;
+      padding-top: 0;
+      padding-bottom: $keywords-bottom-space;
+
+      .name {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        line-height: 1.25;
+        margin-bottom: 2px;
+
+        .name-strong {
+          font-size: 17px;
+          font-weight: 800;
+          color: $ink;
+        }
+
+        .name-regular {
+          font-size: 17px;
+          font-weight: 400;
+          color: $ink;
+        }
+      }
+
+      .school {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: #807c7c;
+        line-height: 1.35;
+        margin-bottom: 10px;
+
+        .school-icon {
+          width: 14px;
+          height: 14px;
+          object-fit: contain;
+        }
+      }
+
+      .stats {
+        font-size: 13px;
+        color: $ink-2;
+        line-height: 1.5;
+        margin-top: 6px;
+
+        .stats-strong {
+          font-weight: 800;
+          color: $ink;
+        }
+
+        .count {
+          margin-left: 4px;
+          color: $brand;
+          font-weight: 800;
+        }
+
+        .muted {
+          color: $ink-4;
+        }
+      }
+
+      .tags {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+
+        .tag.pill {
+          padding: 5px 10px;
+          font-size: 11px;
+          font-weight: 600;
+          border-radius: 999px;
+          background: #fff4ef;
+          color: $brand;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+
+  >h2.section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: $ink;
+    margin: 8px 0 16px;
+  }
+
+  .my-projects {
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    margin-bottom: 16px;
+
+    /* ✅ 여기만 핵심 수정 */
+    .main-project-carousel {
+      display: flex !important;
+      flex-direction: row !important;
+      gap: 12px !important;
+
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      -webkit-overflow-scrolling: touch;
+
+      /* ❌ 패딩을 죽이던 코드 제거 */
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+
+      /* ✅ “왼쪽 16px 흰 배경 여백” 보장 */
+      padding-left: 16px !important;
+      padding-right: 16px !important;
+
+      scroll-snap-type: x mandatory;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      scrollbar-width: none;
+
+      >* {
+        flex: 0 0 auto !important;
+        width: auto !important;
+        max-width: none !important;
+        scroll-snap-align: start;
+      }
+    }
+
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+
+      margin-top: 10px;
+      padding-bottom: 6px;
+
+      min-height: 14px;
+      position: relative;
+      z-index: 5;
+      pointer-events: auto;
+    }
+
+    .carousel-dots .dot {
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #cfcfd4;
+      opacity: 0.95;
+
+      transition: width 0.15s ease, opacity 0.15s ease;
+    }
+
+    .carousel-dots .dot.is-active {
+      width: 16px;
+      background: #111;
+      opacity: 1;
+    }
+
+    .loading-state,
+    .error-state {
+      padding: 40px 16px;
+      text-align: center;
+      font-size: 14px;
+      color: $ink-3;
+
+      button {
+        margin-top: 12px;
+        padding: 8px 16px;
+        background: $brand;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.06s ease;
+
+        &:active {
+          transform: translateY(1px);
+        }
+      }
+    }
+
+    .empty-card {
+      border-radius: $radius-lg;
+      padding: 24px 16px;
+      text-align: center;
+      display: grid;
+      place-items: center;
+      row-gap: 12px;
+
+      .empty-img {
+        width: 128px;
+        height: auto;
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      .empty-text {
+        font-size: 13px;
+        color: #444;
+        line-height: 1.6;
+      }
+
+      .primary-btn {
+        margin-top: 8px;
+        width: 240px;
+        height: 44px;
+        border: 0;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 800;
+        color: #fff;
+        cursor: pointer;
+        background: $brand;
+        box-shadow: none;
+        transition: transform 0.06s ease;
+
+        &:active {
+          transform: translateY(1px);
+        }
+      }
+    }
+  }
+
+  .main-todo-section {
+    margin-left: -16px;
+    margin-right: -16px;
+    margin-top: 12px;
+    width: auto;
+  }
+
+  .bottom-spacer {
+    height: calc(88px + env(safe-area-inset-bottom) + 16px);
+  }
+
+  .support-btn-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .support-btn {
+    width: 260px;
+    height: 48px;
+    background: $brand;
+    border: none;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 800;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: none;
+    transition: transform 0.06s ease;
+
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+
+  @media (max-width: 360px) {
+    .profile-card {
+      grid-template-columns: 1fr 84px;
+      column-gap: 12px;
+
+      .profile-right .profile-img {
+        width: 76px;
+        height: 76px;
+        border-radius: 24px;
+      }
+    }
+
+    .my-projects .empty-card .empty-img {
+      width: 112px;
+    }
+
+    .main-todo-section {
+      margin-left: -16px;
+      margin-right: -16px;
+    }
+  }
+}

@@ -1,0 +1,394 @@
+.recruiting-container {
+  
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  hr {
+    width: 100%;
+    border: 3px solid #ececec;
+    flex-shrink: 0;
+    margin-bottom: 17px;
+  }
+
+  .recruiting-list {
+    box-sizing: border-box;
+
+    .recruiting-cards-wrapper {
+      padding: 0 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .loading-state,
+    .error-state {
+      padding: 40px 16px;
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+
+      button {
+        margin-top: 12px;
+        padding: 8px 16px;
+        background: #F76241;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.06s ease;
+
+        &:active {
+          transform: translateY(1px);
+        }
+      }
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: calc(100dvh - 110px - 88px);
+      padding: 0 2rem;
+      text-align: center;
+
+      .empty-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 8px;
+      }
+
+      .empty-description {
+        font-size: 13px;
+        color: #999;
+        line-height: 1.6;
+        margin-bottom: 24px;
+      }
+
+      .create-project-btn {
+        background: #F76241;
+        color: white;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 1rem 0;
+        width: 100%;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: transform 0.06s ease;
+
+        &:active {
+          transform: translateY(1px);
+        }
+      }
+    }
+  }
+
+  .highlight {
+    color: #f76241;
+    font-family: Pretendard;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+
+  .recruiting-top {
+    
+    padding: 1rem;
+    &-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+
+      .latest {
+        font-size: 13px;
+        color: #888;
+      }
+    }
+
+    .recruiting-card {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      border-radius: 20px;
+      border: 2px solid #f76241;
+
+      h3 {
+        font-size: 16px;
+        margin-bottom: 8px;
+      }
+
+      .description {
+        font-size: 13px;
+        color: #999;
+        margin-bottom: 12px;
+      }
+
+      .info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+
+        .info-left {
+          display: flex;
+          flex-direction: row;
+
+          .views {
+            display: flex;
+            position: relative;
+            color: #bbb;
+            margin-right: 1rem;
+            .info-icon {
+              margin-right: 2px;
+            }
+            span {
+              font-size: 12px;
+            }
+            .info-view-icon {
+              position: relative;
+              top: 2px;
+              font-size: 12px;
+              margin-right: 2px;
+            }
+          }
+
+          .comments {
+            color: #bbb;
+
+            .info-icon {
+              position: relative;
+              top: 1px;
+              margin-right: 2px;
+            }
+            span {
+              font-size: 12px;
+            }
+          }
+        }
+
+        .d-day {
+          color: #f76241;
+          font-family: Pretendard;
+          font-size: 15px;
+          font-style: normal;
+          font-weight: 700;
+          line-height: normal;
+          text-transform: capitalize;
+        }
+      }
+    }
+  }
+
+  .recruiting-bottom {
+    padding: 0 22px;
+    &-info {
+      color: #000;
+      font-family: Pretendard;
+      font-size: 15px;
+      font-style: normal;
+      font-weight: 600;
+      text-transform: capitalize;
+      margin-bottom: 21px;
+    }
+
+    .recruiting-action {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+      &-explain {
+        color: #807c7c;
+        font-family: Pretendard;
+        font-size: 10px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        text-transform: capitalize;
+        margin-bottom: 9px;
+      }
+
+      .project-name {
+        color: #403e3e;
+        font-family: Pretendard;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        text-transform: capitalize;
+        margin-bottom: 27px;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 8px;
+
+        .btn {
+          flex: 1;
+          padding: 10px 12px;
+          border-radius: 8px;
+          border: none;
+          font-size: 14px;
+          cursor: pointer;
+        }
+
+        .delete {
+          width: 143px;
+          height: 39px;
+          flex-shrink: 0;
+          border-radius: 14.063px;
+          border: 0.938px solid #807c7c;
+          background: #fffdfc;
+          color: #807c7c;
+
+          text-align: center;
+          font-family: Pretendard;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+          text-transform: capitalize;
+        }
+
+        .retry {
+          width: 143px;
+          height: 39px;
+          border-radius: 14.063px;
+          background: #807c7c;
+          color: #fffdfc;
+          text-align: center;
+          font-family: Pretendard;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+          text-transform: capitalize;
+        }
+      }
+    }
+  }
+
+  .recruiting-deadline-container {
+    padding: 1rem;
+    margin-bottom: 100px;
+
+    .recruiting-deadline-card {
+      margin-bottom: 1rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .recruiting-deadline-title {
+      font-style: normal;
+      font-family: Pretendard;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 21px;
+
+      .title-text {
+        color: #000;
+        margin: 0;
+
+        .highlight {
+          color: #F76241;
+        }
+      }
+    }
+
+    .recruiting-deadline-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 1.5rem;
+      background-color: #fff;
+      border-radius: 1rem;
+
+      .recruiting-deadline-card-title {
+        color: #403E3E;
+        font-family: Pretendard;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        text-transform: capitalize;
+        margin-bottom: 18px;
+      }
+      
+      .recruiting-deadline-card-description {
+        color: #807C7C;
+        font-family: Pretendard;
+        font-size: 12px;
+        font-weight: 400;
+      }
+
+      
+
+      .recruiting-deadline-card-buttons {
+        display: flex;
+        gap: 8px;
+        justify-content: space-between;
+
+        .delete-btn,
+        .rerecruit-btn {
+          flex: 1;
+          padding: 11px 0;
+          border-radius: 14.063px;
+          font-size: 14px;
+          font-weight: 500;
+          font-family: Pretendard;
+          cursor: pointer;
+          text-align: center
+
+        }
+
+        .delete-btn {
+          border: 1px solid #807C7C;
+          background: #fff;
+          color: #807C7C;
+        }
+
+        .rerecruit-btn {
+          border: none;
+          background: #807C7C;
+          color: #fff;
+        }
+      }
+
+   
+   }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+}

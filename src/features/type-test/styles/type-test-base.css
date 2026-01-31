@@ -1,0 +1,45 @@
+:root {
+    /* Colors derived from _variables.scss */
+    --primary-color: #F76241;
+    --secondary-color: #1890FF;
+    --accent-color: #FFC107;
+    --success-color: #F76241;
+    --warning-color: #FAAD14;
+    --error-color: #FF4D4F;
+
+    /* Grayscale */
+    --gray-dark: #140805;
+    --gray: #403E3E;
+    --gray-light: #807C7C;
+    --gray-lighter: #D1CCCB;
+
+    /* Backgrounds */
+    --background: #F2F2F2;
+    --card-bg: #FFFFFF;
+
+    /* Text */
+    --text-primary: #140805;
+    --text-secondary: #403E3E;
+    --text-tertiary: #807C7C;
+    --text-disabled: #D1CCCB;
+    --text-white: #FFFFFF;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-base: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-card: 0px 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure Preflight-like defaults if needed for this feature specifically, 
+   though tailwind.config.js has preflight: false. 
+   Adding basic resets for specific elements to ensure consistency. */
+
+.type-test-root {
+    font-family: 'Pretendard', 'Apple SD Gothic Neo', Arial, sans-serif;
+    color: var(--text-primary);
+}
+
+.type-test-root * {
+    box-sizing: border-box;
+}

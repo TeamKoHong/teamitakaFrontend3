@@ -1,0 +1,40 @@
+// 임시 변수 (이 부분들이 정확히 들어가 있어야 합니다!)
+$primary-color: #007bff;
+$accent-color: #28a745;
+$text-dark: #333;
+$text-gray: #7B797A;
+$border-light: #e0e0e0;
+$background-light: #f0f2f5;
+$warning-color: #ffc107;
+$white-color: #ffffff; // Added for $color-white replacement
+
+.summaryCard {
+  background-color: $white-color; // Changed from $color-white
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin-bottom: 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1; // Allows cards to take equal width in a flex container
+  min-width: 150px; // Ensure a minimum width for layout
+  margin-right: 10px; // Spacing between cards if in a row
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.categoryName {
+  font-size: 1em;
+  color: $text-gray;
+  margin-bottom: 8px;
+}
+
+.ratingValue {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: $primary-color;
+}

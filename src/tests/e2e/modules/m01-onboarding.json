@@ -1,0 +1,737 @@
+{
+  "module_id": "M01",
+  "module_name": "온보딩 & 회원가입",
+  "features": [
+    {
+      "feature_id": "M01-F01",
+      "feature_name": "온보딩 화면",
+      "route": "/",
+      "test_scenarios": [
+        {
+          "id": "M01-F01-01",
+          "description": "신규 유저에게 온보딩 화면이 표시되는가?",
+          "user_state": "US01",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/" },
+            { "action": "wait", "selector": ".onboarding-page-container", "timeout": 5000 },
+            { "action": "screenshot", "name": "onboarding-initial" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".onboarding-page-container" },
+            { "type": "url_equals", "expected": "/" }
+          ],
+          "expected_result": "처음 앱 설치 시 온보딩 슬라이드 표시"
+        },
+        {
+          "id": "M01-F01-02",
+          "description": "온보딩 로고 이미지가 표시되는가?",
+          "user_state": "US01",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/" },
+            { "action": "wait", "selector": ".onboarding-page-container", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "img[alt='onboarding-page-logo'], .onboarding-page-container img" }
+          ],
+          "expected_result": "온보딩 로고 이미지 표시"
+        },
+        {
+          "id": "M01-F01-03",
+          "description": "온보딩 화면에서 자동으로 로그인 페이지로 이동하는가?",
+          "user_state": "US01",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/" },
+            { "action": "wait_for_navigation", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "url_contains", "expected": "/login" }
+          ],
+          "expected_result": "3초 후 자동으로 로그인 페이지로 이동"
+        }
+      ]
+    },
+    {
+      "feature_id": "M01-F02",
+      "feature_name": "로그인",
+      "route": "/login",
+      "test_scenarios": [
+        {
+          "id": "M01-F02-01",
+          "description": "학교 이메일 입력 필드가 존재하는가?",
+          "user_state": "US01",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/login" },
+            { "action": "wait", "selector": ".login-page-container", "timeout": 3000 },
+            { "action": "screenshot", "name": "login-page" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".input-field[type='email'], .input-field:first-of-type" },
+            { "type": "element_enabled", "selector": ".input-field" }
+          ],
+          "expected_result": "이메일 입력 가능"
+        },
+        {
+          "id": "M01-F02-02",
+          "description": "비밀번호 입력 필드가 존재하는가?",
+          "user_state": "US01",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/login" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".input-field[type='password'], .input-field:nth-of-type(2)" }
+          ],
+          "expected_result": "비밀번호 마스킹 처리되어 입력"
+        },
+        {
+          "id": "M01-F02-03",
+          "description": "로그인 버튼 클릭 시 인증이 수행되는가?",
+          "user_state": "US01",
+          "priority": "critical",
+          "use_test_credentials": true,
+          "steps": [
+            { "action": "navigate", "target": "/login" },
+            { "action": "wait", "selector": ".login-page-container", "timeout": 3000 },
+            { "action": "type", "selector": ".input-field:first-of-type", "value": "{{TEST_EMAIL}}" },
+            { "action": "type", "selector": ".input-field:nth-of-type(2)", "value": "{{TEST_PASSWORD}}" },
+            { "action": "click", "selector": ".login-button" },
+            { "action": "wait_for_navigation", "timeout": 10000 },
+            { "action": "screenshot", "name": "after-login" }
+          ],
+          "validations": [
+            { "type": "url_contains", "expected": "/main" }
+          ],
+          "expected_result": "유효한 계정으로 로그인 성공"
+        },
+        {
+          "id": "M01-F02-04",
+          "description": "'이메일 찾기' 링크가 동작하는가?",
+          "user_state": "US01",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/login" },
+            { "action": "click", "selector": ".find-links-button:first-of-type" },
+            { "action": "wait_for_navigation", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "url_contains", "expected": "/find-id" }
+          ],
+          "expected_result": "이메일 찾기 화면으로 이동"
+        },
+        {
+          "id": "M01-F02-05",
+          "description": "'비밀번호 찾기' 링크가 동작하는가?",
+          "user_state": "US01",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/login" },
+            { "action": "click", "selector": ".find-links-button:nth-of-type(2)" },
+            { "action": "wait_for_navigation", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "url_contains", "expected": "/find-password" }
+          ],
+          "expected_result": "비밀번호 찾기 화면으로 이동"
+        },
+        {
+          "id": "M01-F02-06",
+          "description": "'회원가입' 링크가 동작하는가?",
+          "user_state": "US01",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/login" },
+            { "action": "click", "selector": ".find-links-button:last-of-type, button:has-text('회원가입')" },
+            { "action": "wait_for_navigation", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "url_contains", "expected": "/phone-verify" }
+          ],
+          "expected_result": "본인인증 화면으로 이동"
+        }
+      ]
+    },
+    {
+      "feature_id": "M01-F03",
+      "feature_name": "회원가입 - 약관동의",
+      "route": "/register",
+      "skip": true,
+      "skip_reason": "회원가입 플로우는 실제 SMS/이메일 인증이 필요하여 E2E 자동화 불가",
+      "test_scenarios": [
+        {
+          "id": "M01-F03-01",
+          "description": "'전체 동의' 체크박스가 동작하는가?",
+          "user_state": "US01",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/register" },
+            { "action": "wait", "selector": ".register-page-container", "timeout": 5000 },
+            { "action": "wait", "selector": ".consent-section", "timeout": 3000 },
+            { "action": "click", "selector": ".consent-item.all-consent" },
+            { "action": "screenshot", "name": "all-consent-checked" }
+          ],
+          "validations": [
+            { "type": "element_count", "selector": ".consent-item.checked", "expected": 4 }
+          ],
+          "expected_result": "모든 약관 항목 일괄 선택/해제"
+        },
+        {
+          "id": "M01-F03-02",
+          "description": "[필수] 서비스 이용약관 동의 항목이 존재하는가?",
+          "user_state": "US01",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/register" },
+            { "action": "wait", "selector": ".register-page-container", "timeout": 5000 },
+            { "action": "wait", "selector": ".consent-section", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": ".consent-section", "expected": "서비스 이용약관" },
+            { "type": "text_contains", "selector": ".consent-item:nth-child(2) .consent-label", "expected": "필수" }
+          ],
+          "expected_result": "필수 표시 및 상세보기 가능"
+        },
+        {
+          "id": "M01-F03-03",
+          "description": "[필수] 개인정보 처리방침 동의 항목이 존재하는가?",
+          "user_state": "US01",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/register" },
+            { "action": "wait", "selector": ".register-page-container", "timeout": 5000 },
+            { "action": "wait", "selector": ".consent-section", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": ".consent-section", "expected": "개인정보" }
+          ],
+          "expected_result": "필수 표시 및 상세보기 가능"
+        },
+        {
+          "id": "M01-F03-04",
+          "description": "[선택] 마케팅 정보 수신 동의 항목이 존재하는가?",
+          "user_state": "US01",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/register" },
+            { "action": "wait", "selector": ".register-page-container", "timeout": 5000 },
+            { "action": "wait", "selector": ".consent-section", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": ".consent-section", "expected": "마케팅" }
+          ],
+          "expected_result": "선택 표시 및 상세보기 가능"
+        },
+        {
+          "id": "M01-F03-05",
+          "description": "[선택] 제3자 제공 동의 항목이 존재하는가?",
+          "user_state": "US01",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/register" },
+            { "action": "wait", "selector": ".register-page-container", "timeout": 5000 },
+            { "action": "wait", "selector": ".consent-section", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": ".consent-section", "expected": "제3자" }
+          ],
+          "expected_result": "선택 표시 및 상세보기 가능"
+        },
+        {
+          "id": "M01-F03-06",
+          "description": "필수 항목 미동의 시 '다음' 버튼이 비활성화되는가?",
+          "user_state": "US01",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/register" },
+            { "action": "wait", "selector": ".register-page-container", "timeout": 5000 },
+            { "action": "wait", "selector": ".bottom-button .next-button", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_not_class", "selector": ".next-button", "expected": "active" }
+          ],
+          "expected_result": "필수 항목 동의 전까지 진행 불가"
+        }
+      ]
+    },
+    {
+      "feature_id": "M01-F04",
+      "feature_name": "회원가입 - 본인인증",
+      "route": "/phone-verify",
+      "skip": true,
+      "skip_reason": "SMS 인증 필요 - E2E 자동화 불가",
+      "test_scenarios": [
+        {
+          "id": "M01-F04-01",
+          "description": "휴대전화번호 입력 필드가 존재하는가?",
+          "user_state": "US01",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/phone-verify" },
+            { "action": "wait", "selector": ".standard-input-field", "timeout": 3000 },
+            { "action": "screenshot", "name": "phone-verify-page" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".standard-input-field" },
+            { "type": "element_enabled", "selector": ".standard-input-field input" }
+          ],
+          "expected_result": "통신사 선택 및 전화번호 입력 가능"
+        },
+        {
+          "id": "M01-F04-02",
+          "description": "인증번호 전송 기능이 동작하는가?",
+          "user_state": "US01",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/phone-verify" },
+            { "action": "type", "selector": ".standard-input-field input", "value": "01012345678" },
+            { "action": "click", "selector": ".next-button" },
+            { "action": "wait", "selector": ".register-toast-message", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".register-toast-message" },
+            { "type": "text_contains", "selector": ".register-toast-message", "expected": "인증번호" }
+          ],
+          "expected_result": "'인증번호가 전송되었습니다' 메시지 표시"
+        },
+        {
+          "id": "M01-F04-03",
+          "description": "인증번호 6자리 입력 필드가 존재하는가?",
+          "user_state": "US01",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/phone-verify/code" },
+            { "action": "wait", "selector": ".code-input-wrapper", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".code-input-wrapper" },
+            { "type": "element_count", "selector": ".code-box", "expected": 6 }
+          ],
+          "expected_result": "6자리 숫자 입력 가능"
+        },
+        {
+          "id": "M01-F04-04",
+          "description": "인증 타이머(02:56 형식)가 표시되는가?",
+          "user_state": "US01",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/phone-verify/code" },
+            { "action": "wait", "selector": ".code-input-wrapper", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": ".timer", "expected": ":" }
+          ],
+          "expected_result": "카운트다운 타이머 동작"
+        },
+        {
+          "id": "M01-F04-05",
+          "description": "'다시 보내기' 기능이 동작하는가?",
+          "user_state": "US01",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/phone-verify/code" },
+            { "action": "click", "selector": ".resend-code-link" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".register-toast-message" }
+          ],
+          "expected_result": "인증번호 재전송"
+        },
+        {
+          "id": "M01-F04-06",
+          "description": "주민등록번호 앞자리(생년월일) 입력이 가능한가?",
+          "user_state": "US01",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/register" },
+            { "action": "wait", "selector": ".register-page-container", "timeout": 5000 },
+            { "action": "wait", "selector": ".standard-input-field", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".standard-input-field" }
+          ],
+          "expected_result": "6자리 + 성별 1자리 입력"
+        }
+      ]
+    },
+    {
+      "feature_id": "M01-F05",
+      "feature_name": "회원가입 - 학교 이메일 인증",
+      "route": "/register",
+      "skip": true,
+      "skip_reason": "이메일 인증 필요 - E2E 자동화 불가",
+      "test_scenarios": [
+        {
+          "id": "M01-F05-01",
+          "description": "학교 이메일 입력 필드가 존재하는가?",
+          "user_state": "US01",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/register" },
+            { "action": "wait", "selector": ".register-page-container", "timeout": 5000 },
+            { "action": "wait", "selector": ".standard-input-field", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".standard-input-field" }
+          ],
+          "expected_result": "학교 도메인 이메일 입력 가능"
+        },
+        {
+          "id": "M01-F05-02",
+          "description": "'티미타카는 학교 이메일로만 가입할 수 있습니다' 안내가 표시되는가?",
+          "user_state": "US01",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/register" },
+            { "action": "wait", "selector": ".register-page-container", "timeout": 5000 },
+            { "action": "wait", "selector": ".step-content", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": ".step-description, .step-content", "expected": "학교 이메일" }
+          ],
+          "expected_result": "안내 문구 표시"
+        },
+        {
+          "id": "M01-F05-03",
+          "description": "올바르지 않은 이메일 형식 입력 시 오류 메시지가 표시되는가?",
+          "user_state": "US01",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/register" },
+            { "action": "wait", "selector": ".register-page-container", "timeout": 5000 },
+            { "action": "wait", "selector": ".standard-input-field", "timeout": 3000 },
+            { "action": "type", "selector": ".standard-input-field input", "value": "invalid@gmail.com" },
+            { "action": "click", "selector": ".bottom-button .next-button" },
+            { "action": "wait", "selector": ".input-error-text", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".input-error-text" }
+          ],
+          "expected_result": "'올바른 이메일 형식을 입력해주세요' 메시지"
+        },
+        {
+          "id": "M01-F05-04",
+          "description": "인증 코드 전송 버튼이 동작하는가?",
+          "user_state": "US01",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/register" },
+            { "action": "wait", "selector": ".register-page-container", "timeout": 5000 },
+            { "action": "wait", "selector": ".standard-input-field", "timeout": 3000 },
+            { "action": "type", "selector": ".standard-input-field input", "value": "test@hongik.ac.kr" },
+            { "action": "click", "selector": ".bottom-button .next-button" },
+            { "action": "wait", "selector": ".register-toast-message", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".register-toast-message" }
+          ],
+          "expected_result": "이메일로 인증 코드 발송"
+        },
+        {
+          "id": "M01-F05-05",
+          "description": "인증 코드 6자리 입력 필드가 존재하는가?",
+          "user_state": "US01",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/register" },
+            { "action": "wait", "selector": ".register-page-container", "timeout": 5000 },
+            { "action": "wait", "selector": ".code-input-wrapper, .standard-input-field", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".code-input-wrapper, .standard-input-field" }
+          ],
+          "expected_result": "인증 코드 입력 가능"
+        },
+        {
+          "id": "M01-F05-06",
+          "description": "'코드 다시 받기' 기능이 동작하는가?",
+          "user_state": "US01",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/register" },
+            { "action": "wait", "selector": ".register-page-container", "timeout": 5000 },
+            { "action": "wait", "selector": ".resend-code-link", "timeout": 5000 },
+            { "action": "click", "selector": ".resend-code-link" },
+            { "action": "wait", "selector": ".register-toast-message", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".register-toast-message" }
+          ],
+          "expected_result": "인증 코드 재발송"
+        }
+      ]
+    },
+    {
+      "feature_id": "M01-F06",
+      "feature_name": "회원가입 - 비밀번호 설정",
+      "route": "/register",
+      "skip": true,
+      "skip_reason": "회원가입 플로우 중간 단계 - 이전 단계 인증 필요",
+      "test_scenarios": [
+        {
+          "id": "M01-F06-01",
+          "description": "비밀번호 입력 필드가 존재하는가?",
+          "user_state": "US01",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/register" },
+            { "action": "wait", "selector": ".register-page-container", "timeout": 5000 },
+            { "action": "wait", "selector": ".standard-input-field, .step4-input-field", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".standard-input-field, .step4-input-field" }
+          ],
+          "expected_result": "영문+숫자 8자 이상 입력 가능"
+        },
+        {
+          "id": "M01-F06-02",
+          "description": "비밀번호 확인 입력 필드가 존재하는가?",
+          "user_state": "US01",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/register" },
+            { "action": "wait", "selector": ".register-page-container", "timeout": 5000 },
+            { "action": "wait", "selector": ".standard-input-field, .step4-input-field", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".standard-input-field, .step4-input-field" }
+          ],
+          "expected_result": "비밀번호 재입력 가능"
+        },
+        {
+          "id": "M01-F06-03",
+          "description": "비밀번호 불일치 시 오류 메시지가 표시되는가?",
+          "user_state": "US01",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/register" },
+            { "action": "wait", "selector": ".register-page-container", "timeout": 5000 },
+            { "action": "wait", "selector": ".step4-input-field, .standard-input-field", "timeout": 3000 },
+            { "action": "type", "selector": ".step4-input-field:nth-of-type(1) input, .standard-input-field:nth-of-type(1) input", "value": "Test1234!" },
+            { "action": "type", "selector": ".step4-input-field:nth-of-type(2) input, .standard-input-field:nth-of-type(2) input", "value": "Different1234!" },
+            { "action": "wait", "selector": ".input-error-text, .password-error", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".input-error-text, .password-error" }
+          ],
+          "expected_result": "'비밀번호가 일치하지 않습니다' 메시지"
+        },
+        {
+          "id": "M01-F06-04",
+          "description": "비밀번호 조건 미충족 시 안내가 표시되는가?",
+          "user_state": "US01",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/register" },
+            { "action": "wait", "selector": ".register-page-container", "timeout": 5000 },
+            { "action": "wait", "selector": ".step-content", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": ".step-content, .step-description", "expected": "8자" }
+          ],
+          "expected_result": "'비밀번호는 영문, 숫자를 혼용해 8자 이상으로 설정하세요' 메시지"
+        }
+      ]
+    },
+    {
+      "feature_id": "M01-F07",
+      "feature_name": "회원가입 - 프로필 정보 입력",
+      "route": "/profile-setup",
+      "skip": true,
+      "skip_reason": "회원가입 완료 후 프로필 설정 단계 - 이전 단계 인증 필요",
+      "test_scenarios": [
+        {
+          "id": "M01-F07-01",
+          "description": "닉네임 입력 필드가 존재하는가?",
+          "user_state": "US03",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/profile-setup" },
+            { "action": "wait", "selector": ".standard-input-field", "timeout": 3000 },
+            { "action": "screenshot", "name": "profile-setup-page" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".standard-input-field" }
+          ],
+          "expected_result": "닉네임 입력 가능"
+        },
+        {
+          "id": "M01-F07-02",
+          "description": "학과/전공 입력 필드가 존재하는가?",
+          "user_state": "US03",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/profile-setup" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".major-input, .standard-input-field" }
+          ],
+          "expected_result": "주전공 필수, 복수전공 선택 입력"
+        },
+        {
+          "id": "M01-F07-03",
+          "description": "관심 분야 키워드 입력이 가능한가?",
+          "user_state": "US03",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/profile-setup" },
+            { "action": "wait", "selector": ".standard-input-field", "timeout": 5000 },
+            { "action": "type", "selector": ".standard-input-field input", "value": "마케팅" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".standard-input-field" }
+          ],
+          "expected_result": "최대 5개 키워드 입력 (최대 5글자)"
+        },
+        {
+          "id": "M01-F07-04",
+          "description": "'건너뛰기' 버튼이 존재하는가?",
+          "user_state": "US03",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/profile-setup" },
+            { "action": "wait", "selector": ".bottom-button, .next-button", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".bottom-button .next-button, .next-button" }
+          ],
+          "expected_result": "프로필 입력 스킵 가능"
+        },
+        {
+          "id": "M01-F07-05",
+          "description": "회원가입 완료 후 확인 화면이 표시되는가?",
+          "user_state": "US03",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/welcome" },
+            { "action": "wait", "selector": "body", "timeout": 5000 },
+            { "action": "screenshot", "name": "registration-complete" }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "완료" }
+          ],
+          "expected_result": "'회원가입 완료!' 메시지 및 로그인 버튼"
+        }
+      ]
+    },
+    {
+      "feature_id": "M01-F08",
+      "feature_name": "아이디 찾기",
+      "route": "/find-id",
+      "test_scenarios": [
+        {
+          "id": "M01-F08-01",
+          "description": "이름 입력 필드가 존재하는가?",
+          "user_state": "US01",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/find-id" },
+            { "action": "wait", "selector": "input", "timeout": 5000 },
+            { "action": "screenshot", "name": "find-id-page" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "input" }
+          ],
+          "expected_result": "실명 입력 가능"
+        },
+        {
+          "id": "M01-F08-02",
+          "description": "휴대전화번호 본인인증이 가능한가?",
+          "user_state": "US01",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/find-id" },
+            { "action": "wait", "selector": "input", "timeout": 5000 },
+            { "action": "type", "selector": "input", "value": "홍길동" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "button" }
+          ],
+          "expected_result": "통신사, 전화번호 입력 및 인증"
+        },
+        {
+          "id": "M01-F08-03",
+          "description": "인증 완료 후 이메일 주소가 표시되는가?",
+          "user_state": "US01",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/find-id" },
+            { "action": "wait", "selector": "input", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "input" }
+          ],
+          "expected_result": "가입된 이메일 및 가입일 표시"
+        }
+      ]
+    },
+    {
+      "feature_id": "M01-F09",
+      "feature_name": "비밀번호 찾기",
+      "route": "/find-password",
+      "test_scenarios": [
+        {
+          "id": "M01-F09-01",
+          "description": "이메일 입력 필드가 존재하는가?",
+          "user_state": "US01",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/find-password" },
+            { "action": "wait", "selector": "input", "timeout": 5000 },
+            { "action": "screenshot", "name": "find-password-page" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "input" }
+          ],
+          "expected_result": "가입된 이메일 입력"
+        },
+        {
+          "id": "M01-F09-02",
+          "description": "재설정 메일 보내기 버튼이 동작하는가?",
+          "user_state": "US01",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/find-password" },
+            { "action": "wait", "selector": "input", "timeout": 5000 },
+            { "action": "type", "selector": "input", "value": "test@hongik.ac.kr" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "button" }
+          ],
+          "expected_result": "비밀번호 재설정 이메일 발송"
+        },
+        {
+          "id": "M01-F09-03",
+          "description": "새 비밀번호 설정 화면이 표시되는가?",
+          "user_state": "US01",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/find-password" },
+            { "action": "wait", "selector": "input", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "input" }
+          ],
+          "expected_result": "새 비밀번호 및 확인 입력"
+        },
+        {
+          "id": "M01-F09-04",
+          "description": "비밀번호 재설정 완료 후 로그인 화면으로 이동하는가?",
+          "user_state": "US01",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/find-password" },
+            { "action": "wait", "selector": "input", "timeout": 5000 },
+            { "action": "type", "selector": "input", "value": "test@hongik.ac.kr" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "button" }
+          ],
+          "expected_result": "'비밀번호 재설정 완료' 후 로그인 화면 이동"
+        }
+      ]
+    }
+  ]
+}

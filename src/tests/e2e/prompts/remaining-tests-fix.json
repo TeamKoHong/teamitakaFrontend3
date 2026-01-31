@@ -1,0 +1,252 @@
+{
+  "workflow_name": "남은 E2E 테스트 수정 워크플로우",
+  "version": "2.0.0",
+  "created_at": "2024-12-21",
+  "description": "14개 실패 테스트 수정을 위한 프론트엔드/백엔드 가이드",
+
+  "failure_summary": {
+    "total_failing": 14,
+    "categories": {
+      "DATA": 5,
+      "NAV": 3,
+      "SELECTOR": 5,
+      "API": 1
+    }
+  },
+
+  "frontend_fixes": {
+    "priority": "high",
+    "file": "src/tests/e2e/modules/m06-application.json",
+
+    "selector_fixes": [
+      {
+        "test_id": "M06-F01-04",
+        "description": "이력서 전송 완료 메시지",
+        "current_selector": ".center-done, .done-text, .center-wrap",
+        "issue": ".done-text 클래스가 실제 DOM에 없음",
+        "fix": {
+          "type": "validation",
+          "current": "{ \"type\": \"element_visible\", \"selector\": \".center-done, .done-text, .center-wrap\" }",
+          "fixed": "{ \"type\": \"element_visible\", \"selector\": \".apply-page.apply-complete, .center-wrap, [class*='complete']\" }"
+        }
+      },
+      {
+        "test_id": "M06-F02-03",
+        "description": "지원 취소 토스트",
+        "current_selector": ".toast, .toast-box, [role='alert']",
+        "issue": "토스트 셀렉터가 실제 컴포넌트와 불일치",
+        "fix": {
+          "type": "validation",
+          "current": "{ \"type\": \"element_visible\", \"selector\": \".toast, .toast-box, [role='alert']\" }",
+          "fixed": "{ \"type\": \"element_visible\", \"selector\": \".toast-box, .toast, .Toastify__toast\" }"
+        }
+      },
+      {
+        "test_id": "M06-F06-01",
+        "description": "모집 기간 완료 안내",
+        "current_target": "/recruitment/expired-1",
+        "issue": "expired-1은 유효하지 않은 UUID 형식",
+        "fix": {
+          "type": "navigation",
+          "current": "{ \"action\": \"navigate\", \"target\": \"/recruitment/expired-1\" }",
+          "fixed": "{ \"action\": \"navigate\", \"target\": \"/recruitment/{{RECRUITMENT_ID}}\" }",
+          "note": "만료된 모집공고 ID는 백엔드에서 테스트 데이터로 제공 필요"
+        }
+      },
+      {
+        "test_id": "M06-F06-03",
+        "description": "다시 모집하기 버튼",
+        "current_selector": "button, .cta",
+        "issue": "너무 일반적인 셀렉터",
+        "fix": {
+          "type": "click",
+          "current": "{ \"action\": \"click\", \"selector\": \"button, .cta\" }",
+          "fixed": "{ \"action\": \"click\", \"selector\": \"button:has-text('모집'), .cta:has-text('모집')\" }"
+        }
+      },
+      {
+        "test_id": "M06-F06-04",
+        "description": "삭제하기 버튼",
+        "current_selector": "button:last-child, .cta",
+        "issue": "버튼 순서가 변경될 수 있음",
+        "fix": {
+          "type": "click",
+          "current": "{ \"action\": \"click\", \"selector\": \"button:last-child, .cta\" }",
+          "fixed": "{ \"action\": \"click\", \"selector\": \"button:has-text('삭제'), .cta.danger\" }"
+        }
+      }
+    ],
+
+    "navigation_fixes": [
+      {
+        "test_id": "M06-F01-03",
+        "description": "지원서 보내기 버튼",
+        "issue": "지원 플로우가 완료되지 않은 상태에서 테스트",
+        "fix": {
+          "approach": "테스트 전 지원서 작성 단계 완료 필요",
+          "steps_to_add": [
+            "{ \"action\": \"navigate\", \"target\": \"/apply2\" }",
+            "{ \"action\": \"wait\", \"selector\": \".apply-page\", \"timeout\": 5000 }",
+            "{ \"action\": \"type\", \"selector\": \".editor textarea\", \"value\": \"테스트 자기소개입니다.\" }",
+            "{ \"action\": \"click\", \"selector\": \".cta.active, .cta:not(.disabled)\" }"
+          ]
+        }
+      },
+      {
+        "test_id": "M06-F02-01",
+        "description": "지원 취소 팝업",
+        "issue": "지원 완료된 프로젝트가 없음",
+        "fix": {
+          "approach": "지원 완료 데이터가 있는 상태에서 테스트",
+          "prerequisite": "테스트 계정에 지원 완료된 프로젝트 필요",
+          "skip_option": {
+            "skip": true,
+            "skip_reason": "지원 완료된 프로젝트 데이터 없음 - 백엔드 테스트 데이터 필요"
+          }
+        }
+      }
+    ],
+
+    "data_dependent_tests": {
+      "description": "테스트 데이터 의존성이 있는 테스트들",
+      "tests": [
+        {
+          "test_id": "M03-F01-01",
+          "description": "알림 목록 날짜별 그룹화",
+          "required_data": "테스트 계정에 알림 데이터 필요",
+          "solution": "empty state도 통과하도록 수정 완료"
+        },
+        {
+          "test_id": "M06-F04-09",
+          "description": "팀원으로 초대하기",
+          "required_data": "모집공고에 지원자가 있어야 함",
+          "solution": "백엔드에서 테스트용 지원자 데이터 생성 필요"
+        }
+      ]
+    }
+  },
+
+  "backend_requests": {
+    "priority": "high",
+    "description": "E2E 테스트를 위한 백엔드 API 요청사항",
+
+    "test_data_requirements": [
+      {
+        "id": "BACKEND-001",
+        "title": "테스트용 만료된 모집공고 ID 제공",
+        "priority": "critical",
+        "issue": "M06-F06-01 테스트에서 'expired-1' 문자열 사용으로 PostgreSQL UUID 파싱 오류 발생",
+        "error_message": "invalid input syntax for type uuid: \"expired-1\"",
+        "requirement": "테스트 환경에서 사용할 수 있는 만료된 상태의 모집공고 UUID 필요",
+        "options": [
+          {
+            "option": "A",
+            "description": "테스트용 만료 모집공고 API 엔드포인트 제공",
+            "endpoint": "GET /api/test/expired-recruitments",
+            "response": "{ \"expired_recruitment_id\": \"uuid-string\" }"
+          },
+          {
+            "option": "B",
+            "description": "테스트 데이터 시드 스크립트에 만료 모집공고 포함",
+            "script": "npm run seed:test-data"
+          }
+        ]
+      },
+      {
+        "id": "BACKEND-002",
+        "title": "테스트 계정 알림 데이터 생성",
+        "priority": "medium",
+        "issue": "M03-F01-01 테스트에서 알림 데이터가 없어 빈 상태만 테스트됨",
+        "requirement": "테스트 계정(sjwoo1999@korea.ac.kr)에 알림 데이터 필요",
+        "suggested_notifications": [
+          { "type": "application_received", "message": "새로운 지원자가 있습니다" },
+          { "type": "team_matched", "message": "팀 매칭이 완료되었습니다" },
+          { "type": "project_deadline", "message": "프로젝트 마감이 임박했습니다" }
+        ]
+      },
+      {
+        "id": "BACKEND-003",
+        "title": "테스트용 지원자 데이터 생성",
+        "priority": "medium",
+        "issue": "M06-F04-09 테스트에서 모집공고에 지원자가 없음",
+        "requirement": "테스트 모집공고에 지원자 데이터 필요",
+        "suggested_data": {
+          "applicant_count": 3,
+          "status": ["pending", "accepted", "rejected"]
+        }
+      },
+      {
+        "id": "BACKEND-004",
+        "title": "테스트 계정 지원 완료 프로젝트 데이터",
+        "priority": "medium",
+        "issue": "M06-F02-* 테스트에서 지원 취소할 프로젝트가 없음",
+        "requirement": "테스트 계정에서 지원 완료된 프로젝트 필요",
+        "suggested_data": {
+          "application_status": "applied",
+          "can_cancel": true
+        }
+      }
+    ],
+
+    "api_improvements": [
+      {
+        "id": "API-001",
+        "title": "UUID 유효성 검증 에러 처리 개선",
+        "priority": "low",
+        "issue": "잘못된 UUID 형식 입력 시 PostgreSQL 에러가 그대로 클라이언트에 노출",
+        "current_error": "invalid input syntax for type uuid: \"expired-1\"",
+        "suggested_fix": "400 Bad Request 응답과 사용자 친화적 에러 메시지 반환"
+      }
+    ]
+  },
+
+  "implementation_order": [
+    {
+      "phase": 1,
+      "name": "즉시 수정 가능 (프론트엔드)",
+      "items": [
+        "M06-F01-04 셀렉터 수정",
+        "M06-F02-03 토스트 셀렉터 수정",
+        "M06-F06-03 버튼 셀렉터 수정",
+        "M06-F06-04 버튼 셀렉터 수정"
+      ],
+      "estimated_improvement": "+4 tests"
+    },
+    {
+      "phase": 2,
+      "name": "백엔드 협조 필요",
+      "items": [
+        "BACKEND-001: 만료 모집공고 ID",
+        "BACKEND-002: 알림 데이터",
+        "BACKEND-003: 지원자 데이터",
+        "BACKEND-004: 지원 완료 프로젝트"
+      ],
+      "estimated_improvement": "+6-8 tests"
+    },
+    {
+      "phase": 3,
+      "name": "데이터 의존 테스트 Skip 처리",
+      "items": [
+        "지원 플로우 테스트 조건부 skip",
+        "지원 취소 테스트 조건부 skip"
+      ],
+      "note": "백엔드 데이터 준비 전까지 임시 처리"
+    }
+  ],
+
+  "expected_results": {
+    "current": "30/46 (65.2%)",
+    "after_phase1": "34/46 (73.9%)",
+    "after_phase2": "40-42/46 (87-91%)",
+    "final_target": "42+/46 (91%+)"
+  },
+
+  "commands": {
+    "run_M03_tests": "npx playwright test --workers=1 --grep 'M03' --reporter=list",
+    "run_M06_tests": "npx playwright test --workers=1 --grep 'M06' --reporter=list",
+    "run_M09_tests": "npx playwright test --workers=1 --grep 'M09' --reporter=list",
+    "run_M10_tests": "npx playwright test --workers=1 --grep 'M10' --reporter=list",
+    "run_all_tests": "npx playwright test --workers=1 --reporter=list",
+    "generate_report": "npx playwright test --workers=1 --reporter=html && npx playwright show-report"
+  }
+}

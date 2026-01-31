@@ -1,0 +1,350 @@
+// src/components/ProjectRecruit/DateRangePicker/DateRangePicker.scss
+
+// Figma 디자인 시스템 (정확한 컬러 매칭)
+$primary-orange: #f76241; // Figma 기준
+$light-gray-range: #ececec; // Figma 범위 배경
+$dark-text: #140805; // Figma 제목
+$gray-text: #807c7c; // Figma 부제목
+$gray-light: #d1d5db;
+$white: #fffdfc; // Figma 선택된 날짜 텍스트
+
+// 반응형 breakpoints
+$mobile-sm: 375px; // iPhone SE
+$mobile: 390px; // iPhone 13 (Figma 기준)
+$mobile-lg: 428px; // iPhone Pro Max
+
+// 간격 시스템
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+
+.date-range-picker {
+  padding: 0 $spacing-md $spacing-lg;
+  max-width: $mobile-lg;
+  margin: 0 auto;
+
+  // 작은 화면 대응
+  @media (max-width: $mobile-sm) {
+    padding: 0 12px 20px;
+  }
+
+  // Header with month navigation
+  .picker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+
+    @media (max-width: $mobile-sm) {
+      padding: 12px 0;
+    }
+
+    .month-label {
+      font-size: 16px;
+      font-weight: 700;
+      color: $dark-text;
+
+      @media (max-width: $mobile-sm) {
+        font-size: 15px;
+      }
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: $dark-text;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: background 0.2s;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.05);
+      }
+
+      &:active {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      @media (max-width: $mobile-sm) {
+        width: 28px;
+        height: 28px;
+        font-size: 20px;
+      }
+    }
+  }
+
+  // Weekday row
+  .weekday-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 8px;
+
+    @media (max-width: $mobile-sm) {
+      gap: 2px;
+      margin-bottom: 6px;
+    }
+
+    .weekday {
+      font-size: 11px;
+      font-weight: 600;
+      color: $gray-text;
+      text-align: center;
+      padding: 8px 0;
+
+      @media (max-width: $mobile-sm) {
+        font-size: 10px;
+        padding: 6px 0;
+      }
+    }
+  }
+
+  // Dates grid
+  .dates-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0; // No gap between cells for seamless connection
+
+    .day-cell {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      // Remove border-radius from container to allow background to flow
+      border-radius: 0;
+      transition: background 0.2s;
+      min-width: 44px;
+      min-height: 44px;
+      margin: 2px 0; // Vertical margin only
+      padding: 0; // Reset padding
+      overflow: visible;
+
+      @media (max-width: $mobile-sm) {
+        min-width: 40px;
+        min-height: 40px;
+        margin: 1px 0;
+      }
+
+      .day-number {
+        font-size: 14px;
+        font-weight: 500;
+        color: $dark-text;
+        position: relative;
+        z-index: 2;
+        // Ensure the number is in a circle for hover effects if needed, 
+        // or just centered. Here we keep it simple.
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+
+        @media (max-width: $mobile-sm) {
+          font-size: 13px;
+          width: 40px;
+          height: 40px;
+        }
+      }
+
+      // Out of current month
+      &.out-of-month {
+        .day-number {
+          color: $gray-light;
+        }
+      }
+
+      // Disabled (past dates)
+      &.disabled {
+        cursor: not-allowed;
+
+        .day-number {
+          color: $gray-light;
+        }
+      }
+
+      // Today indicator
+      &.today {
+        .day-number {
+          font-weight: 700;
+        }
+
+        &:not(.start-date):not(.end-date):not(.in-range) .day-number::before {
+          content: '';
+          position: absolute;
+          bottom: 4px;
+          width: 4px;
+          height: 4px;
+          border-radius: 50%;
+          background: $primary-orange;
+          z-index: 1;
+        }
+      }
+
+      // In range (between start and end)
+      &.in-range {
+        background: none;
+
+        // Full width gray background
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 50%;
+          height: 44px;
+          transform: translateY(-50%);
+          background: $light-gray-range;
+          z-index: 0;
+
+          @media (max-width: $mobile-sm) {
+            height: 40px;
+          }
+        }
+
+        // Week boundary handling is automatic with full width, 
+        // but we might need to trim if margins are involved.
+        // Since we removed horizontal margins, left:0 right:0 works perfectly.
+      }
+
+      // Start date
+      &.start-date {
+        background: none;
+
+        // Orange circle for the date itself
+        &::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 44px;
+          height: 44px;
+          background: $primary-orange;
+          border-radius: 50%;
+          z-index: 1;
+
+          @media (max-width: $mobile-sm) {
+            width: 40px;
+            height: 40px;
+          }
+        }
+
+        .day-number {
+          color: $white;
+          font-weight: 700;
+          z-index: 2;
+        }
+
+        // Right connector (gray background)
+        // Only if NOT end date and NOT end of row
+        &:not(.end-date):not(.row-end)::before {
+          content: '';
+          position: absolute;
+          left: 50%; // Start from center
+          right: 0; // Go to right edge
+          top: 50%;
+          height: 44px;
+          transform: translateY(-50%);
+          background: $light-gray-range;
+          z-index: 0;
+
+          @media (max-width: $mobile-sm) {
+            height: 40px;
+          }
+        }
+      }
+
+      // End date
+      &.end-date {
+        background: none;
+
+        // Orange circle for the date itself
+        &::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 44px;
+          height: 44px;
+          background: $primary-orange;
+          border-radius: 50%;
+          z-index: 1;
+
+          @media (max-width: $mobile-sm) {
+            width: 40px;
+            height: 40px;
+          }
+        }
+
+        .day-number {
+          color: $white;
+          font-weight: 700;
+          z-index: 2;
+        }
+
+        // Left connector (gray background)
+        // Only if NOT start date and NOT start of row
+        &:not(.start-date):not(.row-start)::before {
+          content: '';
+          position: absolute;
+          left: 0; // Start from left edge
+          right: 50%; // Go to center
+          top: 50%;
+          height: 44px;
+          transform: translateY(-50%);
+          background: $light-gray-range;
+          z-index: 0;
+
+          @media (max-width: $mobile-sm) {
+            height: 40px;
+          }
+        }
+      }
+
+      // Hover effect (only for enabled dates, excluding start/end)
+      &:not(.disabled):not(.out-of-month):not(.start-date):not(.end-date):hover {
+        .day-number {
+          background: rgba(247, 98, 65, 0.1);
+        }
+      }
+
+      &:not(.disabled):not(.out-of-month):not(.start-date):not(.end-date):active {
+        .day-number {
+          background: rgba(247, 98, 65, 0.2);
+        }
+      }
+
+      // Disabled state overrides
+      &:disabled {
+        cursor: not-allowed;
+
+        &:hover {
+          background: none;
+
+          .day-number {
+            background: none;
+          }
+        }
+      }
+    }
+  }
+}

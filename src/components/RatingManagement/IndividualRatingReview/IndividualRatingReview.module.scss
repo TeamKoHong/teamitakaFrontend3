@@ -1,0 +1,90 @@
+/* src/components/RatingManagement/IndividualRatingReview/IndividualRatingReview.module.scss */
+
+@use '../../../styles/variables' as *;
+
+
+.reviewContainer {
+  background-color: $background-light; // Changed variable name
+  border: 1px solid $border-light; // Changed variable name
+  border-radius: $border-radius-md; // Changed variable name
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  box-shadow: $box-shadow-xs; // Changed variable name
+}
+
+.reviewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline; // Changed from center
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed $border-light; // Changed variable name
+}
+
+.reviewerName {
+  font-weight: $font-weight-bold;
+  font-size: $font-size-md;
+  color: $gray-dark;
+}
+
+.ratingDate {
+  font-size: $font-size-xs; // Changed variable name
+  color: $text-muted; // Changed variable name
+}
+
+.averageScore {
+  margin-bottom: 10px;
+  font-size: $font-size-sm;
+  color: $gray;
+}
+
+.scoreLabel {
+  font-weight: $font-weight-semibold; // Changed variable name
+  margin-right: 5px;
+}
+
+.scoreValue {
+  font-weight: $font-weight-bold; // Changed variable name
+  color: $primary-color; // Changed variable name
+}
+
+.categoryRatings {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 15px;
+}
+
+.categoryItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.categoryName {
+  min-width: 80px; // Align names
+  font-size: $font-size-xs;
+  color: $gray;
+  margin-right: 10px;
+}
+
+.categoryStars {
+  font-size: $font-size-sm; // Changed variable name
+  color: $star-gold-color; // Changed variable name
+}
+
+.reviewComment {
+  background-color: $white-color; // Changed variable name
+  border: 1px solid $border-light; // Changed variable name
+  border-left: 5px solid $primary-color; // Changed variable name
+  border-radius: $border-radius-sm; // Changed variable name
+  padding: 12px 15px;
+  margin-top: 15px;
+}
+
+.commentText {
+  font-style: italic;
+  color: $text-dark; // Changed variable name
+  line-height: 1.5;
+  margin: 0;
+  font-size: $font-size-xs; // Changed variable name
+}

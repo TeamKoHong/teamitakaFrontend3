@@ -1,0 +1,99 @@
+@use '../../styles/variables' as *;
+
+.container {
+    position: relative;
+    width: 100%;
+}
+
+.select {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    padding: 0 16px;
+    background-color: $card-bg;
+    border: 1px solid $gray-lighter;
+    border-radius: $border-radius-base;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+
+    &:hover {
+        border-color: $gray-light;
+    }
+
+    &.open {
+        border-color: $primary-color;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    &.error {
+        border-color: $error-color;
+    }
+}
+
+.value {
+    font-size: $font-size-body;
+    color: $text-primary;
+}
+
+.placeholder {
+    font-size: $font-size-body;
+    color: $gray-light;
+}
+
+.arrow {
+    transition: transform 0.2s ease;
+
+    &.rotated {
+        transform: rotate(180deg);
+    }
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background-color: $card-bg;
+    border: 1px solid $primary-color;
+    border-top: none;
+    border-bottom-left-radius: $border-radius-base;
+    border-bottom-right-radius: $border-radius-base;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 240px;
+    overflow-y: auto;
+    box-shadow: $shadow-lg;
+}
+
+.option {
+    padding: 16px;
+    font-size: $font-size-body;
+    color: $text-primary;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+        background-color: $background;
+    }
+
+    &.selected {
+        color: $primary-color;
+        font-weight: $font-weight-medium;
+    }
+
+    &:last-child {
+        border-bottom-left-radius: $border-radius-base;
+        border-bottom-right-radius: $border-radius-base;
+    }
+}
+
+.errorText {
+    display: block;
+    margin-top: 8px;
+    font-size: $font-size-caption;
+    color: $error-color;
+}

@@ -1,0 +1,54 @@
+.card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  padding: 16px;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.title {
+  font-family: 'Pretendard', 'SF Pro Text', 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 4px; // Reduced from 10px
+  text-align: left;
+}
+
+.question {
+  font-size: 15px;
+  color: #403e3e;
+  margin-bottom: 12px;
+}
+
+.answer {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  padding: 13px 17px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #222;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.more {
+  color: #807c7c;
+  font-size: 13px;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.divider {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 24px 0;
+  border: none;
+}

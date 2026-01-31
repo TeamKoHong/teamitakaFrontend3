@@ -1,0 +1,260 @@
+{
+  "workflow_name": "M06 지원하기 & 지원자 관리 모듈 셀렉터 수정",
+  "version": "1.0.0",
+  "module_id": "M06",
+  "module_name": "지원하기 & 지원자 관리",
+  "file_path": "src/tests/e2e/modules/m06-application.json",
+
+  "problem_analysis": {
+    "current_issues": [
+      "M06-F03, F04, F05, F06에서 {{RECRUITMENT_ID}} 플레이스홀더 사용",
+      "플레이스홀더는 이미 테스트 인프라에서 치환되도록 수정됨",
+      "일부 셀렉터가 실제 컴포넌트 클래스와 불일치",
+      "지원자 관리 페이지(TeamSelectPage) 셀렉터 확인 필요"
+    ],
+    "actual_class_names": {
+      "apply_page": ".apply-page",
+      "apply_select": ".apply-page.apply-select",
+      "apply_complete": ".apply-page.apply-complete",
+      "topbar": ".topbar",
+      "container": ".container",
+      "editor": ".editor",
+      "textarea": ".editor textarea",
+      "cta_button": ".cta",
+      "cta_active": ".cta.active",
+      "cta_disabled": ".cta.disabled",
+      "card": ".card",
+      "card_selected": ".card.on",
+      "grid": ".grid",
+      "center_done": ".center-done",
+      "done_text": ".done-text",
+      "modal": ".modal",
+      "modal_confirm": ".modal.confirm",
+      "modal_overlay": ".modal-overlay",
+      "bar_btn_cancel": ".bar-btn.cancel",
+      "bar_btn_danger": ".bar-btn.danger",
+      "toast": ".toast",
+      "toast_box": ".toast-box",
+      "team_select_page": ".team-select-page"
+    }
+  },
+
+  "selector_mappings": [
+    {
+      "test_id": "M06-F01-01",
+      "description": "자기소개 입력이 가능한가?",
+      "changes": [
+        {
+          "type": "wait_selector",
+          "current": ".apply-page, [class*='apply']",
+          "fixed": ".apply-page"
+        },
+        {
+          "type": "type_selector",
+          "current": ".editor textarea, textarea",
+          "fixed": ".editor textarea, .apply-page textarea"
+        }
+      ],
+      "status": "needs_fix"
+    },
+    {
+      "test_id": "M06-F01-02",
+      "description": "보여줄 프로젝트 선택이 가능한가?",
+      "changes": [
+        {
+          "type": "wait_selector",
+          "current": ".apply-page.apply-select, .apply-page, [class*='apply']",
+          "fixed": ".apply-page.apply-select, .apply-page"
+        },
+        {
+          "type": "click_selector",
+          "current": ".card:first-child, .grid .card",
+          "fixed": ".grid .card:first-child, .card"
+        },
+        {
+          "type": "validation",
+          "current": ".card.on, .card, .grid",
+          "fixed": ".card.on, .grid .card"
+        }
+      ],
+      "status": "needs_fix"
+    },
+    {
+      "test_id": "M06-F01-03",
+      "description": "'지원서 보내기' 버튼이 동작하는가?",
+      "changes": [
+        {
+          "type": "click_selector",
+          "current": ".cta.active, .submit-btn",
+          "fixed": ".cta.active, .cta:not(.disabled)"
+        }
+      ],
+      "status": "needs_fix"
+    },
+    {
+      "test_id": "M06-F01-04",
+      "description": "지원 완료 확인 메시지",
+      "changes": [
+        {
+          "type": "wait_selector",
+          "current": ".apply-page.apply-complete, .apply-page, [class*='apply']",
+          "fixed": ".apply-page.apply-complete, .apply-page"
+        },
+        {
+          "type": "validation",
+          "current": ".center-done, .done-text, .center-wrap",
+          "fixed": ".center-done, .done-text"
+        }
+      ],
+      "status": "needs_fix"
+    },
+    {
+      "test_id": "M06-F02-01",
+      "description": "지원 취소 확인 팝업",
+      "changes": [
+        {
+          "type": "validation",
+          "current": ".modal, .modal-overlay, [role='dialog']",
+          "fixed": ".modal, .modal-overlay, .modal.confirm"
+        }
+      ],
+      "status": "needs_fix"
+    },
+    {
+      "test_id": "M06-F02-02",
+      "description": "'취소' 버튼으로 취소를 중단",
+      "changes": [
+        {
+          "type": "click_selector",
+          "current": ".bar-btn.cancel, .modal button:first-child",
+          "fixed": ".bar-btn.cancel, .modal.confirm .bar-btn.cancel"
+        }
+      ],
+      "status": "needs_fix"
+    },
+    {
+      "test_id": "M06-F02-03",
+      "description": "'지원 취소' 버튼으로 지원 취소",
+      "changes": [
+        {
+          "type": "click_selector",
+          "current": ".bar-btn.danger, .modal button:last-child",
+          "fixed": ".bar-btn.danger, .modal.confirm .bar-btn.danger"
+        },
+        {
+          "type": "validation",
+          "current": ".toast, .toast-box, [role='alert']",
+          "fixed": ".toast, .toast-box"
+        }
+      ],
+      "status": "needs_fix"
+    },
+    {
+      "test_id": "M06-F03-01",
+      "description": "지원자 목록 헤더",
+      "changes": [
+        {
+          "type": "wait_selector",
+          "current": ".als-panel, .als-content, [class*='applicant']",
+          "fixed": ".team-select-page, [class*='team-select']",
+          "note": "TeamSelectPage 컴포넌트 사용"
+        }
+      ],
+      "status": "needs_verification"
+    },
+    {
+      "test_id": "M06-F03-02",
+      "description": "지원자 목록 표시",
+      "changes": [
+        {
+          "type": "wait_selector",
+          "current": ".als-panel, .als-content",
+          "fixed": ".team-select-page"
+        }
+      ],
+      "status": "needs_verification"
+    }
+  ],
+
+  "implementation_steps": [
+    {
+      "step": 1,
+      "action": "M06 테스트 실행하여 현재 상태 확인",
+      "command": "npx playwright test --workers=1 --grep 'M06' --reporter=list"
+    },
+    {
+      "step": 2,
+      "action": "실패한 테스트 분석",
+      "details": "에러 메시지 및 스크린샷 확인"
+    },
+    {
+      "step": 3,
+      "action": "m06-application.json 셀렉터 수정",
+      "file": "src/tests/e2e/modules/m06-application.json",
+      "changes": "위 selector_mappings에 따라 수정"
+    },
+    {
+      "step": 4,
+      "action": "테스트 재실행 및 검증",
+      "command": "npx playwright test --workers=1 --grep 'M06' --reporter=list"
+    }
+  ],
+
+  "fixed_test_json": {
+    "M06-F01-01": {
+      "steps": [
+        { "action": "navigate", "target": "/apply2" },
+        { "action": "wait", "selector": ".apply-page", "timeout": 5000 },
+        { "action": "type", "selector": ".editor textarea, .apply-page textarea", "value": "안녕하세요, 마케팅에 관심이 많은 대학생입니다." },
+        { "action": "screenshot", "name": "apply-intro" }
+      ],
+      "validations": [
+        { "type": "element_visible", "selector": ".editor, .editor textarea" }
+      ]
+    },
+    "M06-F01-02": {
+      "steps": [
+        { "action": "navigate", "target": "/apply2/select" },
+        { "action": "wait", "selector": ".apply-page.apply-select, .apply-page", "timeout": 5000 },
+        { "action": "click", "selector": ".grid .card:first-child, .card" },
+        { "action": "screenshot", "name": "apply-select" }
+      ],
+      "validations": [
+        { "type": "element_visible", "selector": ".card.on, .grid .card" }
+      ]
+    },
+    "M06-F01-04": {
+      "steps": [
+        { "action": "navigate", "target": "/apply2/complete" },
+        { "action": "wait", "selector": ".apply-page.apply-complete, .apply-page", "timeout": 5000 },
+        { "action": "screenshot", "name": "apply-complete" }
+      ],
+      "validations": [
+        { "type": "element_visible", "selector": ".center-done, .done-text" },
+        { "type": "text_contains", "selector": ".done-text, body", "expected": "전송" }
+      ]
+    },
+    "M06-F03-01": {
+      "steps": [
+        { "action": "navigate", "target": "/recruitment/{{RECRUITMENT_ID}}/team-select" },
+        { "action": "wait", "selector": ".team-select-page, [class*='team-select']", "timeout": 5000 },
+        { "action": "screenshot", "name": "applicants-list" }
+      ],
+      "validations": [
+        { "type": "text_contains", "selector": "body", "expected": "지원" }
+      ]
+    }
+  },
+
+  "expected_results": {
+    "before": "M06 테스트 약 10% 통과",
+    "after": "M06 테스트 40-60% 통과 예상"
+  },
+
+  "notes": [
+    "{{RECRUITMENT_ID}} 플레이스홀더는 테스트 인프라에서 자동 치환됨",
+    "지원 플로우(F01) 테스트는 실제 지원 데이터 필요할 수 있음",
+    "지원자 관리(F03-F06)는 모집자 권한으로 로그인 필요",
+    "일부 테스트는 테스트 데이터 상태에 따라 결과가 달라질 수 있음"
+  ]
+}

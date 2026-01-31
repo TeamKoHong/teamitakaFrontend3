@@ -1,0 +1,87 @@
+@use '../../styles/variables' as *;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: $card-bg;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 24px;
+    text-align: center;
+}
+
+.iconWrapper {
+    margin-bottom: 32px;
+    animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.title {
+    font-size: 24px;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
+    margin: 0 0 16px;
+}
+
+.subtitle {
+    font-size: $font-size-body;
+    color: $text-secondary;
+    line-height: 1.6;
+    margin: 0 0 40px;
+}
+
+.userName {
+    color: $primary-color;
+    font-weight: $font-weight-bold;
+}
+
+.featureList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 280px;
+}
+
+.featureItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background-color: $background;
+    border-radius: $border-radius-lg;
+    font-size: $font-size-body;
+    color: $text-primary;
+}
+
+.featureIcon {
+    font-size: 20px;
+}
+
+.bottomButton {
+    padding: 16px;
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+    background-color: $card-bg;
+}

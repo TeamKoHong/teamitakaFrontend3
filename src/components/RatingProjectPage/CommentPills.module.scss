@@ -1,0 +1,6 @@
+@use '../../styles/variables' as *;
+.wrap { display: grid; gap: $spacing-md; margin: $spacing-md 0; }
+.pill { border-radius: 999px; padding: 12px 14px; font-size: $font-size-sm; }
+.light { background: rgba(0,0,0,.05); color: $gray-dark; }
+.dark { background: rgba(0,0,0,.2); color: $white; }
+

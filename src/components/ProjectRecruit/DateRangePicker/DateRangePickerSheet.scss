@@ -1,0 +1,104 @@
+// src/components/ProjectRecruit/DateRangePicker/DateRangePickerSheet.scss
+
+// Figma 디자인 시스템 (정확한 컬러 매칭)
+$primary-orange: #f76241; // Figma 기준
+$dark-text: #140805; // Figma 제목
+$gray-text: #807c7c; // Figma 부제목
+$gray-light: #d1d5db;
+
+.date-range-picker-sheet {
+  .picker-sheet-container {
+    width: 100%;
+    position: relative;
+    border-radius: 22px;
+    background-color: #fff;
+    min-height: 469px;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  }
+
+  // Header with title and checkmark
+  .picker-sheet-header {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 16px 12px;
+    border-bottom: 1px solid #f3f4f6;
+
+    .title-wrap {
+      flex: 1;
+      min-width: 0;
+      text-align: left;
+    }
+
+    .picker-sheet-title {
+      margin: 0;
+      text-align: left;
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, "Noto Sans KR", Arial, sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: $dark-text;
+      line-height: 1.3;
+    }
+
+    .picker-sheet-sub {
+      margin: 6px 0 0;
+      text-align: left;
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, "Noto Sans KR", Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      color: $gray-text;
+      line-height: 1.35;
+    }
+
+    .complete-btn {
+      position: static;
+      transform: none;
+
+      padding: 0;
+      background: none;
+      border: none;
+
+      font-size: 15px;
+      font-weight: 600;
+      color: $primary-orange;
+      cursor: pointer;
+      transition: opacity 0.2s;
+
+      &.disabled {
+        color: $gray-light;
+        cursor: not-allowed;
+      }
+
+      &:not(.disabled):active {
+        opacity: 0.7;
+      }
+    }
+  }
+}
+
+// Override react-spring-bottom-sheet default styles
+body {
+  [data-rsbs-overlay] {
+    z-index: 11000 !important;
+  }
+
+  [data-rsbs-root] {
+    z-index: 11001 !important;
+  }
+}
+
+[data-rsbs-overlay] {
+  .date-range-picker-sheet {
+    background: #fff;
+    border-radius: 22px 22px 0 0; // Figma exact
+
+    // 기본 헤더 숨기기
+    [data-rsbs-header] {
+      display: none;
+    }
+  }
+}

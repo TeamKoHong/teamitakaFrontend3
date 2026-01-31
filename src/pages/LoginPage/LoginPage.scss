@@ -1,0 +1,196 @@
+.login-page-container {
+    min-height: 100vh;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+    position: relative;
+}
+
+.login-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+}
+
+.welcome-text {
+    color: var(--454545, #454545);
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-top: 116px;
+    margin-bottom: 0px;
+}
+
+.subtitle {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-top: 8px;
+    margin-bottom: 219px;
+    font-family: Pretendard;
+    gap: 4px;
+    
+    .highlight {
+        color: #F76241;
+        font-size: 30px;
+    }
+    
+    .normal {
+        color: #000;
+        font-size: 28px;
+        margin-right: 0;
+    }
+    .normal::after {
+        content: '';
+        display: block; /* 줄바꿈 강제 */
+        width: 100%;
+    }
+    
+    // 모바일에서는 글자 크기만 조정
+    @media (max-width: 768px) {
+        .highlight {
+            font-size: 28px;
+        }
+        
+        .normal {
+            font-size: 26px;
+            margin-right: 0;
+        }
+    }
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.login-button {
+    background: #F76241;
+    color: white;
+    border-radius: 12px;
+    border: none;
+    padding: 26px 16px;
+    padding-left: 104px;
+    padding-right: 104px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    
+    &:hover {
+        background-color: #F76241;
+    }
+}
+
+.signup-button {
+    background: #454545;;
+    color: white;
+    border-radius: 12px;
+    border: none;
+    padding: 16px;
+    padding-left: 104px;
+    padding-right: 104px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    
+    &:hover {
+        background-color: #454545;;
+    }
+}
+
+
+.input-field {
+    width: 100%;
+    padding: 24px 16px;
+    border: 1px solid #807C7C;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #140805;
+    &::placeholder {
+        color: #807C7C;
+    }
+    &:focus {
+        outline: none;
+        border: 1px solid #000;
+    }
+}
+
+.guest-button {
+    background: transparent;
+    color: #807C7C;
+    border-radius: 12px;
+    border: 1px solid #E0E0E0;
+    padding: 16px;
+    padding-left: 104px;
+    padding-right: 104px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    
+    &:hover {
+        background-color: #f5f5f5;
+        border-color: #ccc;
+    }
+}
+
+.find-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    color: var(--grey-4, #403E3E);
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.42px;
+    text-transform: capitalize;
+    margin-bottom: 28px;
+}
+
+.find-links-button {
+    background: none;
+    border: none;
+    color: var(--grey-4, #403E3E);
+    font-family: Pretendard;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.42px;
+    text-transform: capitalize;
+    cursor: pointer;
+    padding: 0;
+}
+
+.look-without-register {
+    color: var(--grey-3, #807C7C);
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-bottom: 49px;
+}

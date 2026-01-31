@@ -1,0 +1,151 @@
+.search-page {
+  display: flex;
+  flex-direction: column;
+  padding: 0 16px;
+  background: #fff;
+  min-height: 100vh;
+}
+
+.search-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 68px;
+  border-bottom: 1px solid #e6e6e6;
+  position: relative;
+
+  .back-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 10;
+    img { width: 6px; height: 12px; }
+  }
+
+  .header-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .spacer { width: 24px; }
+}
+
+.search-box-container {
+  padding: 16px 0;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background-color: #F1F4F6;
+  border-radius: 8px;
+  padding: 0 12px;
+  height: 44px;
+  cursor: text;
+
+  .search-input {
+    flex: 1;
+    height: 100%;
+    background: transparent;
+    border: none;
+    font-size: 13px;
+    outline: none;
+    color: #333;
+
+    &::placeholder {
+      color: #807C7C;
+    }
+  }
+
+  .search-btn {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 4px;
+
+    img {
+      // 돋보기 버튼 색상 #7B797A로 변경 (Grayscale filter + Brightness/Contrast 조정)
+      filter: invert(53%) sepia(2%) saturate(301%) hue-rotate(213deg) brightness(91%) contrast(85%);
+    }
+  }
+}
+
+.recent-section, .popular-section {
+  margin-top: 10px;
+  padding: 0 4px;
+}
+
+.section-title {
+  font-size: 14px  !important;
+  font-weight: 600 !important; 
+  margin: 0 0 6px 0;
+  color: #000;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  .tag-item {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 14px;
+    background-color: #F1F4F6;
+    border-radius: 24px;
+    cursor: pointer;
+    margin-bottom: 3px;
+    
+    .tag-text {
+      font-size: 14px;
+      color: #000;
+      line-height: 1;
+    }
+
+    // 통일된 삭제 버튼 (+를 135도 회전)
+    .remove-btn {
+      position: relative;
+      width: 12px;
+      height: 12px;
+      background: none;
+      border: none;
+      margin-left: 8px;
+      padding: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(135deg); // +를 x로 변환
+
+      &::before, &::after {
+        content: '';
+        position: absolute;
+        background-color: #403E3E;
+      }
+
+      &::before {
+        width: 10px;
+        height: 1.5px;
+      }
+
+      &::after {
+        width: 1.5px;
+        height: 10px;
+      }
+    }
+  }
+}
+
+.empty-msg {
+  color: #999;
+  font-size: 13px;
+  padding: 8px 0;
+}

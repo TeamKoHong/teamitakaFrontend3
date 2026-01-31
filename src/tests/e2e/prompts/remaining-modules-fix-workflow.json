@@ -1,0 +1,156 @@
+{
+  "workflow_name": "남은 E2E 테스트 모듈 수정 통합 워크플로우",
+  "version": "1.0.0",
+  "description": "M03, M06, M09 모듈의 셀렉터 수정 및 테스트 통과율 향상을 위한 통합 가이드",
+  "created_at": "2024-12",
+
+  "current_test_status": {
+    "completed_modules": [
+      { "module_id": "M01", "name": "온보딩", "before": "27.9%", "after": "48.8%" },
+      { "module_id": "M04", "name": "프로젝트 관리", "before": "29.5%", "after": "45.5%" },
+      { "module_id": "M05", "name": "매칭", "before": "16.1%", "after": "64.5%" },
+      { "module_id": "M07", "name": "평가", "before": "85%", "after": "85%" },
+      { "module_id": "M08", "name": "프로필", "before": "16.7%", "after": "73.3%" },
+      { "module_id": "M10", "name": "비회원", "before": "42.8%", "after": "85.7%" }
+    ],
+    "remaining_modules": [
+      { "module_id": "M03", "name": "알림", "current": "낮음", "expected": "70%+" },
+      { "module_id": "M06", "name": "지원하기", "current": "10%", "expected": "40-60%" },
+      { "module_id": "M09", "name": "북마크", "current": "낮음", "expected": "60-80%" }
+    ]
+  },
+
+  "execution_order": [
+    {
+      "priority": 1,
+      "module_id": "M03",
+      "module_name": "알림",
+      "prompt_file": "m03-notifications-fix.json",
+      "reason": "셀렉터가 비교적 정확하여 빠른 수정 가능",
+      "estimated_effort": "낮음"
+    },
+    {
+      "priority": 2,
+      "module_id": "M09",
+      "module_name": "북마크",
+      "prompt_file": "m09-bookmark-fix.json",
+      "reason": "슬라이드 오버레이 클래스명 수정 필요",
+      "estimated_effort": "중간"
+    },
+    {
+      "priority": 3,
+      "module_id": "M06",
+      "module_name": "지원하기",
+      "prompt_file": "m06-application-fix.json",
+      "reason": "다양한 페이지 및 모달 셀렉터 수정 필요",
+      "estimated_effort": "높음"
+    }
+  ],
+
+  "quick_commands": {
+    "run_m03": "npx playwright test --workers=1 --grep 'M03' --reporter=list",
+    "run_m06": "npx playwright test --workers=1 --grep 'M06' --reporter=list",
+    "run_m09": "npx playwright test --workers=1 --grep 'M09' --reporter=list",
+    "run_all_remaining": "npx playwright test --workers=1 --grep 'M03|M06|M09' --reporter=list",
+    "run_all_tests": "npx playwright test --workers=1 --reporter=list",
+    "generate_html_report": "npx playwright test --workers=1 --reporter=html && npx playwright show-report"
+  },
+
+  "workflow_steps": {
+    "step_1_analyze": {
+      "description": "각 모듈 테스트 실행하여 현재 상태 파악",
+      "commands": [
+        "npx playwright test --workers=1 --grep 'M03' --reporter=list",
+        "npx playwright test --workers=1 --grep 'M06' --reporter=list",
+        "npx playwright test --workers=1 --grep 'M09' --reporter=list"
+      ]
+    },
+    "step_2_fix_selectors": {
+      "description": "각 모듈의 프롬프트 파일을 참조하여 셀렉터 수정",
+      "files_to_modify": [
+        "src/tests/e2e/modules/m03-notifications.json",
+        "src/tests/e2e/modules/m06-application.json",
+        "src/tests/e2e/modules/m09-bookmark.json"
+      ]
+    },
+    "step_3_verify": {
+      "description": "수정 후 테스트 재실행하여 검증",
+      "command": "npx playwright test --workers=1 --grep 'M03|M06|M09' --reporter=list"
+    },
+    "step_4_report": {
+      "description": "최종 결과 리포트 생성",
+      "command": "npx playwright test --workers=1 --reporter=html"
+    }
+  },
+
+  "common_selector_patterns": {
+    "wait_for_container": {
+      "description": "페이지 컨테이너가 로드될 때까지 대기",
+      "pattern": { "action": "wait", "selector": ".page-container", "timeout": 5000 }
+    },
+    "click_with_text": {
+      "description": "텍스트로 요소 클릭",
+      "pattern": { "action": "click", "selector": "text=버튼텍스트" }
+    },
+    "wait_for_overlay": {
+      "description": "오버레이/모달이 나타날 때까지 대기",
+      "pattern": { "action": "wait", "selector": ".overlay, .modal", "timeout": 3000 }
+    },
+    "multiple_selectors": {
+      "description": "여러 셀렉터 중 하나라도 매칭되면 성공",
+      "pattern": ".selector1, .selector2, .selector3"
+    }
+  },
+
+  "troubleshooting": {
+    "element_not_found": {
+      "symptom": "locator.waitFor: Timeout 5000ms exceeded",
+      "solutions": [
+        "브라우저 개발자 도구에서 실제 클래스명 확인",
+        "SCSS/CSS 파일에서 클래스명 검색",
+        "컴포넌트 JS 파일에서 className 속성 확인",
+        "fallback 셀렉터 추가 (.selector1, .selector2)"
+      ]
+    },
+    "click_not_working": {
+      "symptom": "클릭 액션 후 예상 결과 없음",
+      "solutions": [
+        "요소가 클릭 가능한 상태인지 확인 (visible, enabled)",
+        "wait 액션 추가하여 렌더링 완료 대기",
+        "정확한 셀렉터 사용 (button:has-text('텍스트'))"
+      ]
+    },
+    "navigation_failed": {
+      "symptom": "wait_for_navigation 타임아웃",
+      "solutions": [
+        "실제 네비게이션이 발생하는지 확인",
+        "SPA의 경우 URL 변경만 확인 (url_contains 검증)",
+        "타임아웃 값 증가"
+      ]
+    }
+  },
+
+  "expected_final_results": {
+    "total_modules": 10,
+    "expected_pass_rate": "55-65%",
+    "module_breakdown": {
+      "M01": "48.8%",
+      "M02": "확인 필요",
+      "M03": "70%+",
+      "M04": "45.5%",
+      "M05": "64.5%",
+      "M06": "40-60%",
+      "M07": "85%",
+      "M08": "73.3%",
+      "M09": "60-80%",
+      "M10": "85.7%"
+    }
+  },
+
+  "notes": [
+    "각 모듈 수정 전 반드시 테스트 실행하여 현재 상태 파악",
+    "프롬프트 파일의 actual_class_names 섹션 참조하여 정확한 클래스명 사용",
+    "일부 테스트는 사용자 데이터 상태에 따라 결과가 달라질 수 있음",
+    "skip 처리된 테스트는 해당 기능이 구현되면 활성화 가능"
+  ]
+}

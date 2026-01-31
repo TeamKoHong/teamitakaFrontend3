@@ -1,0 +1,72 @@
+/* 전체 컨테이너 */
+.team-exp-container {
+  width: 100%;
+  padding-left: 0;
+  box-sizing: border-box;
+
+  margin-top: 32px; /* 학과와 여백 */
+}
+
+/* 나의 팀플 경험 라벨 */
+.team-exp-label {
+  font-family: "Pretendard";
+  font-size: 15px;
+  font-weight: 600; /* SemiBold */
+  line-height: 100%;
+  color: #000000;
+  margin-bottom: 8px;
+  margin-left: 0;
+}
+
+/* 입력 박스 전체 */
+.team-exp-box {
+  width: 100%;
+  height: 54px;
+
+  border: 1px solid #D1CCCB;    /* Figma grey 2 */
+  border-radius: 8px;
+
+  padding: 17px 15px;
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+/* 왼쪽 텍스트 */
+.team-exp-text {
+  font-size: 14px;
+  color: #140805;
+  font-family: "Pretendard";
+  font-size: 15px;
+  font-weight: 400; /* SemiBold */
+  line-height: 100%;
+
+}
+
+/* 오른쪽 카운터 정렬 */
+.team-exp-counter {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+
+
+/* +, - 버튼 이미지 */
+.team-exp-icon {
+  width: 14.4px;
+  height: 14.4px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+/* 가운데 숫자 */
+.team-exp-value {
+  font-family:"Pretendard";
+  font-size: 16px;
+  color: #403E3E;
+  font-weight: 400;
+  width: 20px;
+  text-align: center;
+}

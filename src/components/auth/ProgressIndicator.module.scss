@@ -1,0 +1,38 @@
+@use '../../styles/variables' as *;
+
+.container {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 16px 0;
+}
+
+.step {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: $gray-lighter;
+    transition: all 0.2s ease;
+
+    &.active {
+        background-color: $primary-color;
+    }
+
+    // 현재 스텝은 pill 형태로 확장
+    &.current {
+        width: 22px;
+        border-radius: 4px;
+        background-color: $primary-color;
+    }
+}
+
+.line {
+    width: 16px;
+    height: 2px;
+    background-color: $gray-lighter;
+    transition: background-color 0.2s ease;
+
+    &.active {
+        background-color: $primary-color;
+    }
+}

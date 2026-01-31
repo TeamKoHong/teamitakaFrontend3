@@ -1,0 +1,32 @@
+.pentagon-chart {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0; /* 모달에서 잘림 방지 위해 여백 제거 */
+  overflow: visible; /* 라벨 잘림 방지 */
+  padding: 20px; /* 라벨이 나갈 공간 확보 */
+
+  svg {
+    width: 151px;
+    height: 148px;
+    flex-shrink: 0; /* 크기 줄어듦 방지 */
+    margin-top: 10px;
+  }
+
+  .chart-labels {
+    position: absolute;
+    width: 151px;
+    pointer-events: none;
+    overflow: visible; /* 라벨 잘림 방지 */
+
+    .label {
+      position: absolute;
+      font-size: 10px;
+      font-weight: 500;
+      color: #3e3e3e;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+    }
+  }
+}

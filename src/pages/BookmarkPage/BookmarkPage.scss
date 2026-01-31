@@ -1,0 +1,265 @@
+// 북마크 페이지 스타일링
+.bookmark-page-container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+  padding-top: 64px; // 헤더 높이만큼 상단 패딩
+}
+
+.bookmark-main {
+  flex: 1;
+  padding: 20px 16px;
+  padding-bottom: 20px;
+}
+
+// 북마크 요약 섹션
+.bookmark-summary {
+  margin-bottom: 20px;
+  
+  .summary-text {
+    font-size: 20px;
+    color: #140805;
+    font-style: normal;
+    font-weight: 600;
+    font-family: Pretendard;
+    text-transform: capitalize;
+    line-height: 140%;
+    
+    .urgent-count {
+      color: #ff6b35;
+      font-weight: 600;
+    }
+  }
+}
+
+// 통계 섹션
+.bookmark-stats {
+  display: flex;
+  align-items: center;
+  
+  
+  
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    
+    &:hover {
+      opacity: 0.7;
+    }
+    
+    .stat-top {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .stat-icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+    
+    .stat-number {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      color: #666;
+      font-weight: 400;
+    }
+  }
+  
+  .stat-divider {
+    width: 1px;
+    height: 28px;
+    margin: 0 20px;
+    background-color: #e0e0e0;
+  }
+}
+
+
+
+// 탭 네비게이션
+.tab-navigation {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  margin-bottom: 26px;
+  
+  .tab-button {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #D1CCCB;
+    border-radius: 41.48px;
+    background-color: white;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: Pretendard;
+    line-height: normal;
+    color: #D1CCCB;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &.active {
+      background-color: #ff6b35;
+      color: white;
+      border-color: #ff6b35;
+    }
+    
+    &:hover:not(.active) {
+      border-color: #ff6b35;
+      color: #ff6b35;
+    }
+  }
+}
+
+// 프로젝트 목록
+.bookmark-project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+}
+
+.bookmark-page-container .bookmark-project-list .bookmark-project-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px !important; 
+  display: flex;
+  gap: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: Pretendard;
+  line-height: normal;
+  
+  .bookmark-project-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    
+    .bookmark-project-dates {
+      font-size: 12px;
+      color: #807C7C;
+      font-weight: 500;
+    
+    }
+    
+    .bookmark-project-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #140805;
+
+      line-height: 1.3;
+    }
+    
+    .bookmark-project-description {
+      font-size: 11px;
+      color: #807C7C;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      margin-top: 16px;
+      overflow: hidden;
+    }
+  }
+  
+    .bookmark-project-image {
+      width: 30%;
+      min-width: 80px;
+      max-width: 116px;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: visible; // 북마크 아이콘이 밖으로 나올 수 있도록
+      flex-shrink: 0;
+      position: relative; // 북마크 아이콘 absolute 위치 기준
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+
+      .bookmark-toggle-icon {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        width: 16px;
+        height: 24px;
+        flex-shrink: 0;
+        cursor: pointer;
+        z-index: 10;
+        transition: transform 0.2s ease;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+
+        &:hover {
+          transform: scale(1.15);
+        }
+
+        &:active {
+          transform: scale(0.9);
+        }
+      }
+    }
+}
+
+// 반응형 디자인
+@media (max-width: 375px) {
+  .bookmark-main {
+    padding: 16px 12px;
+  }
+  
+  .bookmark-page-container .bookmark-project-list .bookmark-project-card {
+    padding: 12px !important;
+    gap: 12px;
+
+    .bookmark-project-image {
+      width: 25%;
+      min-width: 70px;
+      max-width: 100px;
+
+      .bookmark-toggle-icon {
+        width: 14px;
+        height: 20px;
+        top: 4px;
+        right: 4px;
+      }
+    }
+  }
+  
+  .bookmark-stats {
+    
+    .stat-item {
+      .stat-icon {
+        width: 11px;
+        height: 11px;
+      }
+      
+      .stat-number {
+        font-size: 12px;
+        font-weight: 600;
+        line-height: normal;
+        text-transform: capitalize;
+        font-family: Pretendard;
+      }
+      
+      .stat-label {
+        font-size: 12px;
+      }
+    }
+  }
+}

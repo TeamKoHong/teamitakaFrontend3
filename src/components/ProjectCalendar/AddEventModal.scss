@@ -1,0 +1,117 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    color: #666;
+  }
+}
+
+.modal-header {
+  margin-bottom: 24px;
+  
+  h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #000;
+    margin: 0;
+    font-family: Pretendard;
+  }
+}
+
+.form-group {
+  margin-bottom: 20px;
+  
+  label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
+    margin-bottom: 8px;
+    font-family: Pretendard;
+  }
+  
+  .form-input,
+  .form-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: Pretendard;
+    background: white;
+    transition: border-color 0.2s ease;
+    
+    &:focus {
+      outline: none;
+      border-color: #F76241;
+    }
+    
+    &::placeholder {
+      color: #999;
+    }
+  }
+  
+  .form-textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+}
+
+.save-btn {
+  width: 100%;
+  padding: 14px;
+  background: #F76241;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: Pretendard;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  
+  &:hover:not(:disabled) {
+    background: #F76241;
+  }
+  
+  &:disabled {
+    background: #CCC;
+    cursor: not-allowed;
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "title": "프론트엔드 API 연동 완료 및 백엔드 이슈 리포트",
+  "version": "1.0.0",
+  "timestamp": "2025-12-21T22:30:00+09:00",
+  "from": "프론트엔드 팀",
+  "to": "백엔드 팀",
+
+  "frontend_implementation_status": {
+    "status": "COMPLETED",
+    "summary": "백엔드에서 제공한 API 스펙에 맞춰 프론트엔드 연동을 완료했습니다.",
+
+    "implemented_features": {
+      "notifications": {
+        "files_modified": [
+          "src/services/dashboard.js",
+          "src/pages/NotificationsPage/NotificationsPage.js",
+          "src/pages/NotificationsPage/NotificationsList.js"
+        ],
+        "api_functions_added": [
+          "getNotifications() - 파라미터 수정 (unreadOnly)",
+          "getNotificationUnreadCount() - NEW",
+          "markAllNotificationsRead() - NEW",
+          "markNotificationRead(id) - NEW",
+          "deleteNotification(id) - NEW"
+        ],
+        "ui_features_added": [
+          "API에서 알림 목록 불러오기",
+          "읽음/안읽음 상태 시각적 표시",
+          "개별 알림 클릭 시 읽음 처리",
+          "모두 읽음 버튼",
+          "개별 알림 삭제 버튼"
+        ]
+      },
+      "application_cancel": {
+        "files_modified": [
+          "src/services/recruitment.js",
+          "src/pages/ProjectApply/ProjectApplyComplete.js"
+        ],
+        "api_functions_added": [
+          "cancelApplication(applicationId) - NEW",
+          "getMyApplications() - NEW"
+        ],
+        "ui_features_added": [
+          "지원 취소 API 연동",
+          "로딩 상태 표시",
+          "성공/실패 토스트 메시지"
+        ]
+      }
+    }
+  },
+
+  "backend_issues_found": {
+    "critical": [
+      {
+        "id": "BUG-001",
+        "severity": "CRITICAL",
+        "endpoint": "GET /api/notifications",
+        "error_message": "column \"isRead\" does not exist",
+        "description": "알림 조회 API에서 PostgreSQL 컬럼명 불일치 에러가 발생합니다.",
+        "expected": "is_read (snake_case) 컬럼 사용",
+        "actual": "isRead (camelCase) 로 쿼리 시도",
+        "impact": "알림 기능 전체 사용 불가",
+        "suggested_fix": "SQL 쿼리에서 컬럼명을 is_read로 수정하거나, ORM 매핑 확인"
+      }
+    ],
+    "warnings": []
+  },
+
+  "api_test_results": {
+    "notifications": {
+      "GET /api/notifications": {
+        "status": "FAILED",
+        "response": "{\"success\":false,\"message\":\"column \\\"isRead\\\" does not exist\"}",
+        "expected": "알림 목록 반환"
+      },
+      "GET /api/notifications/unread-count": "NOT_TESTED (위 이슈로 인해)",
+      "PUT /api/notifications/read-all": "NOT_TESTED",
+      "PUT /api/notifications/:id/read": "NOT_TESTED",
+      "DELETE /api/notifications/:id": "NOT_TESTED"
+    },
+    "applications": {
+      "POST /api/applications/:id/cancel": "READY_TO_TEST (프론트엔드 구현 완료)",
+      "GET /api/applications/mine": "READY_TO_TEST"
+    }
+  },
+
+  "questions_answered": {
+    "Q1": {
+      "question": "지원자 목록 테스트에서 어떤 엔드포인트를 호출하나요?",
+      "answer": "GET /api/recruitments/:id/applications",
+      "file_reference": "src/services/recruitment.js (line 152)"
+    },
+    "Q2": {
+      "question": "만료된 모집공고 필터링을 status='CLOSED'로 처리해도 되나요?",
+      "answer": "네, CLOSED로 처리해주시면 됩니다."
+    }
+  },
+
+  "next_steps": {
+    "backend_team": [
+      "BUG-001 수정: notifications 테이블의 isRead → is_read 컬럼명 불일치 해결",
+      "수정 후 알림 API 다시 테스트",
+      "지원 취소 API 테스트 데이터 확인"
+    ],
+    "frontend_team": [
+      "백엔드 버그 수정 후 E2E 테스트 재실행",
+      "테스트 결과 공유"
+    ]
+  },
+
+  "e2e_test_status": {
+    "current_results": {
+      "M03_notifications": "BLOCKED - 백엔드 API 에러로 테스트 불가",
+      "M06_application": "PARTIALLY_TESTED - 일부 테스트 통과"
+    },
+    "expected_after_fix": {
+      "M03_notifications": "100% (5/5)",
+      "M06_application": "75%+ (23+/30)"
+    }
+  }
+}

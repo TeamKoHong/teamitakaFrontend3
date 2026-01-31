@@ -1,0 +1,147 @@
+# Dependencies
+node_modules/
+dist/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+.env.local
+.env.development
+.env.production
+.env.test
+
+# IDE and Editor files
+.kiro/
+.history/
+.DS_Store
+.cursor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+.env.test
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Next.js build output
+.next
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Gatsby files
+.cache/
+
+
+# Storybook build outputs
+.out
+.storybook-out
+
+# Temporary folders
+tmp/
+temp/
+
+# Project specific
+worklogs/
+.history/worklogs/
+.claude
+prompt/
+build/
+.vercel
+
+# Security sensitive files
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.cer
+*.der
+secrets/
+credentials/
+config/secrets/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Backup files
+*.backup
+*.bak
+*.tmp
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# 🔐 Supabase 관련 민감한 정보
+supabase/
+supabase_cli*
+supabase.tar.gz
+
+# 🔐 하드코딩된 API 키 및 토큰
+*_api_key*
+*_token*
+*_secret*
+*_password*
+
+# E2E Test artifacts
+playwright-report/
+test-results/
+e2e-test-dashboard.html
+test-report.md

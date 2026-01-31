@@ -1,0 +1,39 @@
+@use '../../styles/variables' as *;
+
+.progressBarWrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: $spacing-sm;
+}
+
+.track {
+  flex: 1;
+  background: $gray-light;
+  border-radius: $border-radius-base;
+  overflow: hidden;
+  height: 8px;
+  min-width: 40px;
+}
+
+.fill {
+  background: $primary-color;
+  height: 100%;
+  border-radius: $border-radius-base;
+  transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+.label {
+  font-size: $font-size-xs;
+  color: $gray-dark;
+  margin-left: $spacing-xs;
+}
+
+// 색상별 커스텀
+:root {
+  --color-primary: #FF4D4F;
+  --color-secondary: #52C41A;
+  --color-accent: #FFC107;
+  --color-gray: #888888;
+  --color-error: #FF4D4F;
+} 

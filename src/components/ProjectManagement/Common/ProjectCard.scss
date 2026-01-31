@@ -1,0 +1,113 @@
+.project-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px; // 왼쪽 콘텐츠와 오른쪽 프로그레스바 사이 간격
+
+  padding: 16px 20px 16px 16px; // Updated padding (Right: 20px)
+  border-radius: 20px; // Updated radius (was 10px)
+  background: #fff;
+  width: calc(100% - 8px); // Width - 8px (4px margin + 16px parent = 20px)
+  margin: 10px auto; // 10px top/bottom margin
+  height: 100%;
+  min-height: 130px; // Min height 130px
+  
+
+  cursor: pointer;
+
+  @media (max-width: 480px) {
+    width: 100%; // Use parent padding (16px) only
+  }
+
+  position: relative;
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    min-width: 0; // flex 아이템이 오른쪽 공간을 침범하지 않도록
+    height: 100%;
+
+    .info {
+      .title {
+        font-size: 16px;
+        font-family: Pretendard;
+        font-weight: bold;
+        color: #000;
+        font-weight: 600;
+        font-style: normal;
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.25rem;
+
+        svg,
+        img.details-icon {
+          width: 16px;
+          height: 16px;          
+          border-radius: 5px;
+          color: #fffdfc;
+        }
+      }
+    }
+
+    .details {
+      font-size: 0.875rem;
+      color: #555;
+      margin-bottom: 1rem;
+
+
+    }
+
+    .applicant-info {
+      color: #F76241;
+      font-weight: 500;
+
+      svg {
+        background-color: #F76241;
+      }
+    }
+  }
+
+  .team {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+    height: 2rem;
+
+    .team-avatar {
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      object-fit: cover;
+      position: relative;
+
+      &:not(:last-child) {
+        margin-left: -12px;
+      }
+    }
+  }
+}
+
+.projectCard-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; // 위(시간) 아래(프로그레스바) 분리
+  align-items: flex-end;
+  position: relative;
+  flex-shrink: 0; // 오른쪽 영역이 줄어들지 않도록 고정
+  min-width: 80px; // 프로그레스바 최소 너비 확보 (원형 크기 기준)
+
+  .time-ago {
+    font-size: 11px;
+    color: #888;
+    white-space: nowrap; // 텍스트 줄바꿈 방지
+  }
+}

@@ -1,0 +1,331 @@
+.todo-box-container {
+  margin: 1rem 1.375rem 1.5rem 1.375rem; // 22px 마진
+  
+  // 할 일 요약 섹션 (메인 버튼)
+  .todo-summary {
+    display: flex;
+    width: 100%;
+    
+    height: 3rem; // 48px
+    padding: 0.875rem 1.25rem; // 14px 20px
+    flex-direction: column;
+    align-items: flex-start;
+    flex-shrink: 0;
+    border-radius: 0.5rem; // 8px
+    background: var(--main, #F76241);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    z-index: 2; // 투두박스보다 위에 오도록
+    
+    &:hover {
+      transform: translateY(-0.125rem); // -2px
+      box-shadow: 0 0.25rem 0.75rem rgba(247, 98, 65, 0.3);
+    }
+    
+    .todo-summary-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .todo-summary-text {
+      color: #FFF;
+      font-size: 16px;
+      font-weight: 400;
+      font-style: normal;
+      text-transform: capitalize;
+      font-family: Pretendard;
+      cursor: pointer;
+
+      .todo-count-highlight {
+        font-weight: 700;   
+      }
+    }
+    
+    .todo-add-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      transition: transform 0.2s ease;
+      background: #FFF;
+      border-radius: 5.914px
+    }
+  }
+  
+  // 할 일 펼쳐진 컨테이너
+  .todo-expanded-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: -0.5rem; 
+    z-index: 1; // 빨간 헤더보다 아래 레이어
+    
+    // 프로젝트 투두 박스 (하나의 큰 박스)
+    .project-todo-box {
+      background: white;
+      border-radius: 0.5rem; // 8px
+      box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      padding: 1rem; // 16px - 박스 내부 패딩
+      display: flex;
+      flex-direction: column;
+      
+      // 프로젝트 섹션 (각 프로젝트)
+      .todo-project-section {
+        display: flex;
+        flex-direction: column;
+
+        // 투두 입력 창
+        .todo-input-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 0.5rem;
+          
+          
+          .todo-content {
+            flex: 1;
+            min-width: 0;
+            margin-right: 0.75rem;
+            
+            .todo-input {
+              width: 100%;
+              padding: 0;
+              border: none;
+              font-size: 14px;
+              font-family: Pretendard;
+              outline: none;
+              background: transparent;
+              color: #000;
+              
+              &::placeholder {
+                color: #999;
+              }
+            }
+          }
+
+          .todo-checkbox-container {
+            flex-shrink: 0;
+            width: 17px;
+            height: 17px;
+            
+            .checkbox-label {
+              display: block;
+              cursor: default;
+              
+              .custom-checkbox {
+                width: 17px;
+                height: 17px;
+                border-radius: 2px;
+                border: 1px solid #D9D9D9;
+                background: #EBEBEB;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              }
+            }
+          }
+        }
+      }
+      
+      .project-todos-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem; // 8px - 투두리스트 사이 간격
+        
+        .todo-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          transition: all 0.2s ease;
+          
+          &:hover {
+            background-color: #FAFAFA;
+            border-radius: 0.25rem; // 4px
+          }
+          
+          &.completed {
+            .todo-content .todo-text {
+              color: #999; // 회색으로 변경
+              opacity: 0.7; // 불투명도 적용
+            }
+          }
+          
+          .todo-content {
+            flex: 1;
+            min-width: 0;
+            margin-right: 0.75rem; // 12px
+            
+            .todo-text {
+              display: block;
+              color: #000;
+              text-align: justify;
+              font-family: Pretendard;
+              font-size: 13px;
+              font-style: normal;
+              font-weight: 400;
+              line-height: normal;
+              text-transform: capitalize;
+              transition: color 0.2s ease, opacity 0.2s ease;
+            }
+          }
+          
+          .todo-checkbox-container {
+            flex-shrink: 0;
+            
+            .todo-checkbox {
+              display: none;
+            }
+            
+            .checkbox-label {
+              cursor: pointer;
+              
+              .custom-checkbox {
+                width: 17px;
+                height: 17px;
+                flex-shrink: 0;
+                border-radius: 2px;
+                border: 1px solid #D9D9D9;
+                background: #EBEBEB;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.2s ease;
+                
+                &:hover {
+                  border-color: #F76241;
+                  background-color: #FFF5F3;
+                }
+              }
+            }
+            
+            .todo-checkbox:checked + .checkbox-label .custom-checkbox {
+              background: #F76241;
+              border-color: #F76241;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  // 프로젝트 피드 섹션
+  .project-feed-section {
+    margin-top: 1.25rem; // 20px - 투두박스와의 간격
+    
+    .project-feed-header {
+      display: flex;
+      flex-direction: column;
+      
+      gap: 0.25rem;
+      margin-bottom: 1.25rem; // 20px
+      
+      h3 {
+        font-size: 1rem; // 16px
+        font-weight: 600;
+        line-height: normal;
+        color: #140805;
+        margin: 0;
+        font-family: Pretendard;
+      }
+      p {
+        color: #807C7C;
+        font-family: Pretendard;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        letter-spacing: -0.36px;
+        text-transform: capitalize;
+      }
+    }
+    
+    .project-feed-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem; // 8px - 피드 항목 간 간격
+      
+      .feed-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem; // 12px - 아바타와 내용 간 간격
+        min-height: 36px; // 아바타 높이와 맞춤
+        
+        .feed-avatar {
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          
+          svg {
+            width: 36px;
+            height: 36px;
+            border-radius: 36px;
+            border: 1px solid #807B79;
+          }
+        }
+        
+        .feed-content {
+          flex: 1;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          height: 100%;
+          
+          .feed-text {
+            font-size: 13px;
+            font-weight: 400;
+            color: #000;
+            font-family: Pretendard;
+            line-height: normal;
+          }
+          
+          .feed-timestamp {
+            font-size: 12px;
+            font-weight: 400;
+            color: #999;
+            font-family: Pretendard;
+            line-height: normal;
+            flex-shrink: 0;
+            margin-left: 0.5rem; // 8px
+          }
+        }
+      }
+    }
+  }
+}
+
+// 반응형 디자인 - 작은 화면
+@media (max-width: 375px) {
+  .todo-box-container {
+    margin: 0.875rem 1rem 1.25rem 1rem; // 14px 16px 20px 16px
+    
+    .todo-summary {
+      max-width: 100%;
+      padding: 0.75rem 1rem; // 12px 16px
+      height: 2.75rem; // 44px
+      
+      .todo-summary-text {
+        font-size: 0.875rem; // 14px
+      }
+    }
+    
+    .todo-expanded-container {
+      gap: 0.375rem; // 6px
+      
+      .project-todo-box {
+        padding: 0.75rem; // 12px
+        
+        .project-header h3 {
+          font-size: 0.9375rem; // 15px
+        }
+      }
+    }
+  }
+}
+

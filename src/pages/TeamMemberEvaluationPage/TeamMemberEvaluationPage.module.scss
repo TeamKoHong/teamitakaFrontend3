@@ -1,0 +1,577 @@
+@use '../../styles/variables' as *;
+@use 'sass:color';
+
+// Figma Design Colors
+$bg-color: #f2f2f2;
+$card-bg: #ffffff;
+$primary-orange: #f76241;
+$text-dark: #140805;
+$text-gray: #807c7c;
+$track-bg: #ececec;
+
+.pageContainer {
+  min-height: 100vh;
+  background-color: $bg-color;
+  font-family: 'Pretendard', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 69px; // Header(47px) + margin(22px)
+  padding-bottom: 80px; // BottomNav space
+  box-sizing: border-box;
+}
+
+.content {
+  width: 100%;
+  max-width: 390px; // Mobile width
+  padding: 0 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// Header
+.customHeader {
+  width: 100%;
+  max-width: 390px;
+  height: 47px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 20px;
+
+  .headerTitle {
+    font-size: 17px;
+    font-weight: 600;
+    color: $text-dark;
+  }
+
+  .closeButton {
+    position: absolute;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: $text-dark;
+  }
+}
+
+// Project Info Card
+.projectInfoCard {
+  width: 100%;
+  background-color: $card-bg;
+  border-radius: 20px;
+  padding: 8px 16px;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+
+  .projectHeaderRow {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+
+    .projectTitle {
+      font-size: 16px;
+      font-weight: 600;
+      color: $text-dark;
+    }
+
+    .daysProgress {
+      font-size: 14px;
+      color: $primary-orange;
+      font-weight: 600;
+    }
+  }
+
+  .projectInfo {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+
+    .infoRow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: #403e3e;
+
+      .iconWrapper {
+        width: 16px;
+        height: 16px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .iconBox {
+          position: absolute;
+          width: 16px;
+          height: 16px;
+          background-color: #403e3e;
+          border-radius: 5px;
+          opacity: 0.1;
+          display: none;
+        }
+
+        .icon {
+          font-size: 12px;
+          z-index: 1;
+        }
+      }
+    }
+  }
+
+  .teamAvatars {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+
+    .avatarWrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+
+      .avatar {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        overflow: hidden;
+        position: relative;
+        border: none;
+        transition: all 0.3s ease;
+        cursor: pointer;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.3s ease;
+        }
+
+        // Hover 효과 (완료되지 않은 팀원만)
+        &:not(.completedAvatar):hover {
+          transform: scale(1.05);
+
+          img {
+            transform: scale(1.1);
+          }
+        }
+
+        &.currentAvatar {
+          border: 2px solid $primary-orange;
+          box-shadow: 0 0 0 2px rgba(247, 98, 65, 0.2);
+        }
+
+        &.completedAvatar {
+          cursor: default;
+
+          img {
+            opacity: 0.5;
+          }
+        }
+
+        .completedBadge {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          width: 16px;
+          height: 16px;
+          background-color: #5E5E5E;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #F76241;
+          font-size: 10px;
+          border: 1px solid white;
+          z-index: 1;
+        }
+      }
+
+      .memberInfo {
+        text-align: center;
+
+        .memberName {
+          font-size: 14px;
+          font-weight: 600;
+          color: $text-dark;
+        }
+
+        .memberRole {
+          font-size: 12px;
+          color: #403e3e;
+        }
+      }
+    }
+  }
+}
+
+// Step Container
+.stepContainer {
+  position: relative; // Required for absolute-positioned topBackgroundBox
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stepIndicatorContainer {
+  margin: 8px 0; // Adjusted to match Figma spec
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  align-self: flex-start;
+}
+
+
+// Question Text
+.questionText {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 140.98%;
+  color: $text-dark;
+  margin: 8px 0 8px; // Adjusted to match Figma spec
+  text-align: left;
+  width: 100%;
+}
+
+// Category Section
+.categorySection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px; // Adjusted to match Figma spec
+  margin-bottom: 30px;
+}
+
+// Category Item
+.categoryItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 16px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #ececec;
+}
+
+.categoryHeader {
+  display: flex;
+  flex-direction: column; // Stack title and description
+  align-items: flex-start;
+  gap: 4px; // Reduce gap for tighter stacking
+
+  .categoryName {
+    font-size: 13px; // Requested: 13px
+    font-weight: 600; // Requested: semibold
+    color: #140805;
+  }
+
+  .categoryDescription {
+    font-size: 10px; // Requested: 10px
+    font-weight: 400; // Requested: regular
+    color: #807c7c;
+  }
+}
+
+// Rating Input Styles
+.ratingInputContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 10px; // Provide some side padding for knob overhang
+}
+
+.ratingTrackArea {
+  position: relative;
+  width: 100%;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.ratingTrackBackground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background-color: #ECECEC;
+  border-radius: 3px;
+}
+
+.ratingTrackFill {
+  position: absolute;
+  left: 0;
+  height: 6px;
+  background-color: #F76241;
+  border-radius: 3px;
+}
+
+.ratingKnob {
+  position: absolute;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  background-color: #FFFFFF;
+  border: 2px solid #F76241;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.ratingLabels {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.ratingLabel {
+  font-size: 14px;
+  color: #807C7C;
+  cursor: pointer;
+  text-align: center;
+  width: 24px; // Ensure touch target
+  transition: color 0.2s;
+
+  &.active {
+    color: #F76241;
+    font-weight: 700;
+  }
+}
+
+
+
+// Step 2 Styles
+.overallRatingSection {
+  // Removed @extend .categoryItem to remove border/box
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  padding: 0px 16px;
+  gap: 4px;
+
+  .overallLabel {
+    font-size: 18px;
+    font-weight: 600;
+    color: #140805;
+    line-height: 140.98%;
+    margin-bottom: 0;
+  }
+
+  .overallSubtitle {
+    font-size: 12px;
+    color: #807c7c;
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+  }
+}
+
+// ... (Role Section unchanged) ...
+
+// Step 3 Styles - Simplified flex-based layout
+
+// Top Section - White background with header, card and date
+.topSection {
+  width: calc(100% + 32px);
+  margin-left: -16px;
+  margin-right: -16px;
+  background-color: #fffdfc;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.15);
+  padding: 0 16px 20px; // Increased bottom padding
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px; // Increased gap between elements
+
+  // Modal header with title and close button
+  .modalHeader {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 56px; // Slightly taller for better spacing
+    margin-bottom: 4px; // Reduced bottom margin
+
+    .headerTitle {
+      font-size: 17px;
+      font-weight: 600;
+      color: #140805;
+    }
+
+    .closeButton {
+      position: absolute;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: #140805;
+      padding: 0;
+      line-height: 1;
+    }
+  }
+}
+
+// Member card inside top section
+.completedMemberCard {
+  width: 100%;
+  max-width: 420px; // Slightly wider
+  background-color: #fffdfc;
+  border: 1px solid #d1cccb;
+  border-radius: 20px; // More rounded corners
+  padding: 20px 24px; // Adjusted padding
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .memberAvatar {
+    width: 63px;
+    height: 63px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 16px;
+    background-color: #fcece9; // Placeholder color
+  }
+
+  .memberTextContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    flex: 1;
+    gap: 2px;
+  }
+
+  .roleTag {
+    font-size: 13px;
+    color: #807c7c;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .memberName {
+    font-size: 18px;
+    font-weight: 700;
+    color: #140805;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .starRating {
+    display: flex;
+    align-items: center;
+
+    // Override star size for Step 3 completion card
+    :global(.RatingStars_starIcon__TQVGM) {
+      font-size: 23.6px !important;
+      width: 23.6px;
+      height: 23.6px;
+    }
+  }
+}
+
+// Evaluation date below card
+.evaluationDate {
+  width: 100%;
+  max-width: 420px;
+  font-size: 13px; // Slightly larger
+  color: #666666; // Slightly lighter gray
+  text-align: right;
+  margin-top: -8px; // Pull closer to card
+  // User wanted position fix. Usually right aligned below card is standard, 
+  // but if user says "position fix", maybe they want it inside? 
+  // For now keeping right aligned but ensuring margin.
+  margin-top: 4px;
+}
+
+// Bottom Section - Gray background with centered content
+.bottomSection {
+  width: calc(100% + 32px);
+  margin-left: -16px;
+  margin-right: -16px;
+  flex: 1;
+  min-height: calc(100vh - 280px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 16px 34px; // Adjusted padding-bottom for Safari balance
+  background-color: inherit;
+
+  // Centered content wrapper (check icon + message)
+  .centeredContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: 4px; // Reduced gap per QA (8px -> 4px)
+  }
+
+  // Check icon styles  
+  .checkIconCircle {
+    width: 57px;
+    height: 57px;
+    border-radius: 50%;
+    background-color: $primary-orange;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  // Success message below check icon
+  .successMessage {
+    font-size: 18px;
+    font-weight: 600;
+    color: #140805;
+    line-height: 140.98%;
+    text-align: center;
+  }
+
+  // Button group at bottom of section
+  .buttonGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 358px;
+  }
+}
+
+.homeLink {
+  background: none;
+  border: none;
+  color: $text-gray;
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 8px;
+}

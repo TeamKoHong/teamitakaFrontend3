@@ -1,0 +1,73 @@
+.timeLineBox-container {
+  padding: 0 15px;
+
+  .timeLineBox-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #403e3e;
+    }
+    .timeLineBox-button {
+      width: 58px;
+      height: 19px;
+      background: #403e3e;
+      border-radius: 5px;
+      color: #fffdfc;
+      font-size: 10px;
+      font-weight: 600;
+    }
+  }
+
+  .timeLineBox-items {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 16px;
+
+    .timeLineBox-line {
+      position: absolute;
+      left: 21px; // 동그라미 중심 x좌표
+      top: 21px; // 첫 번째 circle의 중심 y좌표
+      bottom: 21px; // 마지막 circle의 중심 y좌표
+      border-left: 1px dashed #d1cccb;
+      z-index: 0;
+    }
+  }
+
+  .timeLineBox-content {
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    .day-circle {
+      width: 42px;
+      height: 42px;
+      background: #d1cccb;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 600;
+      color: #403e3e;
+      flex-shrink: 0;
+    }
+
+    .timeLineBox-content-text {
+      margin-left: 14px;
+      h3 {
+        color: #403e3e;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      p {
+        color: #d1cccb;
+        font-size: 10px;
+        margin-top: 4px;
+      }
+    }
+  }
+}

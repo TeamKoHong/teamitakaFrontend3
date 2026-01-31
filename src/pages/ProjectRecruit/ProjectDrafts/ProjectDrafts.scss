@@ -1,0 +1,85 @@
+/* ===== Tokens ===== */
+$gray-1:#111;
+$gray-3:#6b7280;
+$gray-4:#9ca3af;
+$line:#e5e5ea;
+$bg:#fff;
+$chip:#f3f4f6;
+$primary: #F76241;
+
+.recruit-drafts-page {
+  min-height: 100vh; background: $bg;
+
+  .topbar {
+    position: sticky; top: 0; z-index: 10;
+    height: 56px; display:flex; align-items:center; justify-content:center; background:#fff;
+    .back { position:absolute; left:12px; width:44px; height:44px; display:flex; align-items:center; justify-content:center; background:none; border:0; cursor:pointer;
+      .chevron { width:9px; height:9px; border-left:2px solid #2b2b2b; border-bottom:2px solid #2b2b2b; transform:rotate(45deg); opacity:.9; } }
+    .title { font-size:16px; font-weight:700; color:$gray-1; }
+  }
+
+  .list-wrap { padding:16px; padding-bottom:120px; }
+
+  /* 카드: 선택 전/후 동일한 레이아웃 유지 */
+  .draft-card {
+    width:100%; display:flex; align-items:center; gap:12px;
+    padding:14px; border-radius:12px; border:0; background:$chip; cursor:pointer;
+    text-align:left; /* ✅ 항상 왼쪽 정렬 */
+    + .draft-card { margin-top:12px; }
+
+.doc-icon {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  display: block;
+  object-fit: contain;
+}
+
+.content { flex:1 1 auto; min-width:0; display:flex; flex-direction:column; justify-content:center; }
+    .type   { font-size:12px; color:$gray-4; margin-bottom:6px; }
+    .title  { font-size:14px; color:$gray-1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+   .check-icon {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  display: block;
+  object-fit: contain;
+}
+
+    &.selected {
+      background:$primary;
+      .type, .title { color:#fff; }
+    }
+  }
+
+  .empty {
+    height:60vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+    .empty-title { font-weight:700; color:$gray-1; margin-bottom:8px; }
+    .empty-sub   { color:$gray-4; line-height:1.4; white-space:pre-line; }
+  }
+
+  .footer {
+    position:fixed; left:0; right:0; bottom:0; background:#fff; border-top:none; box-shadow:none;
+    padding:8px 12px calc(24px + env(safe-area-inset-bottom));
+    display:grid; grid-template-columns:1fr 1fr; gap:12px;
+
+    .btn {
+      height:48px; border-radius:12px; font-weight:700; font-size:16px; border:none;
+
+      /* ✅ 공통 비활성(두 버튼 동일한 회색) */
+      &:disabled {
+        background:#e5e7eb;
+        color:#9ca3af;
+        cursor:not-allowed;
+        border:none;           /* delete의 회색 테두리도 제거 */
+      }
+
+      /* 활성 상태 */
+      &.load:not(:disabled)   { background:$primary; color:#fff; }
+      &.delete:not(:disabled) { background:#fff; border:1px solid #e5e7eb; color:#6b7280; }
+
+      &:focus, &:active, &:focus-visible { outline:none; box-shadow:none; }
+    }
+  }
+}

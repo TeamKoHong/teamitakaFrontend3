@@ -1,0 +1,56 @@
+.tab-container {
+  display: flex;
+  grid-template-columns: repeat(3, 130px);
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #fff;
+  position: relative;
+  padding-bottom: 0; // ensure indicator sits on bottom edge
+ 
+}
+
+// full-width base track
+.tab-container::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: #e0e0e0;
+}
+
+.tab-item {
+  width: 100%;
+  min-width: 0;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1; // prevent font metrics from shifting vertical centering
+  font-size: 15px;
+  font-weight: 500;
+  color: #c7c7c7;
+  background: none;
+  border: none;
+  cursor: pointer;
+  letter-spacing: -0.2px;
+
+  .tab-text {
+    display: inline-block;
+  }
+}
+
+.tab-item.active {
+  color: #111;
+  font-weight: 600;
+  
+}
+
+// moving indicator
+.indicator {
+  position: absolute;
+  bottom: 0;
+  background: #140805;
+  border: 2px solid #140805;
+  border-radius: 2px;
+  transition: left 200ms ease, width 200ms ease;
+}

@@ -1,0 +1,189 @@
+.calendar {
+  background: #f2f2f2;
+  padding: 16px;
+  font-style: normal;
+  line-height: normal;
+  text-transform: capitalize;
+ 
+
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 0 1rem;
+
+    .nav-btn {
+      background: none;
+      border: none;
+      font-size: 26px;
+      color: #403e3e;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .month-label {
+      font-size: 18px;
+      font-weight: 700;
+      color: #403e3e;
+    }
+  }
+
+  .weekday-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    justify-items: center;
+    text-align: center;
+    font-size: 10px;
+    color: #8e8e8e;
+    margin-bottom: 24px;
+
+    .weekday {
+      width: 31px;
+    }
+  }
+
+  .dates-grid {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    justify-items: center;
+    gap: 24px 0;
+    text-align: center;
+    font-size: 14px;
+
+    .date-cell {
+      width: 31px;
+      height: 31px;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      position: relative;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+
+      &.disabled {
+        color: #d1cccb;
+        
+      }
+      &:hover:not(.disabled):not(.selected):not(.today) {
+        background: #f5f5f5;
+      }
+      &.selected {
+        background: #333 !important;
+        border-radius: 12px;
+        
+        .date-number {
+          color: white !important;
+        }
+      }
+      &.today {
+        background: #F76241 !important;
+        border-radius: 12px;
+        
+        .date-number {
+          color: white !important;
+          font-weight: 700;
+        }
+      }
+      &.selected.today {
+        background: #333 !important;
+        border-radius: 12px;
+        
+        .date-number {
+          color: white !important;
+          font-weight: 700;
+        }
+      }
+
+      .date-number {
+        font-size: 14px;
+        font-weight: 400;
+      }
+
+      .event-dot {
+        position: absolute;
+        bottom: -0.7rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 6px;
+        height: 6px;
+        background-color: #F76241;
+        border-radius: 50%;
+      }
+    }
+  }
+
+}
+
+// 선택된 날짜 정보 및 일정 - 별개 박스
+.selected-date-container {
+  background: #f2f2f2;
+ 
+  padding: 16px;
+  
+  .selected-date-info {
+    margin-bottom: 16px;
+    
+    .date-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: #F76241;
+      font-family: Pretendard;
+    }
+  }
+
+  .events-list {
+    .event-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+      
+      .event-profile {
+        flex-shrink: 0;
+        
+        img {
+          width: 49px;
+          height: 49px;
+          border-radius: 50%;
+          border: 1px solid #807B79;
+        }
+      }
+      
+      .event-content {
+        flex: 1;
+        
+        .event-title {
+          font-size: 14px;
+          font-weight: 600;
+          color: #000;
+          font-family: Pretendard;
+          margin-bottom: 4px;
+        }
+        
+        .event-desc {
+          font-size: 13px;
+          font-weight: 400;
+          color: #666;
+          font-family: Pretendard;
+          line-height: 1.4;
+        }
+      }
+    }
+    
+    .no-events {
+      text-align: center;
+      color: #999;
+      font-size: 14px;
+      font-family: Pretendard;
+      padding: 20px 0;
+    }
+  }
+}

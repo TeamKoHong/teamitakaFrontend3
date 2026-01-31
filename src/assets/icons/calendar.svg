@@ -1,0 +1,10 @@
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/>
+  <path d="M16 3V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M8 3V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M3 11H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="16" height="16" rx="5" fill="#403E3E"/>
+<path d="M11.1238 4.10043H10.6849V3.22266H9.80712V4.10043H6.29601V3.22266H5.41823V4.10043H4.97934C4.49217 4.10043 4.10595 4.49543 4.10595 4.97821L4.10156 11.1227C4.10156 11.6054 4.49217 12.0004 4.97934 12.0004H11.1238C11.6066 12.0004 12.0016 11.6054 12.0016 11.1227V4.97821C12.0016 4.49543 11.6066 4.10043 11.1238 4.10043ZM11.1238 11.1227H4.97934V6.73377H11.1238V11.1227ZM11.1238 5.85599H4.97934V4.97821H11.1238V5.85599ZM6.7349 8.48932H5.85712V7.61154H6.7349V8.48932ZM8.49045 8.48932H7.61267V7.61154H8.49045V8.48932ZM10.246 8.48932H9.36823V7.61154H10.246V8.48932ZM6.7349 10.2449H5.85712V9.3671H6.7349V10.2449ZM8.49045 10.2449H7.61267V9.3671H8.49045V10.2449ZM10.246 10.2449H9.36823V9.3671H10.246V10.2449Z" fill="#FFFDFC"/>
+</svg>

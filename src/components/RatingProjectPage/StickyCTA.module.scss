@@ -1,0 +1,17 @@
+@use '../../styles/variables' as *;
+.cta {
+  position: sticky;
+  bottom: 72px; // BottomNav 고려
+  width: calc(100% - 24px);
+  margin: 12px auto 0;
+  padding: 14px 16px;
+  border-radius: 999px;
+  border: none;
+  background: $primary-color;
+  color: $white;
+  font-weight: $font-weight-bold;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.label { font-size: $font-size-md; }
+.caret { transform: rotate(180deg); }
+

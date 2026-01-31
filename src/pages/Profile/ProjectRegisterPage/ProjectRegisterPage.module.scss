@@ -1,0 +1,158 @@
+.container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-bottom: 80px; // 하단 버튼 공간 확보
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  height: 56px;
+  background-color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  margin-top: 20px;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  width: 10px;
+  max-height: 5px;
+  
+}
+
+.headerTitle {
+  font-size: 17px;
+  font-weight: 700;
+  color: #000;
+  flex: 1;
+  text-align: center;
+  margin-right: 24px; // 뒤로가기 버튼 크기만큼 보정하여 중앙 정렬
+}
+
+.content {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 프로젝트 카드 스타일 */
+.projectCard {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: 70px;
+  
+  // 기본 상태 (선택 안됨)
+  background-color: #F5F5F5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+
+  &.selected {
+    // 선택된 상태
+    background-color: #F76241;
+    border-color: #F76241;
+    box-shadow: 0 4px 12px rgba(247, 98, 65, 0.3);
+
+    .cardTitle {
+      color: #fff;
+    }
+
+    .cardDesc {
+      color: rgba(255, 255, 255, 0.9);
+    }
+  }
+}
+
+/* 기존 .projectCard 스타일 아래에 추가 */
+
+.cardIconWrapper {
+  margin-right: 16px; /* 아이콘과 텍스트 사이 간격 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 36px;  /* 가로 크기 (원하는대로 조절: 32px, 40px 등) */
+    height: 36px; /* 세로 크기 */
+    object-fit: contain; /* 비율 유지 */
+  }
+}
+
+.cardInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardType {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 2px;
+
+  // 선택되었을 때 텍스트 컬러 변경
+  .selected & {
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.cardTitle {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.checkIcon {
+  width: 24px;
+  height: 24px;
+  margin-left: 12px;
+}
+
+/* 하단 버튼 */
+.bottomButtonContainer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+}
+
+.loadButton {
+  width: 100%;
+  height: 60px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-bottom: 15px;
+
+  // 비활성 상태
+  background-color: #D1CCCB;
+  color: #807C7C;
+  cursor: not-allowed;
+
+  // 활성 상태
+  &.active {
+    background-color: #F76241;
+    color: #fff;
+    cursor: pointer;
+  }
+}

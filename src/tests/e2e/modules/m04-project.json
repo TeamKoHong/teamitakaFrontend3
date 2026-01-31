@@ -1,0 +1,687 @@
+{
+  "module_id": "M04",
+  "module_name": "프로젝트 관리",
+  "features": [
+    {
+      "feature_id": "M04-F01",
+      "feature_name": "프로젝트 목록 탭",
+      "route": "/project-management",
+      "test_scenarios": [
+        {
+          "id": "M04-F01-01",
+          "description": "'진행 중' 탭이 존재하고 동작하는가?",
+          "user_state": "US04",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/project-management" },
+            { "action": "wait", "selector": ".project-management-container", "timeout": 5000 },
+            { "action": "screenshot", "name": "project-management" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".tab-container, .progress-container" }
+          ],
+          "expected_result": "진행 중인 프로젝트 필터링"
+        },
+        {
+          "id": "M04-F01-02",
+          "description": "'모집중' 탭이 존재하고 동작하는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/project-management" },
+            { "action": "wait", "selector": ".tab-container", "timeout": 5000 },
+            { "action": "click", "selector": ".tab-item:nth-child(2)" },
+            { "action": "wait", "selector": ".recruiting-container", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".recruiting-container" }
+          ],
+          "expected_result": "모집 중인 프로젝트 필터링"
+        },
+        {
+          "id": "M04-F01-03",
+          "description": "'완료된' 탭이 존재하고 동작하는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/project-management" },
+            { "action": "wait", "selector": ".tab-container", "timeout": 5000 },
+            { "action": "click", "selector": ".tab-item:nth-child(3)" },
+            { "action": "wait", "selector": ".completed-container", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".completed-container" }
+          ],
+          "expected_result": "완료된 프로젝트 필터링"
+        },
+        {
+          "id": "M04-F01-04",
+          "description": "각 탭별 프로젝트 개수가 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/project-management" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".tab-container" }
+          ],
+          "expected_result": "탭 옆에 숫자 표시"
+        }
+      ]
+    },
+    {
+      "feature_id": "M04-F02",
+      "feature_name": "프로젝트 상세 - 기본정보",
+      "route": "/project/:id",
+      "test_scenarios": [
+        {
+          "id": "M04-F02-01",
+          "description": "프로젝트명이 표시되는가?",
+          "user_state": "US04",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}" },
+            { "action": "wait", "selector": ".project-detail-header", "timeout": 5000 },
+            { "action": "screenshot", "name": "project-detail" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".project-title, .project-detail-header" }
+          ],
+          "expected_result": "프로젝트 제목 표시"
+        },
+        {
+          "id": "M04-F02-02",
+          "description": "'시작한지 +N일' 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}" }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": ".project-days, .start-date", "expected": "시작한지" }
+          ],
+          "expected_result": "프로젝트 진행 일수 표시"
+        },
+        {
+          "id": "M04-F02-03",
+          "description": "D-Day가 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".today-icon, .progress-wrapper" }
+          ],
+          "expected_result": "'D-27' 형식으로 마감일까지 남은 일수"
+        },
+        {
+          "id": "M04-F02-04",
+          "description": "목표일까지 남은 일수 안내가 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}" }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": ".progress-subtext", "expected": "남았어요" }
+          ],
+          "expected_result": "'목표일 2000.00.00까지 27일 남았어요!'"
+        },
+        {
+          "id": "M04-F02-05",
+          "description": "프로젝트 설명/다짐이 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".project-subtitle, .slide-card" }
+          ],
+          "expected_result": "최대 30자 입력란"
+        }
+      ]
+    },
+    {
+      "feature_id": "M04-F03",
+      "feature_name": "프로젝트 상세 - 서브메뉴",
+      "route": "/project/:id",
+      "test_scenarios": [
+        {
+          "id": "M04-F03-01",
+          "description": "'팀원 정보' 메뉴가 존재하고 동작하는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}" },
+            { "action": "wait", "selector": ".main-floating-box", "timeout": 5000 },
+            { "action": "click", "selector": ".icon-container:nth-child(1) .icon" },
+            { "action": "wait_for_navigation", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "url_contains", "expected": "/member" }
+          ],
+          "expected_result": "팀원 정보 화면으로 이동"
+        },
+        {
+          "id": "M04-F03-02",
+          "description": "'팀 회의록' 메뉴가 존재하고 동작하는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}" },
+            { "action": "wait", "selector": ".main-floating-box", "timeout": 5000 },
+            { "action": "click", "selector": ".icon-container:nth-child(2) .icon" },
+            { "action": "wait_for_navigation", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "url_contains", "expected": "/proceedings" }
+          ],
+          "expected_result": "팀 회의록 화면으로 이동"
+        },
+        {
+          "id": "M04-F03-03",
+          "description": "'투표하기' 메뉴가 존재하고 동작하는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}" },
+            { "action": "wait", "selector": ".main-floating-box", "timeout": 5000 },
+            { "action": "click", "selector": "img[alt='투표하기']" },
+            { "action": "wait_for_navigation", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "url_contains", "expected": "/vote" }
+          ],
+          "expected_result": "투표 화면으로 이동"
+        },
+        {
+          "id": "M04-F03-04",
+          "description": "'공유 캘린더' 메뉴가 존재하고 동작하는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}" },
+            { "action": "wait", "selector": ".main-floating-box", "timeout": 5000 },
+            { "action": "click", "selector": ".icon-container:nth-child(4) .icon img" },
+            { "action": "wait_for_navigation", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "url_contains", "expected": "/calender" }
+          ],
+          "expected_result": "공유 캘린더 화면으로 이동"
+        }
+      ]
+    },
+    {
+      "feature_id": "M04-F04",
+      "feature_name": "팀원 정보",
+      "route": "/project/:id/member",
+      "skip": true,
+      "skip_reason": "QR코드 팀원 초대 기능 미구현 - 프로젝트 상세 페이지 필요",
+      "test_scenarios": [
+        {
+          "id": "M04-F04-01",
+          "description": "팀원 목록이 표시되는가?",
+          "user_state": "US04",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}/member" },
+            { "action": "wait", "selector": ".member-detail-card", "timeout": 5000 },
+            { "action": "screenshot", "name": "project-members" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".member-detail-card" },
+            { "type": "element_count", "selector": ".member-detail-card", "expected_min": 1 }
+          ],
+          "expected_result": "팀원명, 담당파트 표시"
+        },
+        {
+          "id": "M04-F04-02",
+          "description": "담당 역할(조장 등)이 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}/member" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".member-role, .role-badge" }
+          ],
+          "expected_result": "역할 표시"
+        },
+        {
+          "id": "M04-F04-03",
+          "description": "담당 업무가 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}/member" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".member-meta, .member-detail-card" }
+          ],
+          "expected_result": "'자료조사, 발표' 등 업무 표시"
+        },
+        {
+          "id": "M04-F04-04",
+          "description": "QR코드로 팀원 초대가 가능한가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "click", "selector": ".invite-btn, .qr-invite" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".qr-code, .invite-modal" }
+          ],
+          "expected_result": "'QR코드를 스캔해 팀원으로 초대해보세요!'"
+        },
+        {
+          "id": "M04-F04-05",
+          "description": "팀원 정보 편집이 가능한가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "click", "selector": ".edit-btn, .member-edit" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".edit-mode, .member-edit-form" }
+          ],
+          "expected_result": "편집 모드에서 정보 수정"
+        }
+      ]
+    },
+    {
+      "feature_id": "M04-F05",
+      "feature_name": "팀 회의록",
+      "route": "/project/:id/proceedings",
+      "skip": true,
+      "skip_reason": "회의록 페이지 - 진행 중인 프로젝트 및 회의록 데이터 필요",
+      "test_scenarios": [
+        {
+          "id": "M04-F05-01",
+          "description": "회의록 목록이 월별로 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}/proceedings" },
+            { "action": "wait", "selector": ".proceedings-list", "timeout": 5000 },
+            { "action": "screenshot", "name": "proceedings-list" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".month-group, .proceedings-month" }
+          ],
+          "expected_result": "'00월' 단위로 그룹화"
+        },
+        {
+          "id": "M04-F05-02",
+          "description": "회의 제목이 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}/proceedings" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".meeting-title, .proceedings-title" }
+          ],
+          "expected_result": "최대 18자 제목"
+        },
+        {
+          "id": "M04-F05-03",
+          "description": "작성자 닉네임이 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}/proceedings" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".author-name, .writer" }
+          ],
+          "expected_result": "작성자 정보 표시"
+        },
+        {
+          "id": "M04-F05-04",
+          "description": "회의 내용 간단 메모가 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}/proceedings" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".meeting-summary, .proceedings-content" }
+          ],
+          "expected_result": "최대 100자 메모"
+        },
+        {
+          "id": "M04-F05-05",
+          "description": "회의록 작성 버튼이 동작하는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "click", "selector": ".create-meeting-btn, .add-proceedings" },
+            { "action": "wait_for_navigation", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "url_contains", "expected": "/create" }
+          ],
+          "expected_result": "새 회의록 작성 화면"
+        },
+        {
+          "id": "M04-F05-06",
+          "description": "프로젝트 종료 후에는 수정이 불가능한가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/project/completed-1/proceedings" }
+          ],
+          "validations": [
+            { "type": "element_disabled", "selector": ".edit-btn" }
+          ],
+          "expected_result": "종료 후 수정 비활성화"
+        }
+      ]
+    },
+    {
+      "feature_id": "M04-F06",
+      "feature_name": "투표하기",
+      "route": "/project/:id/vote",
+      "skip": true,
+      "skip_reason": "투표 기능 미구현",
+      "test_scenarios": [
+        {
+          "id": "M04-F06-01",
+          "description": "투표 목록이 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}" },
+            { "action": "click", "selector": ".vote-menu, [href*='vote']" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".vote-list, .poll-list" }
+          ],
+          "expected_result": "투표 제목, 기간 표시"
+        },
+        {
+          "id": "M04-F06-02",
+          "description": "투표 생성이 가능한가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "click", "selector": ".create-vote-btn" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".vote-form, .create-poll-form" }
+          ],
+          "expected_result": "투표 제목, 기간, 선택지 입력"
+        },
+        {
+          "id": "M04-F06-03",
+          "description": "선택지 추가(+ 선택지 추가하기)가 가능한가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "click", "selector": ".add-option-btn" }
+          ],
+          "validations": [
+            { "type": "element_count", "selector": ".vote-option, .poll-option", "expected_min": 2 }
+          ],
+          "expected_result": "동적 선택지 추가"
+        },
+        {
+          "id": "M04-F06-04",
+          "description": "투표 참여가 가능한가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "click", "selector": ".vote-option:first-child" },
+            { "action": "click", "selector": ".submit-vote-btn" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".vote-result, .poll-result" }
+          ],
+          "expected_result": "선택지 선택 후 저장"
+        },
+        {
+          "id": "M04-F06-05",
+          "description": "가장 많은 선택을 받은 선택지가 강조 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "wait", "selector": ".vote-result", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".winning-option, .top-choice" }
+          ],
+          "expected_result": "시각적 구분 표시"
+        },
+        {
+          "id": "M04-F06-06",
+          "description": "투표 후 수정이 불가능한가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "wait", "selector": ".vote-result", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_disabled", "selector": ".vote-option" }
+          ],
+          "expected_result": "'선택하면 이렇게 표시되고 중복, 수정 불가능'"
+        }
+      ]
+    },
+    {
+      "feature_id": "M04-F07",
+      "feature_name": "공유 캘린더",
+      "route": "/project/:id/calender",
+      "skip": true,
+      "skip_reason": "프로젝트 캘린더 페이지 - 진행 중인 프로젝트 필요",
+      "test_scenarios": [
+        {
+          "id": "M04-F07-01",
+          "description": "월간 캘린더 뷰가 표시되는가?",
+          "user_state": "US04",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}/calender" },
+            { "action": "wait", "selector": ".calendar", "timeout": 5000 },
+            { "action": "screenshot", "name": "project-calendar" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".calendar" }
+          ],
+          "expected_result": "해당 월 달력 표시"
+        },
+        {
+          "id": "M04-F07-02",
+          "description": "일정이 있는 날짜에 표시가 되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}/calender" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".has-event, .event-dot" }
+          ],
+          "expected_result": "일정 있는 날 시각적 구분"
+        },
+        {
+          "id": "M04-F07-03",
+          "description": "일정 제목이 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "click", "selector": ".has-event, .calendar-day:has(.event-dot)" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".event-title" }
+          ],
+          "expected_result": "최대 20자 일정 제목"
+        },
+        {
+          "id": "M04-F07-04",
+          "description": "일정 설명이 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "click", "selector": ".event-item" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".event-description" }
+          ],
+          "expected_result": "30자 이내 설명"
+        },
+        {
+          "id": "M04-F07-05",
+          "description": "일정 추가가 가능한가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "click", "selector": ".add-event-btn, .calendar-day" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".add-event-modal, .event-form" }
+          ],
+          "expected_result": "날짜 선택 후 일정 생성"
+        },
+        {
+          "id": "M04-F07-06",
+          "description": "고정 회의 시간이 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}/calender" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".recurring-event, .fixed-meeting" }
+          ],
+          "expected_result": "정기 회의 시간 표시"
+        }
+      ]
+    },
+    {
+      "feature_id": "M04-F08",
+      "feature_name": "프로젝트 킥오프",
+      "route": "/project/:id/kickoff",
+      "skip": true,
+      "skip_reason": "킥오프 작성 기능 미구현",
+      "test_scenarios": [
+        {
+          "id": "M04-F08-01",
+          "description": "킥오프 작성 화면이 존재하는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "click", "selector": ".kickoff-btn, .create-kickoff" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".kickoff-form, .kickoff-page" }
+          ],
+          "expected_result": "'킥오프 작성하기' 버튼 동작"
+        },
+        {
+          "id": "M04-F08-02",
+          "description": "프로젝트 제목 입력이 가능한가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "type", "selector": ".project-title-input", "value": "테스트 프로젝트" }
+          ],
+          "validations": [
+            { "type": "input_value", "selector": ".project-title-input", "expected": "테스트 프로젝트" }
+          ],
+          "expected_result": "제목 입력 필드"
+        },
+        {
+          "id": "M04-F08-03",
+          "description": "프로젝트 기간 설정이 가능한가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "click", "selector": ".date-picker, .period-input" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".date-picker-modal, .calendar-picker" }
+          ],
+          "expected_result": "기간 선택"
+        },
+        {
+          "id": "M04-F08-04",
+          "description": "프로젝트 설명/다짐 입력이 가능한가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "type", "selector": ".project-description-input", "value": "함께 성장하는 프로젝트" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".project-description-input" }
+          ],
+          "expected_result": "설명 입력 필드"
+        },
+        {
+          "id": "M04-F08-05",
+          "description": "임시 저장이 가능한가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "click", "selector": ".save-draft-btn" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".toast-message, .save-success" }
+          ],
+          "expected_result": "임시 저장 버튼 동작"
+        }
+      ]
+    },
+    {
+      "feature_id": "M04-F09",
+      "feature_name": "프로젝트 피드/타임라인",
+      "route": "/project/:id",
+      "skip": true,
+      "skip_reason": "프로젝트 피드 - 진행 중인 프로젝트 및 활동 데이터 필요",
+      "test_scenarios": [
+        {
+          "id": "M04-F09-01",
+          "description": "프로젝트 피드가 시간순으로 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}" },
+            { "action": "scroll", "direction": "down", "amount": 300 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".timeLineBox-container, .feed-list" },
+            { "type": "text_matches", "selector": ".timeLineBox-content-text p, .feed-time", "pattern": "\\d+(초|분|시간|일|주|개월) 전|방금 전" }
+          ],
+          "expected_result": "'3시간 전', '15시간 전' 등 시간 표시"
+        },
+        {
+          "id": "M04-F09-02",
+          "description": "팀원 활동 내역이 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".activity-item, .feed-item" }
+          ],
+          "expected_result": "'전달받은 자료로 발표자료 완성했습니다!' 등"
+        },
+        {
+          "id": "M04-F09-03",
+          "description": "타임라인에 마일스톤이 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/project/{{USER_PROJECT_ID}}" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".milestone, .timeline-milestone" }
+          ],
+          "expected_result": "주요 일정 표시"
+        }
+      ]
+    }
+  ]
+}

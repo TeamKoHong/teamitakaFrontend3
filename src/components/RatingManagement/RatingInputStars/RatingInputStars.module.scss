@@ -1,0 +1,72 @@
+// src/components/RatingManagement/RatingInputStars/RatingInputStars.module.scss
+
+// 별점 전용 색상 변수 (디자인 시스템의 일반 변수와 구분되는 별점 UI 특화 색상)
+$star-color-active: #FFC531; // 활성 별: 황금색 (디자인 시스템의 $accent-color #FFC107과 유사하지만 별점 전용)
+$star-color-inactive: #D7D1CF; // 비활성 별: 베이지 회색 (디자인 시스템에 해당 색상 없음, 별점 UI 전용)
+
+.starRating {
+  display: flex;
+  align-items: center; // 별들을 중앙 정렬
+  line-height: 1; // 컨테이너 줄간격 제거
+  // margin-right는 ProjectRatingCard.module.scss에서 관리
+}
+
+.star {
+  font-size: clamp(24px, 6vw, 28px); // Step1과 동일한 반응형 크기
+  color: $star-color-inactive; // 기본 비활성 색상
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+  display: inline-block;
+  line-height: 1;
+
+  &.filled {
+    color: $star-color-active; // 활성 색상
+  }
+
+  // 별들 사이의 간격 (반응형)
+  &:not(:last-child) {
+    margin-right: clamp(8px, 2vw, 12px); // 반응형 간격
+  }
+}
+
+// 읽기 전용 (readOnly) 상태일 때 커서 변경
+.readOnly {
+  .star {
+    cursor: default;
+  }
+}
+
+// 반응형 미디어 쿼리 (평가 페이지와 일관성 확보)
+@media (max-width: 767px) {
+  .star {
+    font-size: 32px; // 모바일에서 터치 최적화 (Step1과 동일)
+    
+    &:not(:last-child) {
+      margin-right: 16px; // 모바일에서 더 큰 간격
+    }
+  }
+  
+  .starRating {
+    justify-content: center;
+    gap: 0; // margin-right로 간격 제어
+  }
+}
+
+// 터치 기기 최적화
+@media (hover: none) {
+  .star {
+    font-size: clamp(28px, 7vw, 32px); // 터치 기기에서 더 큰 별
+    padding: 4px; // 터치 영역 확대
+    
+    &:not(:last-child) {
+      margin-right: clamp(12px, 3vw, 16px);
+    }
+  }
+}
+
+// 접근성 개선
+@media (prefers-reduced-motion: reduce) {
+  .star {
+    transition: none !important;
+  }
+}

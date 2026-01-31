@@ -1,0 +1,201 @@
+{
+  "module_id": "M09",
+  "module_name": "북마크 & 지원 내역",
+  "features": [
+    {
+      "feature_id": "M09-F01",
+      "feature_name": "북마크",
+      "route": "/bookmark",
+      "test_scenarios": [
+        {
+          "id": "M09-F01-01",
+          "description": "북마크 목록이 표시되는가?",
+          "user_state": "US04",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/bookmark" },
+            { "action": "wait", "selector": ".bookmark-page-container", "timeout": 5000 },
+            { "action": "screenshot", "name": "bookmark-list" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".bookmark-project-list, .bookmark-page-container" }
+          ],
+          "expected_result": "스크랩한 모집글 목록"
+        },
+        {
+          "id": "M09-F01-02",
+          "description": "'오늘 지원 마감인 북마크 프로젝트가 총 N건 있습니다' 안내가 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/bookmark" },
+            { "action": "wait", "selector": ".bookmark-page-container", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".bookmark-summary, .summary-text" }
+          ],
+          "expected_result": "마감 임박 알림"
+        },
+        {
+          "id": "M09-F01-03",
+          "description": "북마크 수가 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/bookmark" },
+            { "action": "wait", "selector": ".bookmark-page-container", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".bookmark-stats .stat-number, .stat-item" }
+          ],
+          "expected_result": "북마크된 게시물 수"
+        }
+      ]
+    },
+    {
+      "feature_id": "M09-F02",
+      "feature_name": "지원 내역",
+      "route": "/bookmark",
+      "test_scenarios": [
+        {
+          "id": "M09-F02-01",
+          "description": "지원한 프로젝트 목록이 표시되는가?",
+          "user_state": "US04",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/bookmark" },
+            { "action": "wait", "selector": ".bookmark-page-container", "timeout": 3000 },
+            { "action": "click", "selector": "text=지원완료" },
+            { "action": "wait", "selector": ".application-history-overlay, .application-history-slide", "timeout": 3000 },
+            { "action": "screenshot", "name": "application-history" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".application-history-slide, .application-history-list" }
+          ],
+          "expected_result": "지원 완료 모집글"
+        },
+        {
+          "id": "M09-F02-02",
+          "description": "'지원 완료' 상태가 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/bookmark" },
+            { "action": "wait", "selector": ".bookmark-page-container", "timeout": 3000 },
+            { "action": "click", "selector": "text=지원완료" },
+            { "action": "wait", "selector": ".application-history-slide", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".application-history-status, .status-text" }
+          ],
+          "expected_result": "지원 상태 표시"
+        },
+        {
+          "id": "M09-F02-03",
+          "description": "지원서 보기가 가능한가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/bookmark" },
+            { "action": "wait", "selector": ".bookmark-page-container", "timeout": 3000 },
+            { "action": "click", "selector": "text=지원완료" },
+            { "action": "wait", "selector": ".application-history-slide", "timeout": 3000 },
+            { "action": "click", "selector": ".view-application, .application-history-action" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".application-detail, .my-application, .view-application" }
+          ],
+          "expected_result": "제출한 지원서 열람"
+        },
+        {
+          "id": "M09-F02-04",
+          "description": "'지원을 취소할래요' 옵션이 존재하는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "skip": true,
+          "skip_reason": "지원 취소 기능이 현재 구현되지 않음",
+          "steps": [
+            { "action": "click", "selector": ".more-options-btn, .cancel-option" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".cancel-application-btn, .cancel-option" }
+          ],
+          "expected_result": "지원 취소 기능"
+        }
+      ]
+    },
+    {
+      "feature_id": "M09-F03",
+      "feature_name": "내가 올린 모집 글",
+      "route": "/bookmark",
+      "test_scenarios": [
+        {
+          "id": "M09-F03-01",
+          "description": "내가 작성한 모집글 목록이 표시되는가?",
+          "user_state": "US04",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/bookmark" },
+            { "action": "wait", "selector": ".bookmark-page-container", "timeout": 3000 },
+            { "action": "click", "selector": "text=내가올린 모집" },
+            { "action": "wait", "selector": ".my-recruitment-overlay, .my-recruitment-slide", "timeout": 3000 },
+            { "action": "screenshot", "name": "my-recruitments" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".my-recruitment-slide, .my-recruitment-list" }
+          ],
+          "expected_result": "작성한 모집글 목록"
+        },
+        {
+          "id": "M09-F03-02",
+          "description": "'모집 중', '모집 마감', '팀 확정 완료', '모집 종료' 상태가 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/bookmark" },
+            { "action": "wait", "selector": ".bookmark-page-container", "timeout": 3000 },
+            { "action": "click", "selector": "text=내가올린 모집" },
+            { "action": "wait", "selector": ".my-recruitment-slide", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".my-recruitment-status, .status-text" }
+          ],
+          "expected_result": "모집글 상태 표시"
+        },
+        {
+          "id": "M09-F03-03",
+          "description": "'최신순' 정렬이 가능한가?",
+          "user_state": "US04",
+          "priority": "low",
+          "skip": true,
+          "skip_reason": "정렬 UI가 현재 구현되지 않음",
+          "steps": [
+            { "action": "click", "selector": ".sort-dropdown, .sort-btn" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".sort-options" },
+            { "type": "text_contains", "selector": ".sort-options", "expected": "최신순" }
+          ],
+          "expected_result": "정렬 옵션"
+        },
+        {
+          "id": "M09-F03-04",
+          "description": "'지원자 보기' 버튼이 동작하는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/bookmark" },
+            { "action": "wait", "selector": ".bookmark-page-container", "timeout": 3000 },
+            { "action": "click", "selector": "text=내가올린 모집" },
+            { "action": "wait", "selector": ".my-recruitment-slide, .my-recruitment-overlay", "timeout": 5000 },
+            { "action": "click", "selector": ".my-recruitment-action .view-applicants, .my-recruitment-card .view-applicants, button:has-text('지원자 보기')" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".my-recruitment-action, .view-applicants, .my-recruitment-card" }
+          ],
+          "expected_result": "지원자 목록으로 이동"
+        }
+      ]
+    }
+  ]
+}

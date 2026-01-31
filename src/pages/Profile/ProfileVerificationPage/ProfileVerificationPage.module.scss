@@ -1,0 +1,190 @@
+.container {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  background-color: #fffdfc;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Pretendard', sans-serif;
+  color: #140805;
+}
+
+/* Custom Header Override */
+.customHeader {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  padding: 24px 16px !important;
+  z-index: 10;
+}
+
+/* Wrapper for DefaultHeader padding/sizing adjustments if needed, 
+   but usually DefaultHeader handles itself. 
+   We keep .container etc. */
+
+/* Main Content Area */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 0;
+}
+
+/* Badge Section */
+.badgeSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  /* Content starts from top padding position */
+  gap: 16px;
+  width: 100%;
+  height: 67vh;
+  /* Responsive height (approx 565/844) */
+  padding-top: 28vh;
+  /* Responsive top offset (approx 235/844) */
+  padding-bottom: 0;
+  box-sizing: border-box;
+  margin-top: 0;
+}
+
+.badgeIconWrapper {
+  width: 73px;
+  height: 73px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  /* Circle background if needed */
+  .badgeBg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #FFFDFC;
+    z-index: 0;
+  }
+
+  .badgeIcon {
+    width: 73px;
+    height: 73px;
+    position: relative;
+    z-index: 1;
+    object-fit: contain;
+  }
+}
+
+.badgeText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  .badgeTitle {
+    font-size: 25px;
+    font-weight: 700;
+    color: #140805;
+    letter-spacing: -0.02em;
+    /* Polished tight spacing */
+  }
+
+  .badgeDate {
+    font-size: 14px;
+    font-weight: 400;
+    /* Regular */
+    color: #807c7c;
+  }
+}
+
+/* Bottom Sheet Section */
+.bottomSheet {
+  width: 100%;
+  flex: 1;
+  background-color: #f6f6f6;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  padding: 30px 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0;
+}
+
+.sheetTitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: #140805;
+}
+
+.profileSection {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.profileImage {
+  width: 67px;
+  height: 67px;
+  border-radius: 24px;
+  object-fit: cover;
+  background-color: #f0f0f0;
+}
+
+.profileTexts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.univText {
+  font-size: 18px;
+  font-weight: 600;
+  color: #140805;
+}
+
+.nameText {
+  font-size: 16px;
+  font-weight: 600;
+  color: #140805;
+}
+
+.infoList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+  padding-bottom: 56px;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: #403e3e;
+  padding: 0;
+
+  .label {
+    font-weight: 600;
+    color: #403e3e;
+  }
+
+  .value {
+    font-weight: 400;
+    /* Regular */
+  }
+}

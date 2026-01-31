@@ -1,0 +1,207 @@
+// 내가 올린 모집글 슬라이드 스타일링
+.my-recruitment-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+
+  .my-recruitment-slide {
+    background-color: #f8f9fa;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    animation: slideInFromRight 0.3s ease-out;
+
+    @keyframes slideInFromRight {
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    // 헤더
+    .my-recruitment-header {
+      background-color: transparent;
+      padding: 20px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 10;
+
+      .my-recruitment-title {
+        color: var(--text-01-black, #000);
+        text-align: center;
+        font-family: Pretendard;
+        font-size: 17px;
+        font-weight: 600;
+        line-height: normal;
+        margin: 0;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .my-recruitment-close {
+        background: none;
+        border: none;
+        color: #140805;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 15.8px;
+        height: 15.8px;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: #f0f0f0;
+        }
+      }
+    }
+
+    // 프로젝트 목록
+    .my-recruitment-list {
+      flex: 1;
+      padding: 20px 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      .my-recruitment-card {
+        background-color: white;
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        font-family: Pretendard;
+        line-height: normal;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .my-recruitment-top {
+          display: flex;
+          gap: 20px;
+          margin-bottom: 10px;
+
+          .my-recruitment-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            .my-recruitment-dates {
+              font-size: 12px;
+              color: #807c7c;
+              font-weight: 500;
+            }
+
+            .my-recruitment-title-text {
+              font-size: 14px;
+              font-weight: 600;
+              color: #140805;
+              line-height: 1.3;
+              margin: 0;
+            }
+
+            .my-recruitment-description {
+              font-size: 11px;
+              color: #807c7c;
+              margin: 0;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              line-clamp: 2;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+            }
+          }
+
+          .my-recruitment-image {
+            width: 30%;
+            min-width: 80px;
+            max-width: 116px;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+          }
+        }
+
+        .my-recruitment-divider {
+          height: 1px;
+          background-color: #e0e0e0;
+          margin: 0 0 10px 0;
+        }
+
+        .my-recruitment-bottom {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .my-recruitment-status {
+            .status-text {
+              font-size: 12px;
+              font-weight: 500;
+            }
+          }
+
+          .my-recruitment-action {
+            .view-applicants {
+              font-size: 12px;
+              color: #140805;
+              font-weight: 500;
+              cursor: pointer;
+              transition: color 0.2s ease;
+
+              &:hover {
+                color: #ff6b35;
+              }
+            }
+          }
+        }
+      }
+
+      // 반응형
+      @media (max-width: 375px) {
+        padding: 16px 12px;
+
+        .my-recruitment-card {
+          padding: 12px;
+
+          .my-recruitment-top {
+            gap: 12px;
+
+            .my-recruitment-image {
+              width: 25%;
+              min-width: 70px;
+              max-width: 100px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

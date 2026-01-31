@@ -1,0 +1,67 @@
+.pageBg {
+  padding-top: 47px;
+  padding-bottom: 88px;
+  background: #f5f5f5;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.scrollArea {
+  height: calc(100vh - 47px - 88px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px;
+  padding-bottom: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.commentSection {
+  margin-bottom: 8px;
+}
+
+.slidersSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sectionLabel {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.sliderCards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sliderCard {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+// 헤더 우측 버튼 (내가 한 평가)
+.headerBtn {
+  background: transparent;
+  color: #333;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s;
+  white-space: nowrap;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  &:hover {
+    color: #f76241;
+  }
+}

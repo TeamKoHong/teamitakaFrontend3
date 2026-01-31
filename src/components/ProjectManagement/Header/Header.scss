@@ -1,0 +1,55 @@
+.pm-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #fff;
+
+  .header-first {
+    height: 64px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .header-right {
+      display: flex;
+      gap: 16px;
+
+      .btn-calendar,
+      .btn-bookmark {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+          width: 24px;
+          height: 24px;
+          display: block;
+        }
+      }
+    }
+  }
+
+  .title {
+    font-family: 'KIMM_Bold', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #F76241;
+  }
+
+  // allow full-bleed tab in second row
+  .header-second {
+    display: block;
+    width: 100%;
+    flex: 0 0 auto;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}

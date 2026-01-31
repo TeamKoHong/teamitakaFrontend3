@@ -1,0 +1,446 @@
+@use '../../styles/variables' as *;
+@use 'sass:color';
+
+// CSS Custom Properties 시스템 - 반응형 디자인을 위한 동적 변수
+:root {
+  // 반응형 간격 시스템
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-xxl: 24px;
+  --spacing-xxxl: 32px;
+
+  // 반응형 패딩 시스템
+  --padding-xs: 8px;
+  --padding-sm: 12px;
+  --padding-md: 16px;
+  --padding-lg: 20px;
+  --padding-xl: 24px;
+
+  // 반응형 폰트 크기 시스템
+  --font-size-xs: 11px;
+  --font-size-sm: 13px;
+  --font-size-md: 15px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-xxl: 20px;
+
+  // 반응형 테두리 반경 시스템
+  --border-radius-sm: 8px;
+  --border-radius-md: 10px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-xxl: 20px;
+
+  // 반응형 간격 시스템
+  --gap-xs: 8px;
+  --gap-sm: 12px;
+  --gap-md: 16px;
+  --gap-lg: 20px;
+  --gap-xl: 24px;
+  --gap-xxl: 32px;
+
+  // 반응형 아이콘 크기 시스템
+  --icon-size-sm: 20px;
+  --icon-size-md: 24px;
+  --icon-size-lg: 28px;
+  --icon-size-xl: 32px;
+}
+
+.categorySlider {
+  background: $white;
+  border-radius: var(--border-radius-lg);
+  padding: 12px 26px;
+  margin: 0; // 상위 카드에서 간격 관리
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  &.compact {
+    background: transparent;
+    box-shadow: none;
+    padding: var(--spacing-sm) 0 var(--spacing-sm);
+    border-radius: 0;
+  }
+}
+
+.categoryHeader {
+  margin-bottom: var(--spacing-md); // 시안 간격에 맞춤
+  width: 100%;
+
+  .categoryName {
+    font-size: var(--font-size-md);
+    font-weight: $font-weight-bold;
+    color: $gray-dark;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .categoryDescription {
+    font-size: var(--font-size-sm);
+    color: $gray;
+    line-height: 1.4;
+    letter-spacing: -0.2px;
+  }
+}
+
+.sliderContainer {
+  position: relative;
+  width: 100%;
+  margin-bottom: var(--spacing-sm);
+  overscroll-behavior: contain; // 상위 스크롤 전파 억제
+
+  .sliderTrack {
+    position: relative;
+    z-index: 2; // 트랙을 라벨보다 위로
+    width: 100%;
+    height: 7px;
+    background: #ededed;
+    border-radius: 8px; // 3px -> 8px
+    cursor: pointer;
+    // overflow: hidden; // <-- Removed from here to prevent thumb clipping
+    // 세로 스크롤은 허용하고, 가로 제스처는 컴포넌트가 처리
+    touch-action: pan-y;
+    outline: none;
+    transition: all 0.2s ease;
+
+    // 터치 영역 확대를 위한 가상 영역 (과도 확장 방지)
+    &::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: -8px;
+      right: -8px;
+      bottom: -6px;
+      z-index: 1;
+    }
+
+    // 포커스 스타일
+    &:focus {
+      box-shadow: 0 0 0 2px rgba($primary-color, 0.3);
+    }
+
+    &.pressed {
+      transform: scale(1.02);
+
+      .sliderFill {
+        box-shadow: 0 0 8px rgba($primary-color, 0.4);
+      }
+    }
+
+    .sliderFill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: $primary-color;
+      border-radius: 8px 0 0 8px; // Flush end
+      transition: width 0.2s ease;
+    }
+
+    // 썸의 중앙이 fill 끝과 정확히 맞도록 여백을 반영
+    .sliderThumb {
+      margin-left: 0; // reset
+    }
+
+    .sliderThumb {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 17px;
+      height: 17px;
+      background: $primary-color;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      z-index: 3; // 최상단
+      box-shadow: 0 2px 4px rgba($primary-color, 0.18);
+
+      touch-action: none;
+
+      // 터치 영역 확대
+      &::before {
+        content: '';
+        position: absolute;
+        top: -8px;
+        left: -8px;
+        right: -8px;
+        bottom: -8px;
+        border-radius: 50%;
+      }
+
+      // 호버 효과
+      &:hover {
+        transform: translate(-50%, -50%) scale(1.05);
+      }
+
+      // 터치/클릭 피드백
+      &.pressed {
+        transform: translate(-50%, -50%) scale(1.08);
+      }
+
+
+    }
+  }
+}
+
+// 썸 제거 모드: 트랙과 필만 표시
+.noThumb {
+  .sliderContainer .sliderTrack {
+    height: 7px; // 유지 (기본값과 동일하거나 미세조정)
+    overflow: hidden; // 썸이 없을 때만 안전하게 overflow 숨김
+  }
+}
+
+.sliderLabels {
+  position: relative;
+  width: 100%;
+  height: 24px; // Ensure explicit height for absolute children
+  margin-top: 12px;
+  z-index: 1;
+
+  .labelButton {
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%); // Center exactly on the tick
+    padding: 4px 0; // Remove side padding to rely on width
+    background: none;
+    border: none;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+    font-size: 11px;
+    color: $gray;
+    font-weight: $font-weight-medium;
+    border-radius: 4px;
+    width: 20px; // Fixed width for centering
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover:not(:disabled) {
+      color: $primary-color;
+      background: rgba($primary-color, 0.08);
+      // Resetting transform to include translateX(-50%) explicitly:
+      transform: translateX(-50%) scale(1.1);
+    }
+
+    &:active:not(:disabled) {
+      background: rgba($primary-color, 0.2);
+      transform: translateX(-50%) scale(0.95);
+    }
+
+    &.active {
+      color: $primary-color;
+      font-weight: $font-weight-bold;
+      // background: rgba($primary-color, 0.15); // Optional
+      transform: translateX(-50%) scale(1.2);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    // 터치 피드백
+    @media (hover: none) {
+      &:active:not(:disabled) {
+        background: rgba($primary-color, 0.3);
+        transform: scale(1.2);
+      }
+    }
+  }
+}
+
+.valueDisplay {
+  margin-top: 8px;
+  text-align: center;
+
+  .currentValue {
+    font-size: 16px;
+    font-weight: $font-weight-bold;
+    color: $primary-color;
+  }
+}
+
+
+
+// 모바일 최적화
+@media (max-width: 768px) {
+  .categorySlider {
+    padding: 12px 26px;
+    height: 130px;
+  }
+
+  .sliderLabels {
+    .labelButton {
+      padding: 4px 6px;
+      min-width: 20px;
+      min-height: 20px;
+      font-size: 10px;
+    }
+  }
+}
+
+// 극소형 모바일 (320px) 대응
+@media (max-width: 359px) {
+  :root {
+    --spacing-xs: 3px;
+    --spacing-sm: 6px;
+    --spacing-md: 8px;
+    --spacing-lg: 12px;
+    --spacing-xl: 16px;
+    --spacing-xxl: 20px;
+    --spacing-xxxl: 24px;
+
+    --padding-xs: 6px;
+    --padding-sm: 8px;
+    --padding-md: 12px;
+    --padding-lg: 16px;
+    --padding-xl: 20px;
+
+    --font-size-xs: 10px;
+    --font-size-sm: 12px;
+    --font-size-md: 13px;
+    --font-size-lg: 15px;
+    --font-size-xl: 16px;
+    --font-size-xxl: 18px;
+
+    --border-radius-sm: 6px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 10px;
+    --border-radius-xl: 12px;
+    --border-radius-xxl: 16px;
+
+    --gap-xs: 6px;
+    --gap-sm: 8px;
+    --gap-md: 12px;
+    --gap-lg: 16px;
+    --gap-xl: 20px;
+    --gap-xxl: 24px;
+
+    --icon-size-sm: 18px;
+    --icon-size-md: 20px;
+    --icon-size-lg: 24px;
+    --icon-size-xl: 28px;
+  }
+
+  .categorySlider {
+    padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-md);
+    border-radius: var(--border-radius-md);
+
+    &.compact {
+      padding: var(--spacing-xs) 0 var(--spacing-xs);
+    }
+  }
+
+  .categoryHeader {
+    margin-bottom: var(--spacing-sm);
+
+    .categoryName {
+      font-size: var(--font-size-md);
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .categoryDescription {
+      font-size: var(--font-size-xs);
+    }
+  }
+
+  .sliderContainer {
+    margin-bottom: var(--spacing-xs);
+
+    .sliderTrack {
+      height: 3px;
+
+      &::before {
+        top: -4px;
+        left: -6px;
+        right: -6px;
+        bottom: -4px;
+      }
+    }
+
+    .sliderThumb {
+      width: 15px;
+      height: 15px;
+    }
+  }
+
+  .sliderLabels {
+    margin-top: var(--spacing-xs);
+
+    .labelButton {
+      padding: var(--spacing-xs) var(--spacing-xs);
+      min-width: 18px;
+      min-height: 18px;
+      font-size: var(--font-size-xs);
+      border-radius: var(--border-radius-sm);
+    }
+  }
+
+  .valueDisplay {
+    margin-top: var(--spacing-sm);
+
+    .currentValue {
+      font-size: var(--font-size-md);
+    }
+  }
+}
+
+// 접근성 개선
+@media (prefers-reduced-motion: reduce) {
+
+  .categorySlider,
+  .sliderTrack,
+  .sliderFill,
+  .sliderThumb,
+  .labelButton,
+  .currentValue {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+// 고대비 모드 지원
+@media (prefers-contrast: high) {
+  .categorySlider {
+    border: 2px solid $gray-dark;
+  }
+
+  .sliderTrack {
+    background: $white;
+    border: 1px solid $gray-dark;
+
+    .sliderFill {
+      background: $gray-dark;
+    }
+
+    .sliderThumb {
+      background: $gray-dark;
+      box-shadow: 0 0 0 2px $white;
+    }
+  }
+
+  .labelButton {
+    border: 1px solid transparent;
+
+    &:focus {
+      border-color: $gray-dark;
+    }
+
+    &.active {
+      background: $gray-dark;
+      color: $white;
+    }
+  }
+}

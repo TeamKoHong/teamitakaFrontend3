@@ -1,0 +1,24 @@
+.indicatorContainer {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+}
+
+.dot {
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+    background-color: #dadada;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background-color: #f76241;
+}
+
+.dot.current {
+    width: 22px;
+    border-radius: 3px;
+    background-color: #f76241;
+}

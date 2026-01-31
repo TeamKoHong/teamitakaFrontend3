@@ -1,0 +1,41 @@
+@use '../../../styles/variables' as *;
+
+.pageContainer {
+    min-height: 100vh;
+    background-color: $background;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 69px; // Header(47px) + margin(22px)
+    padding-bottom: calc(88px + env(safe-area-inset-bottom) + 16px); // BottomNav(88px) + Safe Area + Buffer
+    box-sizing: border-box;
+}
+
+.content {
+    width: 100%;
+    max-width: 390px; // Mobile standard
+    padding: 0 $padding-base; // 상단 padding 제거 (container에서 69px 처리)
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.closeButton {
+    position: absolute;
+    right: 22px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 24px; // Larger touch target
+    cursor: pointer;
+    color: $text-primary;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+}

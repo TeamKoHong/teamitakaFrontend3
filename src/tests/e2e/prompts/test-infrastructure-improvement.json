@@ -1,0 +1,271 @@
+{
+  "title": "E2E 테스트 인프라 개선 가이드",
+  "version": "1.0.0",
+  "created_at": "2025-12-21",
+  "purpose": "플로우 의존성 테스트를 위한 테스트 인프라 개선",
+
+  "current_status": {
+    "summary": "프론트엔드 API 연동은 완료되었으나, 일부 테스트가 플로우 의존성 문제로 실패",
+    "test_results": {
+      "M03_notifications": "4/5 통과 (80%)",
+      "M06_application": "14/30 통과 (46.7%)",
+      "M09_bookmark": "10/10 통과 (100%)",
+      "M10_guest": "6/7 통과 (85.7%)"
+    }
+  },
+
+  "problems_identified": {
+    "problem_1": {
+      "id": "PROB-001",
+      "title": "상태 의존성 페이지 직접 접근 불가",
+      "affected_tests": ["M06-F02-01", "M06-F02-02", "M06-F02-03"],
+      "description": "/apply2/complete 페이지는 location.state로 applicationId를 전달받아야 하는데, E2E 테스트에서 직접 navigate하면 state가 없음",
+      "current_behavior": "페이지 접근 가능하나 applicationId가 없어 취소 API 호출 실패",
+      "expected_behavior": "실제 지원 플로우를 거쳐 applicationId가 있는 상태에서 테스트"
+    },
+    "problem_2": {
+      "id": "PROB-002",
+      "title": "테스트 순서 의존성",
+      "affected_tests": ["M06-F01-03", "M06-F01-04", "M06-F01-05"],
+      "description": "지원 완료 테스트는 먼저 지원서 제출이 성공해야 진행 가능",
+      "current_behavior": "각 테스트가 독립적으로 실행되어 이전 단계 없이 실패",
+      "expected_behavior": "테스트 체인 또는 beforeEach에서 필수 상태 설정"
+    },
+    "problem_3": {
+      "id": "PROB-003",
+      "title": "조건부 테스트 스킵 로직 부재",
+      "affected_tests": ["M03-F01-03"],
+      "description": "알림이 있을 때 '빈 상태' 테스트가 실패 (알림 있는 게 정상)",
+      "current_behavior": "테스트가 무조건 실행되어 false negative 발생",
+      "expected_behavior": "알림 존재 여부에 따라 조건부 스킵 또는 다른 검증 적용"
+    }
+  },
+
+  "solution_approaches": {
+    "approach_1": {
+      "id": "SOL-001",
+      "title": "테스트 플로우 체인 구현",
+      "description": "의존성 있는 테스트들을 하나의 플로우로 연결",
+      "implementation": {
+        "file": "src/tests/e2e/test-runner.spec.ts",
+        "changes": [
+          "dependent_tests 필드 추가하여 테스트 순서 정의",
+          "이전 테스트 결과(applicationId 등)를 다음 테스트로 전달",
+          "체인 테스트 실행 함수 구현"
+        ],
+        "example": {
+          "flow": "지원서 작성 → 지원 완료 → 지원 취소",
+          "data_passing": "applicationId를 context에 저장하여 다음 테스트에서 사용"
+        }
+      }
+    },
+    "approach_2": {
+      "id": "SOL-002",
+      "title": "API를 통한 테스트 데이터 사전 설정",
+      "description": "테스트 전에 API로 필요한 상태를 미리 생성",
+      "implementation": {
+        "file": "src/tests/e2e/test-executor.ts",
+        "changes": [
+          "setupTestApplication() 함수 추가 - 테스트용 지원서 생성",
+          "setupTestRecruitment() 함수 개선 - 테스트용 모집공고 생성",
+          "각 테스트의 beforeAll에서 필요한 데이터 설정"
+        ],
+        "api_calls_needed": [
+          "POST /api/applications/{recruitmentId} - 지원서 생성",
+          "GET /api/applications/mine - 내 지원 목록 조회",
+          "POST /api/recruitments - 테스트용 모집공고 생성"
+        ]
+      }
+    },
+    "approach_3": {
+      "id": "SOL-003",
+      "title": "테스트 JSON 스키마 확장",
+      "description": "테스트 설정에 의존성과 조건부 실행 정보 추가",
+      "implementation": {
+        "file": "src/tests/e2e/modules/*.json",
+        "new_fields": {
+          "depends_on": "선행 테스트 ID 배열",
+          "skip_if": "스킵 조건 (예: 'has_notifications')",
+          "required_state": "필요한 상태 객체 (예: { applicationId: true })",
+          "setup_api": "사전 실행할 API 호출 배열"
+        },
+        "example": {
+          "id": "M06-F02-01",
+          "depends_on": ["M06-F01-04"],
+          "required_state": { "applicationId": "{{LAST_APPLICATION_ID}}" },
+          "setup_api": [
+            {
+              "method": "POST",
+              "endpoint": "/api/applications/{{RECRUITMENT_ID}}",
+              "body": { "introduction": "테스트 자기소개", "portfolio_project_ids": [] },
+              "save_response": { "applicationId": "data.application_id" }
+            }
+          ]
+        }
+      }
+    },
+    "approach_4": {
+      "id": "SOL-004",
+      "title": "테스트 실행 모드 추가",
+      "description": "독립 실행 모드와 플로우 실행 모드 분리",
+      "implementation": {
+        "modes": {
+          "independent": "각 테스트 독립 실행 (현재 방식)",
+          "flow": "관련 테스트들을 순차적으로 실행",
+          "full": "전체 사용자 시나리오 테스트"
+        },
+        "command_examples": [
+          "npx playwright test --grep M06 --mode=independent",
+          "npx playwright test --grep M06 --mode=flow",
+          "npx playwright test --mode=full"
+        ]
+      }
+    }
+  },
+
+  "recommended_implementation": {
+    "priority": "high",
+    "selected_approach": "SOL-002 + SOL-003 조합",
+    "rationale": "API 사전 설정으로 독립 테스트 가능 + JSON 스키마 확장으로 유지보수성 향상",
+
+    "implementation_steps": [
+      {
+        "step": 1,
+        "title": "테스트 헬퍼 함수 추가",
+        "file": "src/tests/e2e/test-executor.ts",
+        "tasks": [
+          "createTestApplication(recruitmentId) 함수 추가",
+          "getMyApplications() 함수 추가",
+          "저장된 applicationId를 반환하도록 구현"
+        ]
+      },
+      {
+        "step": 2,
+        "title": "테스트 러너 수정",
+        "file": "src/tests/e2e/test-runner.spec.ts",
+        "tasks": [
+          "setup_api 필드 처리 로직 추가",
+          "required_state 검증 로직 추가",
+          "플레이스홀더 치환 로직 확장 ({{LAST_APPLICATION_ID}} 등)"
+        ]
+      },
+      {
+        "step": 3,
+        "title": "테스트 JSON 업데이트",
+        "files": [
+          "src/tests/e2e/modules/m06-application.json"
+        ],
+        "tasks": [
+          "M06-F02-* 테스트에 setup_api 추가",
+          "required_state 필드 추가",
+          "depends_on 필드 추가 (선택적)"
+        ]
+      },
+      {
+        "step": 4,
+        "title": "조건부 스킵 로직 추가",
+        "file": "src/tests/e2e/test-runner.spec.ts",
+        "tasks": [
+          "skip_if 조건 평가 함수 구현",
+          "조건 만족 시 test.skip() 호출",
+          "M03-F01-03에 skip_if 적용"
+        ]
+      }
+    ]
+  },
+
+  "m06_test_fix_example": {
+    "title": "M06-F02 테스트 수정 예시",
+    "before": {
+      "id": "M06-F02-01",
+      "steps": [
+        { "action": "navigate", "target": "/apply2/complete" },
+        { "action": "click", "selector": ".cancel-link" }
+      ]
+    },
+    "after": {
+      "id": "M06-F02-01",
+      "setup_api": [
+        {
+          "method": "POST",
+          "endpoint": "/api/applications/{{RECRUITMENT_ID}}",
+          "body": {
+            "introduction": "[E2E 테스트] 지원 취소 테스트용",
+            "portfolio_project_ids": []
+          },
+          "save_response": {
+            "applicationId": "data.application_id"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "navigate",
+          "target": "/apply2/complete",
+          "state": {
+            "applicationId": "{{LAST_APPLICATION_ID}}"
+          }
+        },
+        { "action": "click", "selector": ".cancel-link" }
+      ]
+    }
+  },
+
+  "test_data_management": {
+    "title": "테스트 데이터 관리 전략",
+    "principles": [
+      "테스트 데이터는 테스트 시작 시 API로 생성",
+      "테스트 종료 후 생성된 데이터 정리 (선택적)",
+      "테스트 간 데이터 격리 보장",
+      "재실행 가능한 테스트 설계"
+    ],
+    "data_lifecycle": {
+      "beforeAll": "공통 테스트 데이터 설정 (로그인, 기본 recruitment 등)",
+      "beforeEach": "개별 테스트에 필요한 데이터 설정",
+      "afterEach": "생성된 테스트 데이터 정리 (선택적)",
+      "afterAll": "세션 정리"
+    }
+  },
+
+  "expected_results": {
+    "before_improvement": {
+      "M06_pass_rate": "46.7% (14/30)"
+    },
+    "after_improvement": {
+      "M06_pass_rate": "80%+ (24+/30)",
+      "additional_passing_tests": [
+        "M06-F02-01 (취소 팝업)",
+        "M06-F02-02 (취소 중단)",
+        "M06-F02-03 (지원 취소)",
+        "M06-F01-03 (지원서 보내기)",
+        "M06-F01-04 (완료 메시지)",
+        "M06-F01-05 (지원 내역 확인)"
+      ]
+    }
+  },
+
+  "files_to_modify": [
+    {
+      "path": "src/tests/e2e/test-executor.ts",
+      "changes": "API 헬퍼 함수 추가"
+    },
+    {
+      "path": "src/tests/e2e/test-runner.spec.ts",
+      "changes": "setup_api, required_state, skip_if 처리 로직"
+    },
+    {
+      "path": "src/tests/e2e/modules/m06-application.json",
+      "changes": "테스트 설정에 새 필드 추가"
+    },
+    {
+      "path": "src/tests/e2e/modules/m03-notifications.json",
+      "changes": "조건부 스킵 설정 추가"
+    }
+  ],
+
+  "action_required": {
+    "implementer": "프론트엔드 팀",
+    "estimated_effort": "중간 (3-4시간)",
+    "priority": "높음 - 테스트 안정성 확보"
+  }
+}

@@ -1,0 +1,60 @@
+// Figma: 완료된 프로젝트 페이지 - pill 스타일
+.card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: #F5F5F5;
+  border-radius: 100px;
+  padding: 8px 16px 8px 8px;
+}
+
+// Figma: 40px x 40px
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #E0E0E0;
+}
+
+.bubble {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+// Figma: 14px, color #140805, line-height 140.98%
+.text {
+  font-size: 14px;
+  font-weight: 400;
+  color: #140805;
+  line-height: 140.98%;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// 클릭 가능한 카드 스타일
+.clickable {
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #f76241;
+    outline-offset: 2px;
+  }
+}

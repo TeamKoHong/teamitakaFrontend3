@@ -1,0 +1,75 @@
+@use '../../styles/variables' as *;
+
+.container {
+    width: 100%;
+}
+
+.inputWrapper {
+    display: flex;
+    align-items: center;
+    height: 64px;
+    padding: 0 16px;
+    background-color: $card-bg;
+    border: 1px solid $gray-lighter;
+    border-radius: $border-radius-base;
+    transition: border-color 0.2s ease;
+
+    &:focus-within {
+        border-color: $primary-color;
+    }
+
+    &.error {
+        border-color: $error-color;
+    }
+}
+
+.birthInput {
+    flex: 1;
+    height: 100%;
+    border: none;
+    outline: none;
+    font-size: $font-size-body;
+    font-family: $font-family-base;
+    color: $text-primary;
+    background: transparent;
+
+    &::placeholder {
+        color: $gray-light;
+    }
+}
+
+.separator {
+    margin: 0 8px;
+    color: $gray-light;
+    font-size: $font-size-body;
+}
+
+.genderInput {
+    width: 24px;
+    height: 100%;
+    border: none;
+    outline: none;
+    font-size: $font-size-body;
+    font-family: $font-family-base;
+    color: $text-primary;
+    background: transparent;
+    text-align: center;
+
+    &::placeholder {
+        color: $gray-light;
+    }
+}
+
+.mask {
+    color: $gray-light;
+    font-size: $font-size-body;
+    letter-spacing: 2px;
+    margin-left: 4px;
+}
+
+.errorText {
+    display: block;
+    margin-top: 8px;
+    font-size: $font-size-caption;
+    color: $error-color;
+}

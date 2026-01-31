@@ -1,0 +1,98 @@
+{
+  "module_id": "M03",
+  "module_name": "알림",
+  "features": [
+    {
+      "feature_id": "M03-F01",
+      "feature_name": "알림 목록",
+      "route": "/notifications",
+      "skip": true,
+      "skip_reason": "알림 데이터 필요 - 테스트 계정에 알림 없음",
+      "test_scenarios": [
+        {
+          "id": "M03-F01-01",
+          "description": "알림 목록이 날짜별로 그룹화되어 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/notifications" },
+            { "action": "wait", "selector": ".page.notifications-page, .notifications-page", "timeout": 5000 },
+            { "action": "screenshot", "name": "notifications-list" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".notifications-list-container, .page.notifications-page, .empty-wrap" },
+            { "type": "text_contains", "selector": ".notification-date-group, .notification-date, .empty-title", "expected": "오늘|새로운 알림이 없습니다" }
+          ],
+          "expected_result": "'오늘', '어제', '2월 22일' 등 날짜 구분 (알림 없으면 빈 상태 표시)"
+        },
+        {
+          "id": "M03-F01-02",
+          "description": "알림 내용이 최대 40자로 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/notifications" },
+            { "action": "wait", "selector": ".page.notifications-page, .notifications-page", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".notification-item, .notification-title, .empty-wrap" }
+          ],
+          "expected_result": "40자 이내 알림 텍스트 (알림 없으면 빈 상태 표시)"
+        },
+        {
+          "id": "M03-F01-03",
+          "description": "알림이 없을 때 안내 메시지가 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "skip_if": "has_notifications",
+          "steps": [
+            { "action": "navigate", "target": "/notifications" },
+            { "action": "wait", "selector": ".notifications-page", "timeout": 3000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".empty-wrap, .empty-title" },
+            { "type": "text_contains", "selector": ".empty-wrap, .empty-title", "expected": "새로운 알림이 없습니다" }
+          ],
+          "expected_result": "'새로운 알림이 없습니다. 새로운 소식이 있으면 알려드릴게요.'"
+        }
+      ]
+    },
+    {
+      "feature_id": "M03-F02",
+      "feature_name": "알림 설정",
+      "route": "/notifications/settings",
+      "test_scenarios": [
+        {
+          "id": "M03-F02-01",
+          "description": "앱 알림 수신 설정이 가능한가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/notifications/settings" },
+            { "action": "wait", "selector": ".settings-page, .settings-list", "timeout": 3000 },
+            { "action": "screenshot", "name": "notification-settings" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".switch, .setting-item" }
+          ],
+          "expected_result": "On/Off 토글"
+        },
+        {
+          "id": "M03-F02-02",
+          "description": "광고 수신 설정이 가능한가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/notifications/settings" },
+            { "action": "wait", "selector": ".settings-page, .settings-list", "timeout": 3000 },
+            { "action": "click", "selector": ".setting-item:last-child .switch, .settings-list > div:last-child .switch" }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": ".setting-item .switch, .switch" }
+          ],
+          "expected_result": "On/Off 토글"
+        }
+      ]
+    }
+  ]
+}

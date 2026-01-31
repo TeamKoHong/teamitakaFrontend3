@@ -1,0 +1,62 @@
+.team-page {
+  background: #f2f2f2;
+  min-height: 100vh;
+  padding-top: 64px; /* DefaultHeader 높이만큼 */
+}
+
+.team-list {
+  list-style: none;
+  margin-top: 8px;
+  padding: 0;
+
+  .team-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f2f2f2;
+    padding: 12px 22px;
+
+    cursor: pointer;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .team-info {
+      display: flex;
+      align-items: center;
+
+      .avatar {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        object-fit: cover;
+        margin-right: 12px;
+      }
+
+      .text {
+        display: flex;
+        flex-direction: column;
+
+        .name {
+          font-size: 17px;
+          font-weight: 400;
+          font-style: normal;
+          line-height: normal;
+          color: #403e3e;
+          margin: 0;
+        }
+
+        .role {
+          font-size: 10px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          color: #8e8e8e;
+          margin: 4px 0 0 0;
+        }
+      }
+    }
+  }
+}

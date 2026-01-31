@@ -1,0 +1,22 @@
+/* 전체 감싸는 영역 */
+.withdrawal-container {
+  width: 100%;
+  padding: 0;
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: center;  /* 가운데 정렬 */
+  margin-top: 0;            /* 부모에서 gap으로 간격 처리 */
+}
+
+/* '탈퇴하기' 텍스트 스타일 */
+.withdrawal-text {
+  font-family: "Pretendard";
+  font-size: 12px;
+  font-weight: 500;       /* Medium */
+  color: #D1CCCB;         /* grey2 (#D1CCCB) */
+  cursor: pointer;
+
+  text-decoration: underline;
+  text-underline-offset: 2px;   /* 피그마 Offset 25% 구현 */
+}

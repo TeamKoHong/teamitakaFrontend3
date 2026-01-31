@@ -1,0 +1,1085 @@
+// 임시 변수 (이 부분들이 정확히 들어가 있어야 합니다!)
+$primary-color: #007bff;
+$accent-color: #28a745;
+$text-dark: #333;
+$text-gray: #7B797A;
+$background-light: #f0f2f5;
+$border-light: #e0e0e0;
+
+// CSS Custom Properties 시스템 - 반응형 디자인을 위한 동적 변수
+:root {
+  // 반응형 간격 시스템
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-xxl: 24px;
+  --spacing-xxxl: 32px;
+
+  // 반응형 패딩 시스템
+  --padding-xs: 8px;
+  --padding-sm: 12px;
+  --padding-md: 16px;
+  --padding-lg: 20px;
+  --padding-xl: 24px;
+
+  // 반응형 폰트 크기 시스템
+  --font-size-xs: 11px;
+  --font-size-sm: 13px;
+  --font-size-md: 15px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-xxl: 20px;
+
+  // 반응형 테두리 반경 시스템
+  --border-radius-sm: 8px;
+  --border-radius-md: 10px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-xxl: 20px;
+
+  // 반응형 간격 시스템
+  --gap-xs: 8px;
+  --gap-sm: 12px;
+  --gap-md: 16px;
+  --gap-lg: 20px;
+  --gap-xl: 24px;
+  --gap-xxl: 32px;
+
+  // 반응형 아이콘 크기 시스템
+  --icon-size-sm: 20px;
+  --icon-size-md: 24px;
+  --icon-size-lg: 28px;
+  --icon-size-xl: 32px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: $background-light;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  max-width: 700px; // Adjust width for rating page
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pageTitle {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: $text-dark;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.pageDescription {
+  font-size: 0.9em;
+  color: $text-gray;
+  margin-bottom: 25px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.memberRatingSection {
+  background-color: #fff; // Using literal white instead of $color-white
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  padding: 25px;
+  margin-bottom: 30px;
+}
+
+.memberName {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: $primary-color; // Highlight member name
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.ratingCategories {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; // Space between category items
+}
+
+.submitButton {
+  display: block;
+  width: 100%;
+  max-width: 300px; // Limit button width
+  margin: 30px auto 20px auto; // Center button with margin
+  padding: 15px 20px;
+  background-color: $accent-color;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    background-color: darken($accent-color, 10%); // Use darken or color.adjust
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.loading,
+.error,
+.noData {
+  text-align: center;
+  padding: 20px;
+  color: $text-gray;
+  font-size: 1.2em;
+}
+
+.pageBg {
+  padding-top: 69px; // Header(47px) + margin(22px)
+  padding-bottom: 88px;
+  background: #f2f2f2;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+// Figma 스펙: 각 섹션별 개별 padding, gap 없음
+.scrollArea {
+  display: flex;
+  flex-direction: column;
+  gap: 0; // 섹션별 개별 간격 적용
+  padding: 0;
+  box-sizing: border-box;
+  // 스크롤 영역을 헤더(47px)+여백(22px)=69px와 하단네비(88px) 사이로 제한
+  height: calc(100vh - 69px - 88px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.card,
+.summaryROW {
+  background: #fff;
+  border-radius: var(--border-radius-xl);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  padding: var(--spacing-lg);
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.contentWrap {
+  padding: 0 var(--spacing-xxl) 44px var(--spacing-xxl);
+  max-width: 390px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xxl);
+}
+
+.card,
+.projectSummaryCard,
+.teamMemberEvaluation {
+  margin-bottom: 0;
+}
+
+// 프로젝트카드 ~ 프로젝트 결과물
+.ProjectInfoCard_card__wYPQF,
+.ProjectResultCard_card__xB5Pr,
+.ProjectSummaryCard_summaryROW__bDMjX,
+.TeamMemberEvaluation_card__LZ1_o {
+  margin: 0 !important;
+}
+
+// 좋아요/개선 ~ 팀원 평가지
+.좋아요개선_wrapper {
+  margin-bottom: var(--spacing-xxl);
+}
+
+// 팀원 평가지 ~ 업무 분담
+.TeamMemberEvaluation_card__LZ1_o {
+  margin-top: var(--spacing-sm);
+}
+
+// 업무 분담 ~ 구체적 역할
+.업무분담 {
+  margin-bottom: var(--spacing-lg);
+}
+
+// 구체적 역할 리스트 사이
+.구체적역할 {
+  margin-bottom: var(--spacing-sm);
+}
+
+// 상세 내용 더보기
+.상세더보기 {
+  margin-top: var(--spacing-sm);
+  margin-bottom: 31px;
+  display: block;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+// 카드 간 일관된 간격(모바일 스크롤 시 부자연스러움 개선)
+.contentWrap>*:not(:last-child) {
+  margin-bottom: var(--gap-md);
+}
+
+// 슬라이더 그룹과 하단 네비 사이 공백 확보 (BottomNav 88px + 여유공간 12px)
+.scrollArea {
+  padding-bottom: 100px;
+}
+
+.divider {
+  height: 1px;
+  background: #d9d9d9;
+  margin: var(--spacing-lg) 0;
+  border: none;
+}
+
+// 상단 섹션들 사이의 굵은 구분선
+.topDivider {
+  height: 8px;
+  background: #efefef;
+  border: none;
+  margin: var(--spacing-lg) 0;
+}
+
+// 한 줄 요약 타이틀 주변 간격/서체
+.oneLinerTitle {
+  padding: 0 var(--padding-sm);
+  margin: var(--gap-md) 0 var(--spacing-sm);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: #222;
+}
+
+// Step A: 내가 받은 별점 섹션
+.sectionCard {
+  background: #fff;
+  border-radius: var(--border-radius-xl);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  padding: var(--spacing-lg);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.starsSection {
+  padding: 0 12px; // plain section without card look
+  background: transparent;
+}
+
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 12px;
+}
+
+.starsRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scoreText {
+  font-weight: 700;
+  color: #f76241;
+}
+
+// 헤더 높이 예시 (sticky 적용 시)
+.header {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  font-weight: bold;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+// 탭 버튼 예시
+.tabButton {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  background: #eee;
+  color: #7B797A;
+  font-weight: bold;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.tabButtonActive {
+  background: #FF7F50;
+  color: #fff;
+}
+
+.ratingForm {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  padding: 20px 16px 24px 16px;
+  margin: 0 0 18px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+// 전체 총점 안내 블록 (이미지 문구 스타일)
+.overallIntro {
+  padding: 8px 16px 0 16px;
+}
+
+.overallTitle {
+  margin: 0 0 6px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+}
+
+.overallCaption {
+  margin: 0;
+  font-size: 14px;
+  color: #C7C7CB;
+}
+
+// 섹션 라벨 통일 - 부모 섹션의 padding과 정렬되도록 padding 제거
+.sectionLabel {
+  padding: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+  margin: 0 0 8px 0;
+}
+
+.sectionLabelTight {
+  padding: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #222;
+  margin: 0;
+  line-height: 1.25;
+}
+
+// 헤더 우측 버튼 (내가 한 평가) - 일반 텍스트 스타일
+.headerBtn {
+  background: transparent;
+  color: #333;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s;
+  white-space: nowrap;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    color: #f76241;
+  }
+}
+
+// 섹션 부제목 스타일 - 부모 섹션의 padding과 정렬
+.sectionSubLabel {
+  padding: 0;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+// ===== Figma 스펙 기준 섹션 간격 =====
+
+// 프로젝트 카드: Figma padding 24px 16px 8px
+.projectCardSection {
+  padding: 24px 16px 8px;
+}
+
+// 팀원 목록: Figma padding 8px 16px
+.membersSection {
+  padding: 8px 16px;
+}
+
+// 프로젝트 결과물: Figma padding 8px 16px
+.resultSection {
+  padding: 8px 16px;
+}
+
+// 별점 섹션: Figma padding 24px 16px 24px
+.ratingSection {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 24px 16px 24px;
+  text-align: center;
+}
+
+// 한 줄 요약: Figma padding 8px 16px
+.summarySection {
+  padding: 8px 16px;
+}
+
+// 카테고리별 점수 (내가 한 평가 모드)
+.slidersSection {
+  background: #fff;
+  border-radius: var(--border-radius-xl);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  padding: var(--spacing-lg);
+  margin: 8px 16px;
+}
+
+// 팀원 평가지: Figma padding 24px 16px 8px
+.commentsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 16px 8px;
+}
+
+.emptyComments {
+  text-align: center;
+  color: #c7c7cb; // Lighter gray for empty state
+  font-size: 15px; // Slightly larger for readability
+  padding: 40px 0;
+  font-weight: 500;
+}
+
+// Hide title inside MyRatingSection without editing its code
+.myRatingNoTitle {
+  section[aria-label="내가 받은 별점"]>h2 {
+    display: none !important;
+  }
+}
+
+.tagSection {
+  margin-bottom: 8px;
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.tag {
+  background: #f2f2f2;
+  color: #f76241;
+  border-radius: 12px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.removeTag {
+  color: #bbb;
+  font-size: 13px;
+  margin-left: 2px;
+}
+
+.tagInput {
+  border: none;
+  border-radius: 8px;
+  background: #f8f8f8;
+  padding: 6px 10px;
+  font-size: 14px;
+  margin-left: 4px;
+  outline: none;
+  min-width: 80px;
+}
+
+.addTagBtn {
+  background: #f76241;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-left: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: darken(#f76241, 8%);
+  }
+}
+
+.memberSection {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.memberBox {
+  background: #fafbfc;
+  border-radius: 12px;
+  padding: 14px 12px 10px 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  margin-bottom: 2px;
+}
+
+.categoryRow {
+  margin-bottom: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.categoryTextWrap {
+  margin-bottom: 10px;
+}
+
+.categoryName {
+  font-size: 20px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 2px;
+}
+
+.categoryDesc {
+  font-size: 14px;
+  color: #b0b0b0;
+  margin-bottom: 8px;
+}
+
+.sliderWrap {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.ratingSlider {
+  width: 100%;
+  height: 32px;
+  background: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  margin-bottom: 0;
+}
+
+.ratingSlider::-webkit-slider-runnable-track {
+  height: 7px;
+  background: linear-gradient(to right,
+      #f76241 0%,
+      #f76241 calc((var(--value, 1) - 1) * 25%),
+      #eee calc((var(--value, 1) - 1) * 25%),
+      #eee 100%);
+  border-radius: 6px;
+}
+
+.ratingSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f76241;
+  box-shadow: 0 2px 8px rgba(247, 98, 65, 0.18);
+  border: 3px solid #fff;
+  margin-top: -10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ratingSlider:focus {
+  outline: none;
+}
+
+.sliderLabels {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 15px;
+  color: #bbb;
+  margin-top: 2px;
+  margin-bottom: 0;
+  padding: 0 2px;
+  user-select: none;
+}
+
+.overallRatingSection {
+  margin: 28px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.overallLabel {
+  font-size: 16px;
+  color: #222;
+  font-weight: 600;
+  margin-bottom: 2px;
+  text-align: center;
+  width: 100%;
+}
+
+.commentInput {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  margin-top: 6px;
+  background: #fafbfc;
+  resize: none;
+  outline: none;
+  transition: border 0.2s;
+
+  &:focus {
+    border: 1.5px solid $primary-color;
+  }
+}
+
+.submitButton {
+  width: 100%;
+  background: #f76241;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 0;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 12px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  box-shadow: 0 2px 8px rgba(247, 98, 65, 0.08);
+
+  &:hover {
+    background: darken(#f76241, 8%);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// 별점(별 아이콘) 크기 및 간격 강제 오버라이드 (모듈 격리 우회)
+// Figma 스펙: star size 16.1px, star gap 4px, score gap 8px
+.ratingSection>section>div>div>span {
+  font-size: 16.1px !important;
+  width: 16.1px !important;
+  height: 16.1px !important;
+  margin-right: 4px !important;
+
+  &:last-child {
+    margin-right: 0 !important;
+  }
+}
+
+// 슬라이더 스타일 (세 번째 이미지 참고)
+.ratingForm input[type="range"] {
+  width: 100%;
+  margin: 8px 0 18px 0;
+
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  height: 32px;
+
+  .ratingForm input[type="range"]::-webkit-slider-runnable-track {
+    height: 6px;
+    background: #ffe5de;
+    border-radius: 6px;
+  }
+
+  .ratingForm input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #f76241;
+    box-shadow: 0 2px 6px rgba(247, 98, 65, 0.15);
+    border: 2px solid #fff;
+    margin-top: -9px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .ratingForm input[type="range"]:focus::-webkit-slider-thumb {
+    background: #ff9a7a;
+  }
+
+  .ratingForm input[type="range"]::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #f76241;
+    border: 2px solid #fff;
+    cursor: pointer;
+  }
+
+  .ratingForm input[type="range"]::-ms-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #f76241;
+    border: 2px solid #fff;
+    cursor: pointer;
+  }
+
+  .ratingForm input[type="range"]:focus {
+    outline: none;
+  }
+
+  .ratingForm input[type="range"]::-ms-fill-lower {
+    background: #ffe5de;
+    border-radius: 6px;
+  }
+
+  .ratingForm input[type="range"]::-ms-fill-upper {
+    background: #ffe5de;
+    border-radius: 6px;
+  }
+
+  .ratingForm input[type="range"]::-ms-tooltip {
+    display: none;
+  }
+}
+
+// ===== 반응형 미디어 쿼리 =====
+
+// 극소형 모바일 (320px) 대응
+@media (max-width: 359px) {
+  :root {
+    --spacing-xs: 3px;
+    --spacing-sm: 6px;
+    --spacing-md: 8px;
+    --spacing-lg: 12px;
+    --spacing-xl: 16px;
+    --spacing-xxl: 20px;
+    --spacing-xxxl: 24px;
+
+    --padding-xs: 6px;
+    --padding-sm: 8px;
+    --padding-md: 12px;
+    --padding-lg: 16px;
+    --padding-xl: 20px;
+
+    --font-size-xs: 10px;
+    --font-size-sm: 12px;
+    --font-size-md: 13px;
+    --font-size-lg: 15px;
+    --font-size-xl: 16px;
+    --font-size-xxl: 18px;
+
+    --border-radius-sm: 6px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 10px;
+    --border-radius-xl: 12px;
+    --border-radius-xxl: 16px;
+
+    --gap-xs: 6px;
+    --gap-sm: 8px;
+    --gap-md: 12px;
+    --gap-lg: 16px;
+    --gap-xl: 20px;
+    --gap-xxl: 24px;
+
+    --icon-size-sm: 18px;
+    --icon-size-md: 20px;
+    --icon-size-lg: 24px;
+    --icon-size-xl: 28px;
+  }
+
+  .scrollArea {
+    padding: var(--spacing-md) var(--padding-xs) 0 var(--padding-xs);
+    gap: var(--gap-sm);
+  }
+
+  .contentWrap {
+    padding: 0 var(--spacing-lg) 44px var(--spacing-lg);
+    gap: var(--gap-lg);
+  }
+
+  .card,
+  .summaryROW {
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-lg);
+  }
+
+  .oneLinerTitle {
+    font-size: var(--font-size-lg);
+    padding: 0 var(--padding-xs);
+    margin: var(--gap-sm) 0 var(--spacing-xs);
+  }
+
+  .좋아요개선_wrapper {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .업무분담 {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .구체적역할 {
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .상세더보기 {
+    margin-top: var(--spacing-xs);
+  }
+
+  .contentWrap>*:not(:last-child) {
+    margin-bottom: var(--gap-sm);
+  }
+}
+
+// 모바일 (360px - 767px) 최적화
+@media (min-width: 360px) and (max-width: 767px) {
+  :root {
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 20px;
+    --spacing-xxl: 24px;
+    --spacing-xxxl: 32px;
+
+    --padding-xs: 8px;
+    --padding-sm: 12px;
+    --padding-md: 16px;
+    --padding-lg: 20px;
+    --padding-xl: 24px;
+
+    --font-size-xs: 11px;
+    --font-size-sm: 13px;
+    --font-size-md: 15px;
+    --font-size-lg: 16px;
+    --font-size-xl: 18px;
+    --font-size-xxl: 20px;
+
+    --border-radius-sm: 8px;
+    --border-radius-md: 10px;
+    --border-radius-lg: 12px;
+    --border-radius-xl: 16px;
+    --border-radius-xxl: 20px;
+
+    --gap-xs: 8px;
+    --gap-sm: 12px;
+    --gap-md: 16px;
+    --gap-lg: 20px;
+    --gap-xl: 24px;
+    --gap-xxl: 32px;
+
+    --icon-size-sm: 20px;
+    --icon-size-md: 24px;
+    --icon-size-lg: 28px;
+    --icon-size-xl: 32px;
+  }
+
+  .scrollArea {
+    padding: var(--spacing-lg) var(--padding-sm) 0 var(--padding-sm);
+    gap: var(--gap-md);
+  }
+
+  .contentWrap {
+    padding: 0 var(--spacing-xxl) 44px var(--spacing-xxl);
+    gap: var(--gap-xxl);
+  }
+
+  .card,
+  .summaryROW {
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-xl);
+  }
+
+  .oneLinerTitle {
+    font-size: var(--font-size-lg);
+    padding: 0 var(--padding-sm);
+    margin: var(--gap-md) 0 var(--spacing-sm);
+  }
+
+  .좋아요개선_wrapper {
+    margin-bottom: var(--spacing-xxl);
+  }
+
+  .업무분담 {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .구체적역할 {
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .상세더보기 {
+    margin-top: var(--spacing-sm);
+  }
+
+  .contentWrap>*:not(:last-child) {
+    margin-bottom: var(--gap-md);
+  }
+}
+
+// 태블릿 (768px - 1023px) 최적화
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root {
+    --spacing-xs: 6px;
+    --spacing-sm: 10px;
+    --spacing-md: 14px;
+    --spacing-lg: 18px;
+    --spacing-xl: 22px;
+    --spacing-xxl: 26px;
+    --spacing-xxxl: 36px;
+
+    --padding-xs: 10px;
+    --padding-sm: 14px;
+    --padding-md: 18px;
+    --padding-lg: 22px;
+    --padding-xl: 28px;
+
+    --font-size-xs: 12px;
+    --font-size-sm: 14px;
+    --font-size-md: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 20px;
+    --font-size-xxl: 22px;
+
+    --border-radius-sm: 10px;
+    --border-radius-md: 12px;
+    --border-radius-lg: 14px;
+    --border-radius-xl: 18px;
+    --border-radius-xxl: 22px;
+
+    --gap-xs: 10px;
+    --gap-sm: 14px;
+    --gap-md: 18px;
+    --gap-lg: 22px;
+    --gap-xl: 26px;
+    --gap-xxl: 36px;
+
+    --icon-size-sm: 22px;
+    --icon-size-md: 26px;
+    --icon-size-lg: 30px;
+    --icon-size-xl: 34px;
+  }
+
+  .contentWrap {
+    max-width: 600px;
+    padding: 0 var(--spacing-xxxl) 44px var(--spacing-xxxl);
+  }
+
+  .scrollArea {
+    padding: var(--spacing-xl) var(--padding-md) 0 var(--padding-md);
+  }
+}
+
+// 데스크톱 (1024px+) 최적화
+@media (min-width: 1024px) {
+  :root {
+    --spacing-xs: 8px;
+    --spacing-sm: 12px;
+    --spacing-md: 16px;
+    --spacing-lg: 20px;
+    --spacing-xl: 24px;
+    --spacing-xxl: 28px;
+    --spacing-xxxl: 40px;
+
+    --padding-xs: 12px;
+    --padding-sm: 16px;
+    --padding-md: 20px;
+    --padding-lg: 24px;
+    --padding-xl: 32px;
+
+    --font-size-xs: 13px;
+    --font-size-sm: 15px;
+    --font-size-md: 17px;
+    --font-size-lg: 18px;
+    --font-size-xl: 20px;
+    --font-size-xxl: 22px;
+
+    --border-radius-sm: 12px;
+    --border-radius-md: 14px;
+    --border-radius-lg: 16px;
+    --border-radius-xl: 20px;
+    --border-radius-xxl: 24px;
+
+    --gap-xs: 12px;
+    --gap-sm: 16px;
+    --gap-md: 20px;
+    --gap-lg: 24px;
+    --gap-xl: 28px;
+    --gap-xxl: 40px;
+
+    --icon-size-sm: 24px;
+    --icon-size-md: 28px;
+    --icon-size-lg: 32px;
+    --icon-size-xl: 36px;
+  }
+
+  .contentWrap {
+    max-width: 700px;
+    padding: 0 var(--spacing-xxxl) 44px var(--spacing-xxxl);
+  }
+
+  .scrollArea {
+    padding: var(--spacing-xxl) var(--padding-lg) 0 var(--padding-lg);
+  }
+}
+
+// 터치 기기 최적화
+@media (hover: none) {
+  .submitButton {
+    min-height: 48px; // 터치 영역 확대
+    font-size: 16px; // iOS 줌 방지
+  }
+
+  .ratingForm input[type="range"]::-webkit-slider-thumb {
+    width: 28px; // 터치 영역 확대
+    height: 28px;
+  }
+
+  .ratingForm input[type="range"]::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+  }
+
+  .ratingForm input[type="range"]::-ms-thumb {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+// 접근성 개선
+@media (prefers-reduced-motion: reduce) {
+
+  .submitButton,
+  .ratingForm input[type="range"]::-webkit-slider-thumb {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+
+  .card,
+  .summaryROW {
+    border: 2px solid currentColor;
+  }
+
+  .submitButton {
+    border: 2px solid currentColor !important;
+  }
+}

@@ -1,0 +1,424 @@
+{
+  "meta": {
+    "name": "티미타카 테스트 결과 분석 프롬프트",
+    "version": "1.0",
+    "purpose": "E2E 테스트 실패 원인 분석 및 개선 방안 제시",
+    "created_at": "2025-12-20"
+  },
+
+  "analysis_context": {
+    "app_info": {
+      "name": "티미타카",
+      "framework": "React 18.2.0 + React Router 7.6.1",
+      "auth_method": "Firebase Phone Auth + JWT",
+      "api_base_url": "https://teamitakabackend.onrender.com",
+      "test_base_url": "http://localhost:3000"
+    },
+    "user_states": {
+      "US01": { "name": "신규 유저", "auth": false, "profile": false },
+      "US02": { "name": "비회원", "auth": false, "profile": false },
+      "US03": { "name": "회원(프로필X)", "auth": true, "profile": false },
+      "US04": { "name": "회원(프로필O)", "auth": true, "profile": true },
+      "US05": { "name": "재방문 유저", "auth": true, "profile": true }
+    },
+    "protected_routes": [
+      "/main",
+      "/project-management",
+      "/project/:id",
+      "/profile",
+      "/profile/edit",
+      "/notifications",
+      "/apply2",
+      "/evaluation",
+      "/bookmark"
+    ]
+  },
+
+  "failure_patterns": {
+    "authentication": {
+      "id": "AUTH",
+      "symptoms": [
+        "Timeout waiting for selector",
+        "리다이렉트 발생",
+        "로그인 화면으로 이동",
+        "401 Unauthorized",
+        "인증 토큰 없음"
+      ],
+      "common_causes": [
+        "테스트가 인증이 필요한 라우트에 접근했으나 로그인되지 않음",
+        "localStorage에 토큰이 설정되지 않음",
+        "토큰이 만료됨",
+        "AuthContext가 초기화되지 않음"
+      ],
+      "solutions": [
+        {
+          "type": "mock_auth",
+          "description": "테스트 전 localStorage에 mock 토큰 설정",
+          "code": "await page.evaluate(() => { localStorage.setItem('authToken', 'mock_token'); localStorage.setItem('user', JSON.stringify({id: 1, nickname: '테스트유저'})); });"
+        },
+        {
+          "type": "skip_auth_routes",
+          "description": "인증 필요 라우트 테스트 스킵",
+          "code": "if (requiresAuth(scenario)) { test.skip(); return; }"
+        },
+        {
+          "type": "setup_fixture",
+          "description": "beforeEach에서 인증 상태 설정",
+          "code": "test.beforeEach(async ({ page }) => { await setupAuthState(page, 'US04'); });"
+        }
+      ]
+    },
+
+    "selector_not_found": {
+      "id": "SELECTOR",
+      "symptoms": [
+        "Timeout waiting for selector",
+        "locator not found",
+        "Element not visible",
+        "strict mode violation"
+      ],
+      "common_causes": [
+        "CSS 클래스명이 변경됨",
+        "컴포넌트가 조건부 렌더링됨",
+        "동적으로 생성되는 요소",
+        "셀렉터가 너무 일반적임 (여러 요소 매칭)",
+        "data-testid 누락"
+      ],
+      "solutions": [
+        {
+          "type": "update_selector",
+          "description": "실제 DOM에서 올바른 셀렉터 확인",
+          "steps": [
+            "브라우저 개발자 도구에서 요소 검사",
+            "고유한 셀렉터 찾기 (id, data-testid, 고유 클래스)",
+            "test-simulation.json 셀렉터 업데이트"
+          ]
+        },
+        {
+          "type": "add_testid",
+          "description": "컴포넌트에 data-testid 추가",
+          "code": "<button data-testid=\"submit-button\">제출</button>"
+        },
+        {
+          "type": "use_text_selector",
+          "description": "텍스트 기반 셀렉터 사용",
+          "code": "page.getByText('버튼 텍스트')"
+        },
+        {
+          "type": "use_role_selector",
+          "description": "역할 기반 셀렉터 사용",
+          "code": "page.getByRole('button', { name: '제출' })"
+        }
+      ]
+    },
+
+    "timing_issues": {
+      "id": "TIMING",
+      "symptoms": [
+        "Timeout exceeded",
+        "Element not attached to DOM",
+        "Navigation interrupted",
+        "flaky test"
+      ],
+      "common_causes": [
+        "API 응답 지연",
+        "애니메이션/전환 효과",
+        "비동기 렌더링",
+        "네트워크 지연"
+      ],
+      "solutions": [
+        {
+          "type": "increase_timeout",
+          "description": "타임아웃 증가",
+          "code": "await page.waitForSelector('.element', { timeout: 10000 });"
+        },
+        {
+          "type": "wait_for_network",
+          "description": "네트워크 요청 완료 대기",
+          "code": "await page.waitForLoadState('networkidle');"
+        },
+        {
+          "type": "wait_for_response",
+          "description": "특정 API 응답 대기",
+          "code": "await page.waitForResponse(resp => resp.url().includes('/api/') && resp.status() === 200);"
+        },
+        {
+          "type": "retry_action",
+          "description": "액션 재시도 로직 추가",
+          "code": "await expect(async () => { await page.click('.button'); }).toPass({ timeout: 5000 });"
+        }
+      ]
+    },
+
+    "navigation_issues": {
+      "id": "NAVIGATION",
+      "symptoms": [
+        "URL does not contain expected path",
+        "Page redirected unexpectedly",
+        "Navigation timeout"
+      ],
+      "common_causes": [
+        "라우트 가드 (인증 체크)",
+        "조건부 리다이렉트",
+        "잘못된 라우트 경로",
+        "React Router 버전 이슈"
+      ],
+      "solutions": [
+        {
+          "type": "check_route_guard",
+          "description": "라우트 가드 조건 확인",
+          "steps": [
+            "해당 라우트의 접근 조건 확인",
+            "필요한 상태 (인증, 프로필 등) 사전 설정"
+          ]
+        },
+        {
+          "type": "wait_for_url",
+          "description": "URL 변경 대기",
+          "code": "await page.waitForURL('**/expected-path');"
+        }
+      ]
+    },
+
+    "api_issues": {
+      "id": "API",
+      "symptoms": [
+        "데이터가 표시되지 않음",
+        "빈 목록",
+        "500 Internal Server Error",
+        "CORS error"
+      ],
+      "common_causes": [
+        "백엔드 서버 미실행",
+        "API 엔드포인트 변경",
+        "테스트 데이터 없음",
+        "환경 변수 미설정"
+      ],
+      "solutions": [
+        {
+          "type": "mock_api",
+          "description": "API 응답 모킹",
+          "code": "await page.route('**/api/**', route => route.fulfill({ status: 200, body: JSON.stringify(mockData) }));"
+        },
+        {
+          "type": "check_backend",
+          "description": "백엔드 서버 상태 확인",
+          "steps": [
+            "curl https://teamitakabackend.onrender.com/health",
+            "서버 로그 확인"
+          ]
+        },
+        {
+          "type": "seed_test_data",
+          "description": "테스트 데이터 시드",
+          "steps": [
+            "테스트용 사용자 계정 생성",
+            "테스트용 프로젝트 데이터 준비"
+          ]
+        }
+      ]
+    },
+
+    "state_issues": {
+      "id": "STATE",
+      "symptoms": [
+        "이전 테스트 상태가 남아있음",
+        "예상치 못한 데이터",
+        "localStorage 오염"
+      ],
+      "common_causes": [
+        "테스트 간 상태 격리 미흡",
+        "beforeEach에서 cleanup 누락",
+        "전역 상태 오염"
+      ],
+      "solutions": [
+        {
+          "type": "clear_storage",
+          "description": "테스트 전 스토리지 초기화",
+          "code": "await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });"
+        },
+        {
+          "type": "new_context",
+          "description": "각 테스트마다 새 브라우저 컨텍스트",
+          "code": "test.use({ storageState: undefined });"
+        }
+      ]
+    }
+  },
+
+  "analysis_workflow": {
+    "step_1_categorize": {
+      "description": "실패 패턴 분류",
+      "actions": [
+        "에러 메시지에서 키워드 추출",
+        "failure_patterns와 매칭",
+        "실패 카테고리 결정"
+      ]
+    },
+    "step_2_root_cause": {
+      "description": "근본 원인 분석",
+      "actions": [
+        "스크린샷 확인",
+        "테스트 로그 분석",
+        "해당 페이지/컴포넌트 코드 확인"
+      ]
+    },
+    "step_3_suggest_fix": {
+      "description": "개선 방안 제시",
+      "actions": [
+        "적합한 solution 선택",
+        "코드 수정 제안",
+        "테스트 케이스 수정 제안"
+      ]
+    },
+    "step_4_validate": {
+      "description": "수정 후 검증",
+      "actions": [
+        "수정된 테스트 재실행",
+        "연관 테스트 영향 확인",
+        "리그레션 체크"
+      ]
+    }
+  },
+
+  "improvement_templates": {
+    "selector_fix": {
+      "file": "src/tests/e2e/modules/{module}.json",
+      "change_type": "update_selector",
+      "template": {
+        "before": { "selector": "{old_selector}" },
+        "after": { "selector": "{new_selector}" },
+        "reason": "{reason}"
+      }
+    },
+    "add_auth_setup": {
+      "file": "src/tests/e2e/test-runner.spec.ts",
+      "change_type": "add_beforeEach",
+      "template": {
+        "code": "test.beforeEach(async ({ page }) => {\n  await setupUserState(page, '{user_state}');\n});"
+      }
+    },
+    "increase_timeout": {
+      "file": "src/tests/e2e/modules/{module}.json",
+      "change_type": "update_step",
+      "template": {
+        "before": { "timeout": 3000 },
+        "after": { "timeout": 10000 }
+      }
+    },
+    "add_wait_step": {
+      "file": "src/tests/e2e/modules/{module}.json",
+      "change_type": "insert_step",
+      "template": {
+        "step": { "action": "wait", "selector": "{selector}", "timeout": 5000 },
+        "position": "before_validation"
+      }
+    }
+  },
+
+  "ai_analysis_prompt": {
+    "system": "당신은 E2E 테스트 전문가입니다. 테스트 실패 결과를 분석하고 구체적인 개선 방안을 제시합니다.",
+    "user_template": "다음 테스트 실패 결과를 분석해주세요:\n\n## 테스트 정보\n- ID: {test_id}\n- 설명: {description}\n- 사용자 상태: {user_state}\n- 대상 라우트: {route}\n\n## 에러 정보\n- 에러 메시지: {error_message}\n- 실패 지점: {failure_point}\n- 스크린샷: {screenshot_path}\n\n## 테스트 스텝\n{steps}\n\n## 검증 조건\n{validations}\n\n---\n\n분석 결과를 다음 형식으로 제공해주세요:\n\n### 1. 실패 원인 분류\n- 카테고리: (AUTH/SELECTOR/TIMING/NAVIGATION/API/STATE 중 선택)\n- 신뢰도: (높음/중간/낮음)\n\n### 2. 근본 원인\n(상세 설명)\n\n### 3. 개선 방안\n(구체적인 코드 수정 제안)\n\n### 4. 테스트 케이스 수정\n(JSON 수정 내용)",
+    "examples": [
+      {
+        "input": {
+          "test_id": "M02-F01-01",
+          "description": "사용자명과 인사말이 표시되는가?",
+          "user_state": "US04",
+          "route": "/main",
+          "error_message": "Timeout waiting for selector '.user-greeting'",
+          "steps": [
+            { "action": "navigate", "target": "/main" },
+            { "action": "wait", "selector": ".user-greeting" }
+          ]
+        },
+        "output": {
+          "category": "AUTH",
+          "confidence": "높음",
+          "root_cause": "/main은 인증이 필요한 라우트입니다. US04 상태로 테스트하려면 사전에 인증 토큰을 설정해야 합니다. 현재 테스트는 인증 없이 /main에 접근하여 로그인 페이지로 리다이렉트됩니다.",
+          "solution": {
+            "type": "mock_auth",
+            "code": "// 테스트 전 인증 상태 설정\nawait page.evaluate(() => {\n  localStorage.setItem('authToken', 'mock_token_full');\n  localStorage.setItem('user', JSON.stringify({\n    id: 1,\n    nickname: '테스트티미',\n    school: '홍익대학교'\n  }));\n});"
+          },
+          "test_case_fix": {
+            "add_step": {
+              "action": "set_storage",
+              "value": "{\"authToken\":\"mock_token_full\",\"user\":{\"id\":1}}",
+              "position": "before_navigate"
+            }
+          }
+        }
+      },
+      {
+        "input": {
+          "test_id": "M10-F02-03",
+          "description": "'프로젝트 생성하기' 버튼 클릭 시 회원가입 유도가 되는가?",
+          "user_state": "US02",
+          "route": "/team-matching",
+          "error_message": "Timeout 3000ms exceeded waiting for selector '.alert-modal-overlay, .register-prompt'",
+          "steps": [
+            { "action": "navigate", "target": "/team-matching" },
+            { "action": "click", "selector": ".create-project-banner" },
+            { "action": "wait", "selector": ".alert-modal-overlay, .register-prompt" }
+          ]
+        },
+        "output": {
+          "category": "SELECTOR",
+          "confidence": "중간",
+          "root_cause": "'.create-project-banner' 클릭 후 표시되는 모달의 셀렉터가 실제 DOM과 다를 수 있습니다. 또는 해당 버튼이 다른 방식으로 회원가입을 유도할 수 있습니다.",
+          "solution": {
+            "type": "update_selector",
+            "steps": [
+              "1. 브라우저에서 직접 해당 버튼 클릭",
+              "2. 표시되는 모달/팝업의 실제 클래스명 확인",
+              "3. 셀렉터 업데이트"
+            ]
+          },
+          "test_case_fix": {
+            "update_validation": {
+              "old": ".alert-modal-overlay, .register-prompt",
+              "new": ".modal-container, [role='dialog']"
+            }
+          }
+        }
+      }
+    ]
+  },
+
+  "batch_analysis": {
+    "description": "다량의 테스트 실패를 한번에 분석",
+    "grouping_strategy": [
+      "같은 모듈별 그룹화",
+      "같은 에러 유형별 그룹화",
+      "같은 사용자 상태별 그룹화"
+    ],
+    "priority_rules": [
+      { "condition": "critical priority 테스트", "priority": 1 },
+      { "condition": "인증 관련 실패", "priority": 2 },
+      { "condition": "셀렉터 관련 실패", "priority": 3 },
+      { "condition": "타이밍 관련 실패", "priority": 4 }
+    ],
+    "output_format": {
+      "summary": {
+        "total_failures": "number",
+        "by_category": { "AUTH": 0, "SELECTOR": 0, "TIMING": 0, "NAVIGATION": 0, "API": 0, "STATE": 0 },
+        "top_issues": ["issue1", "issue2", "issue3"]
+      },
+      "recommendations": [
+        {
+          "priority": 1,
+          "issue": "인증 설정 누락",
+          "affected_tests": ["M02-*", "M04-*"],
+          "fix": "테스트 전 인증 상태 설정 로직 추가"
+        }
+      ],
+      "auto_fixable": [
+        {
+          "test_id": "string",
+          "fix_type": "string",
+          "confidence": "number"
+        }
+      ]
+    }
+  }
+}

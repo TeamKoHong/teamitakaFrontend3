@@ -1,0 +1,252 @@
+/* ===== Vars ===== */
+$gray-1: #111;
+$gray-2: #4b5563;
+$gray-3: #6b7280;
+$gray-4: #9ca3af;
+$line: #e5e5ea;
+$bg: #fff;
+
+$cta: #f76241;
+
+/* Base */
+.page {
+  min-height: 100vh;
+  background: $bg;
+}
+
+/* Topbar (기존 톤) */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+
+  .back {
+    position: absolute;
+    left: 12px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 0;
+    cursor: pointer;
+
+    .chevron {
+      width: 9px;
+      height: 9px;
+      border-left: 2px solid #2b2b2b;
+      border-bottom: 2px solid #2b2b2b;
+      transform: rotate(45deg);
+      opacity: 0.9;
+    }
+  }
+
+  .title {
+    font-size: 16px;
+    font-weight: 700;
+    color: $gray-1;
+  }
+}
+
+/* Layout */
+.container {
+  padding: 16px 16px 120px;
+}
+
+/* Cover image (있을 때만) */
+.cover {
+  margin-bottom: 12px;
+
+  img {
+    width: 100%;
+    display: block;
+    border-radius: 12px;
+  }
+}
+
+/* Title */
+.post-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: $gray-1;
+  margin: 4px 0 6px;
+}
+
+/* Meta (조회/지원 ← | → 시간) */
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+
+  .left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: $gray-4;
+
+    /*  아이콘 크기: JSX에 class 없을 수도 있으니 안전하게 기본 img에 적용 */
+    img {
+      display: block;
+      opacity: 0.7;
+      object-fit: contain;
+    }
+
+    /* 조회수 아이콘 (첫번째 meta-item의 img) */
+    &:nth-child(1) img {
+      width: 15.97px;
+      height: 10.73px;
+    }
+
+    /* 지원자 아이콘 (두번째 meta-item의 img) */
+    &:nth-child(2) img {
+      width: 18px;
+      height: 11px;
+    }
+
+    .num {
+      color: $gray-4;
+    }
+  }
+
+  .right {
+    font-size: 12px;
+    color: $gray-4;
+  }
+}
+
+/* Key-Value rows (no box) */
+.kv {
+  .row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 6px 0;
+
+    /* 공통 폰트 패밀리만 묶고, 굵기는 k/v 각각 분리 */
+    .k,
+    .v {
+      font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, "Noto Sans KR", Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.4;
+      font-style: normal;
+    }
+
+    /* 라벨(모집 기간/프로젝트 정보/프로젝트 유형) */
+    .k {
+      font-weight: 600;
+      color: $gray-3;
+      flex: 0 0 auto;
+    }
+
+    /* 사용자 입력 값(기간/정보/유형 값) */
+    .v {
+      font-weight: 400;
+      /* Regular */
+      color: #403E3E;
+      /* 요청 색상 */
+      text-align: right;
+      flex: 1 1 auto;
+    }
+  }
+}
+
+/* Divider */
+.divider {
+  border: 0;
+  border-top: 1px solid $line;
+  margin: 12px 0 14px;
+}
+
+/* Detail */
+.detail {
+  .detail-label {
+    font-size: 12px;
+    color: $gray-4;
+    margin-bottom: 6px;
+  }
+
+  .detail-body {
+    white-space: pre-wrap;
+    font-size: 14px;
+    color: $gray-1;
+    line-height: 1.6;
+    margin: 0 0 14px;
+  }
+}
+
+/* Keywords */
+.keywords {
+  .label {
+    font-size: 13px;
+    color: $gray-3;
+    margin-bottom: 8px;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+
+    &.chip-orange {
+      background: #ffe8e1;
+      color: $cta;
+    }
+  }
+}
+
+/* Footer */
+.footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  border-top: none;
+  padding: 8px 16px calc(24px + env(safe-area-inset-bottom));
+  display: flex;
+  justify-content: center;
+}
+
+/* 작성 완료 버튼: 358*59 / radius 8 / #f76241 */
+.submit-btn {
+  width: 358px;
+  height: 59px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 16px;
+  background: $cta;
+  color: #fff;
+  cursor: pointer;
+
+  &:focus,
+  &:active,
+  &:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+}

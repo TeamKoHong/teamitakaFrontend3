@@ -1,0 +1,53 @@
+// src/components/RatingManagement/RatingTabs/RatingTabs.module.scss
+.tabsContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  
+    .tabButtons {
+      display: flex;
+      gap: 8px;
+      .tab {
+        border-radius: 65px;
+        font-weight: 600;
+        font-size: 15px;
+        padding: 8px 18px;
+        border: none;
+        background: #fff;
+        color: #f76241;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        box-shadow: none;
+        outline: none;
+        &.active {
+          background: #f76241;
+          color: #fff;
+          box-shadow: 0 2px 8px rgba(247,98,65,0.15);
+        }
+      }
+    }
+  
+    .sortOptions {
+      margin-left: auto;
+      font-size: 0.9rem;
+      color: #666;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      cursor: pointer;
+      padding: 0.5rem 0.5rem;
+      border-radius: 4px;
+      transition: background-color 0.2s ease-in-out;
+  
+      &:hover {
+        background-color: #f0f0f0;
+      }
+  
+      .sortIcon {
+        font-size: 1rem;
+        color: #999;
+        transition: transform 0.2s ease-in-out;
+      }
+    }
+  }

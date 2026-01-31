@@ -1,0 +1,83 @@
+/* 전체 영역 */
+.interest-container {
+  width: 100%;
+  padding-left: 0;
+  box-sizing: border-box;
+
+  margin-top: 32px; /* 위 요소와 간격 */
+}
+
+/* 라벨 */
+.interest-label {
+  font-family: "Pretendard";
+  font-size: 15px;
+  font-weight: 600; /* SemiBold */
+  line-height: 100%;
+  color: #000000;
+  margin-bottom: 8px;
+  margin-left: 0;
+}
+
+
+
+/* + 버튼 감싸는 박스 */
+.interest-add-btn {
+  width: 57px;
+  height: 33px;
+
+  background-color: #FFE6E0; /* 연한 살구색 */
+  padding: 8px 16px;
+  border-radius: 24px;
+
+  border: none;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 5px;
+}
+
+/* + 아이콘 */
+.interest-plus-icon {
+  width: 25px;
+  height: 17px;
+  object-fit: contain;
+}
+
+/* 키워드들과 버튼을 한 줄 유지 */
+.keyword-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;       /* 버튼 절대 아래로 안 떨어짐 */
+}
+
+/* 키워드 pill */
+.keyword-pill {
+  background-color: #FFE6E0;
+  padding: 8px 16px;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #F76241;
+  font-family: "Pretendard";
+  white-space: nowrap;
+}
+
+/* 입력창 */
+.keyword-input {
+  height: 33px;                 /* + 버튼과 동일 */
+  padding: 8px 16px;            /* + 버튼과 동일 padding */
+  border-radius: 24px;          /* pill shape */
+  border: 1px solid #F76241;    /* 같은 컬러 */
+  outline: none;
+
+  font-size: 14px;
+  font-family: Pretendard;
+
+  width: 57px;      /* + 버튼과 똑같이 고정 */
+  box-sizing: border-box;
+   background-color: #FFE6E0;
+}
+

@@ -1,0 +1,510 @@
+{
+  "module_id": "M07",
+  "module_name": "상호평가 & 별점관리",
+  "features": [
+    {
+      "feature_id": "M07-F01",
+      "feature_name": "상호평가 안내",
+      "route": "/evaluation/management",
+      "test_scenarios": [
+        {
+          "id": "M07-F01-01",
+          "description": "'팀원 평가가 이뤄지지 않은 프로젝트가 N개 있어요!' 안내가 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/management" },
+            { "action": "wait", "selector": "body", "timeout": 5000 },
+            { "action": "screenshot", "name": "evaluation-management" }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "평가" }
+          ],
+          "expected_result": "미완료 평가 알림"
+        },
+        {
+          "id": "M07-F01-02",
+          "description": "평가 관리 페이지에 프로젝트 목록이 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/management" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "프로젝트" }
+          ],
+          "expected_result": "프로젝트 목록 표시"
+        },
+        {
+          "id": "M07-F01-03",
+          "description": "'내가 받은 평가' 탭이 존재하는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/management" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "내가 받은 평가" }
+          ],
+          "expected_result": "내가 받은 평가 탭 존재"
+        },
+        {
+          "id": "M07-F01-04",
+          "description": "프로젝트 카드에 평가 상태가 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/management" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='card'], [class*='project'], [class*='item']" }
+          ],
+          "expected_result": "프로젝트 카드 표시"
+        },
+        {
+          "id": "M07-F01-05",
+          "description": "평가 페이지로 이동할 수 있는가?",
+          "user_state": "US04",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/project/{{USER_PROJECT_ID}}" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "url_contains", "expected": "/evaluation/project" }
+          ],
+          "expected_result": "평가 페이지로 이동"
+        }
+      ]
+    },
+    {
+      "feature_id": "M07-F02",
+      "feature_name": "팀원 평가 작성",
+      "route": "/evaluation/team-member/:projectId/:memberId",
+      "skip": true,
+      "skip_reason": "평가 작성은 상태를 변경하므로 수동 테스트 권장",
+      "test_scenarios": [
+        {
+          "id": "M07-F02-01",
+          "description": "참여도 평가(1-5점)가 가능한가?",
+          "user_state": "US04",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/team-member/{{USER_PROJECT_ID}}/1" },
+            { "action": "wait", "selector": "body", "timeout": 5000 },
+            { "action": "screenshot", "name": "evaluation-step1" }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "참여도" }
+          ],
+          "expected_result": "'해당 팀원의 프로젝트 내에서 참여도를 점수로 평가 해주세요'"
+        },
+        {
+          "id": "M07-F02-02",
+          "description": "소통 평가(1-5점)가 가능한가?",
+          "user_state": "US04",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/team-member/{{USER_PROJECT_ID}}/1" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "소통" }
+          ],
+          "expected_result": "'해당 팀원과의 의사소통 태도를 점수로 평가 해주세요'"
+        },
+        {
+          "id": "M07-F02-03",
+          "description": "책임감 평가(1-5점)가 가능한가?",
+          "user_state": "US04",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/team-member/{{USER_PROJECT_ID}}/1" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "책임감" }
+          ],
+          "expected_result": "'해당 팀원의 프로젝트 책임감을 점수로 평가 해주세요'"
+        },
+        {
+          "id": "M07-F02-04",
+          "description": "협력 평가(1-5점)가 가능한가?",
+          "user_state": "US04",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/team-member/{{USER_PROJECT_ID}}/1" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "협력" }
+          ],
+          "expected_result": "'해당 팀원의 프로젝트 내에서 보인 협동심을 점수로 평가 해주세요'"
+        },
+        {
+          "id": "M07-F02-05",
+          "description": "개인능력 평가(1-5점)가 가능한가?",
+          "user_state": "US04",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/team-member/{{USER_PROJECT_ID}}/1" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "능력" }
+          ],
+          "expected_result": "'해당 팀원의 프로젝트 수행 능력을 점수로 평가 해주세요'"
+        },
+        {
+          "id": "M07-F02-06",
+          "description": "전체 총점 평가(1-5점)가 가능한가?",
+          "user_state": "US04",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/team-member/{{USER_PROJECT_ID}}/1" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "총점" }
+          ],
+          "expected_result": "'해당 팀원의 전체 총점은 몇 점인가요?'"
+        },
+        {
+          "id": "M07-F02-07",
+          "description": "업무 분담 및 역할 입력이 가능한가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/team-member/{{USER_PROJECT_ID}}/1" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "역할" }
+          ],
+          "expected_result": "'해당 팀원의 업무 분담 및 구체적인 역할은 무엇이었나요?'"
+        },
+        {
+          "id": "M07-F02-08",
+          "description": "'별점은 익명으로 전송되니 솔직하게 평가해주세요' 안내가 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/team-member/{{USER_PROJECT_ID}}/1" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "익명" }
+          ],
+          "expected_result": "익명 평가 안내"
+        },
+        {
+          "id": "M07-F02-09",
+          "description": "평가 UI가 정상적으로 표시되는가?",
+          "user_state": "US04",
+          "priority": "critical",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/team-member/{{USER_PROJECT_ID}}/1" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "[class*='star'], [class*='rating'], img[alt*='star']" }
+          ],
+          "expected_result": "평가 UI 표시"
+        },
+        {
+          "id": "M07-F02-10",
+          "description": "평가 페이지 URL이 올바른가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/team-member/{{USER_PROJECT_ID}}/1" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "url_contains", "expected": "/evaluation/team-member" }
+          ],
+          "expected_result": "팀원 평가 URL"
+        }
+      ]
+    },
+    {
+      "feature_id": "M07-F03",
+      "feature_name": "평가 완료",
+      "route": "/evaluation/team-member/:projectId/:memberId",
+      "skip": true,
+      "skip_reason": "평가 완료 상태 테스트 - 평가 제출 후 상태에서만 확인 가능",
+      "test_scenarios": [
+        {
+          "id": "M07-F03-01",
+          "description": "'팀원 평가를 완료했어요!' 메시지가 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/project/{{USER_PROJECT_ID}}" },
+            { "action": "wait", "selector": "body", "timeout": 5000 },
+            { "action": "screenshot", "name": "evaluation-complete" }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "완료" }
+          ],
+          "expected_result": "평가 완료 확인"
+        },
+        {
+          "id": "M07-F03-02",
+          "description": "'n명 중 n명 완료' 진행 상황이 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/project/{{USER_PROJECT_ID}}" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "명" }
+          ],
+          "expected_result": "평가 진행률 표시"
+        },
+        {
+          "id": "M07-F03-03",
+          "description": "평가 결과 페이지로 이동 가능한가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/project/{{USER_PROJECT_ID}}" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "url_contains", "expected": "/evaluation/project" }
+          ],
+          "expected_result": "평가 결과 화면으로 이동"
+        },
+        {
+          "id": "M07-F03-04",
+          "description": "프로젝트 관리 페이지 이동 가능한가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/project-management" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "url_contains", "expected": "/project-management" }
+          ],
+          "expected_result": "프로젝트 관리 화면으로 이동"
+        }
+      ]
+    },
+    {
+      "feature_id": "M07-F04",
+      "feature_name": "내가 받은 평가",
+      "route": "/evaluation/project/:projectId",
+      "skip": true,
+      "skip_reason": "평가 데이터 필요 - 테스트 계정에 평가 데이터 없음",
+      "test_scenarios": [
+        {
+          "id": "M07-F04-01",
+          "description": "'내가 받은 평가' 탭이 존재하는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/project/{{USER_PROJECT_ID}}" },
+            { "action": "wait", "selector": "[class*='page'], [class*='container'], body", "timeout": 5000 },
+            { "action": "screenshot", "name": "received-evaluation" }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "내가 받은 별점" }
+          ],
+          "expected_result": "탭 전환 가능"
+        },
+        {
+          "id": "M07-F04-02",
+          "description": "내 별점 평균이 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/project/{{USER_PROJECT_ID}}" }
+          ],
+          "validations": [
+            { "type": "text_matches", "selector": "body", "pattern": "\\d\\.\\d" }
+          ],
+          "expected_result": "'4.0' 등 평균 점수"
+        },
+        {
+          "id": "M07-F04-03",
+          "description": "별점 평가 UI가 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/project/{{USER_PROJECT_ID}}" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "img[alt*='star'], [aria-label*='star']" }
+          ],
+          "expected_result": "별점 평가 UI 표시"
+        },
+        {
+          "id": "M07-F04-04",
+          "description": "'이런 점이 좋아요' 피드백이 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/project/{{USER_PROJECT_ID}}" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "이런 점이 좋아요" }
+          ],
+          "expected_result": "긍정적 피드백 목록"
+        },
+        {
+          "id": "M07-F04-05",
+          "description": "'이런 점은 개선이 필요해요' 피드백이 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/project/{{USER_PROJECT_ID}}" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "개선이 필요해요" }
+          ],
+          "expected_result": "개선 피드백 목록"
+        },
+        {
+          "id": "M07-F04-06",
+          "description": "'팀원 평가지' 섹션이 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/project/{{USER_PROJECT_ID}}" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "팀원 평가지" }
+          ],
+          "expected_result": "팀원 평가지 섹션 표시"
+        },
+        {
+          "id": "M07-F04-07",
+          "description": "'상호평가 완료 후 열람 가능해요' 안내가 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "skip": true,
+          "skip_reason": "incomplete-1 프로젝트가 존재하지 않음 - 미완료 프로젝트 테스트 필요",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/project/incomplete-1" }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "열람 가능" }
+          ],
+          "expected_result": "미완료 시 잠금 표시"
+        }
+      ]
+    },
+    {
+      "feature_id": "M07-F05",
+      "feature_name": "내가 한 평가",
+      "route": "/evaluation/project/:projectId/given",
+      "skip": true,
+      "skip_reason": "평가 데이터 필요 - 테스트 계정에 평가 데이터 없음",
+      "test_scenarios": [
+        {
+          "id": "M07-F05-01",
+          "description": "'내가 한 평가' 탭이 존재하는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/project/{{USER_PROJECT_ID}}/given" },
+            { "action": "wait", "selector": "body", "timeout": 5000 },
+            { "action": "screenshot", "name": "given-evaluation" }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "내가 한 평가" }
+          ],
+          "expected_result": "탭 전환 가능"
+        },
+        {
+          "id": "M07-F05-02",
+          "description": "내가 준 별점이 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/project/{{USER_PROJECT_ID}}/given" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "element_visible", "selector": "img[alt*='star'], [class*='star'], [class*='rating']" }
+          ],
+          "expected_result": "'내가 김00님에게 준 별점'"
+        },
+        {
+          "id": "M07-F05-03",
+          "description": "평가 대상자별 내역이 표시되는가?",
+          "user_state": "US04",
+          "priority": "high",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/project/{{USER_PROJECT_ID}}/given" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "평가" }
+          ],
+          "expected_result": "팀원별 평가 내역"
+        }
+      ]
+    },
+    {
+      "feature_id": "M07-F06",
+      "feature_name": "완료 프로젝트 평가 현황",
+      "route": "/evaluation/status/:projectId",
+      "test_scenarios": [
+        {
+          "id": "M07-F06-01",
+          "description": "평가 현황 페이지가 로드되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/status/{{USER_PROJECT_ID}}/received" },
+            { "action": "wait", "selector": "body", "timeout": 5000 },
+            { "action": "screenshot", "name": "evaluation-status" }
+          ],
+          "validations": [
+            { "type": "url_contains", "expected": "/evaluation/status" }
+          ],
+          "expected_result": "평가 현황 페이지"
+        },
+        {
+          "id": "M07-F06-02",
+          "description": "평가 상태 정보가 표시되는가?",
+          "user_state": "US04",
+          "priority": "medium",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/status/{{USER_PROJECT_ID}}/received" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "text_contains", "selector": "body", "expected": "평가" }
+          ],
+          "expected_result": "평가 상태 정보"
+        },
+        {
+          "id": "M07-F06-03",
+          "description": "평가 현황 URL이 올바른가?",
+          "user_state": "US04",
+          "priority": "low",
+          "steps": [
+            { "action": "navigate", "target": "/evaluation/status/{{USER_PROJECT_ID}}" },
+            { "action": "wait", "selector": "body", "timeout": 5000 }
+          ],
+          "validations": [
+            { "type": "url_contains", "expected": "/evaluation/status" }
+          ],
+          "expected_result": "평가 현황 URL"
+        }
+      ]
+    }
+  ]
+}

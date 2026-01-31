@@ -1,0 +1,426 @@
+@use '../../styles/variables' as *;
+
+.container {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 69px 12px 48px 12px; // Header(47px) + margin(22px) = 69px top
+  background: $background;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0;
+  padding-bottom: 96px;
+  margin-bottom: 0;
+  gap: 24px; // Reduced from 32px
+}
+
+.pageTitle {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: $gray-dark;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.statusSection,
+.summarySection,
+.reviewsSection {
+  background: $white;
+  border-radius: $border-radius-base;
+  box-shadow: $shadow-base;
+  padding: $spacing-md $spacing-lg;
+  margin-bottom: $spacing-lg;
+}
+
+.statusOverview {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.averageRating,
+.completion {
+  font-size: 1.1em;
+  color: $gray-dark;
+
+  span {
+    font-weight: bold;
+    color: $primary-color;
+    font-size: 1.2em;
+  }
+}
+
+.progressBarContainer {
+  width: 90%;
+  height: 10px;
+  background-color: $gray-light;
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 0 auto; // Center the progress bar
+}
+
+.progressBar {
+  height: 100%;
+  background-color: $accent-color;
+  border-radius: 5px;
+  transition: width 0.5s ease-in-out;
+}
+
+.sectionTitle {
+  font-size: 1.25em;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 28px;
+  text-align: left;
+}
+
+.summaryCards {
+  display: flex;
+  flex-wrap: wrap; // Allow cards to wrap
+  justify-content: center; // Center cards if they don't fill the row
+  gap: 15px; // Space between cards
+}
+
+.individualReviews {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; // Space between individual review items
+}
+
+.noReviews {
+  text-align: center;
+  color: $gray;
+  padding: 20px;
+  border: 1px dashed $gray-light;
+  border-radius: 8px;
+}
+
+.loading,
+.error,
+.noData {
+  text-align: center;
+  padding: 20px;
+  color: $gray;
+  font-size: 1.2em;
+}
+
+.detailTabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+
+  button {
+    flex: 1;
+    padding: 10px 0;
+    border: none;
+    border-radius: 8px 8px 0 0;
+    background: #f2f2f2;
+    color: #888;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+
+    &.active {
+      background: #fff;
+      color: #f76241;
+      border-bottom: 2px solid #f76241;
+    }
+  }
+}
+
+.givenResultSection {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  padding: 24px 18px 28px 18px;
+  margin-bottom: 18px;
+}
+
+.givenResultBox {
+  background: #fafbfc;
+  border-radius: 12px;
+  padding: 18px 14px;
+  margin-top: 10px;
+  font-size: 15px;
+  color: #333;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.incompleteNotice {
+  background: #fffbe6;
+  color: #b88a00;
+  border-radius: 10px;
+  padding: 18px 14px;
+  margin: 18px 0;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.summaryRow {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.goodBox,
+.improveBox {
+  flex: 1;
+  border-radius: 12px;
+  padding: 14px 12px;
+  background: #f7f7f7;
+  font-size: 15px;
+}
+
+.goodBox {
+  background: #f7f7f7;
+  color: #222;
+}
+
+.improveBox {
+  background: #ffede6;
+  color: #f76241;
+}
+
+.goodTitle,
+.improveTitle {
+  font-weight: 700;
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+.givenDetailSection {
+  margin-top: 18px;
+}
+
+.sectionSubTitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.roleCard {
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  font-size: 15px;
+  color: #333;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.showMoreBtn {
+  display: block;
+  margin: 0 auto;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.receivedDetailPage {
+  background: #f2f2f2;
+  min-height: 100vh;
+  padding: 0 0 96px 0;
+  gap: 32px;
+}
+
+.sectionCard,
+.card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  padding: 32px 20px 32px 20px;
+  margin-bottom: 32px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.categoryAverages {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 12px;
+}
+
+.categoryItem {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 2px;
+
+  .categoryName {
+    min-width: 90px;
+    color: #f76241;
+    font-weight: 700;
+  }
+
+  .categoryScore {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f76241;
+    margin-left: 4px;
+  }
+}
+
+.categorySummaryCard {
+  padding-left: 32px !important;
+  padding-right: 32px !important;
+}
+
+.memberReviewCardSection {
+  padding-left: 32px !important;
+  padding-right: 32px !important;
+}
+
+.memberReviewCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 36px !important;
+  padding-bottom: 32px !important;
+  padding-left: 32px !important;
+  padding-right: 32px !important;
+}
+
+.reviewerRow {
+  margin-bottom: 18px;
+}
+
+.reviewerName {
+  margin-left: 0 !important;
+  white-space: nowrap;
+  display: inline-block;
+  font-size: 1.12em;
+  font-weight: 700;
+  color: #f76241;
+  text-align: left;
+}
+
+.memberCategoryTable {
+  width: 100%;
+  margin-bottom: 32px;
+}
+
+.reviewComment {
+  align-self: stretch;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-top: 18px !important;
+  padding: 22px 24px !important;
+  border-radius: 16px 16px 16px 0;
+  font-size: 1.05em;
+  min-height: 64px;
+  position: relative;
+
+  &:before {
+    left: 32px;
+  }
+}
+
+.categoryRow {
+  display: grid;
+  grid-template-columns: minmax(56px, 110px) 140px;
+  align-items: center;
+  gap: 0 4px;
+  width: 100%;
+}
+
+.categoryName {
+  padding-right: 8px;
+  font-size: 1em;
+  font-weight: 500;
+  color: #222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.starsAndScore {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.categoryScore {
+  font-size: 15px;
+  font-weight: 500;
+  color: #222;
+  margin-left: 6px;
+  min-width: 28px;
+  flex-shrink: 0;
+  overflow: visible;
+  text-overflow: unset;
+  white-space: nowrap;
+}
+
+.categoryRow.total {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  font-weight: 700;
+
+  .categoryName {
+    color: #222;
+  }
+
+  .categoryScore {
+    color: #f76241;
+    font-weight: 700;
+  }
+}
+
+.memberCategoryTable,
+.categoryAverages {
+  gap: 14px;
+}
+
+.sectionCard,
+.card {
+  max-width: 420px;
+  margin: 0 auto 32px auto;
+  padding-left: 24px;
+  padding-right: 24px;
+  box-sizing: border-box;
+}
+
+.overallScoreBox {
+  margin-top: 18px;
+  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #222;
+  width: 100%;
+}
+
+
+
+.commentsSection {
+  .commentCard {
+    background: #f7f7f7;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    font-size: 15px;
+    color: #333;
+
+    .commenter {
+      font-weight: 600;
+      color: #f76241;
+      margin-bottom: 2px;
+      display: block;
+    }
+  }
+}

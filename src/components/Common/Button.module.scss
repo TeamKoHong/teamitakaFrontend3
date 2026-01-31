@@ -1,0 +1,347 @@
+@use '../../styles/variables' as *;
+
+// CSS Custom Properties 시스템 - 반응형 디자인을 위한 동적 변수
+:root {
+  // 반응형 간격 시스템
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-xxl: 24px;
+  --spacing-xxxl: 32px;
+  
+  // 반응형 패딩 시스템
+  --padding-xs: 8px;
+  --padding-sm: 12px;
+  --padding-md: 16px;
+  --padding-lg: 20px;
+  --padding-xl: 24px;
+  
+  // 반응형 폰트 크기 시스템
+  --font-size-xs: 11px;
+  --font-size-sm: 13px;
+  --font-size-md: 15px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-xxl: 20px;
+  
+  // 반응형 테두리 반경 시스템
+  --border-radius-sm: 8px;
+  --border-radius-md: 10px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-xxl: 20px;
+  
+  // 반응형 간격 시스템
+  --gap-xs: 8px;
+  --gap-sm: 12px;
+  --gap-md: 16px;
+  --gap-lg: 20px;
+  --gap-xl: 24px;
+  --gap-xxl: 32px;
+  
+  // 반응형 아이콘 크기 시스템
+  --icon-size-sm: 20px;
+  --icon-size-md: 24px;
+  --icon-size-lg: 28px;
+  --icon-size-xl: 32px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-family: $font-family-base;
+  font-weight: $font-weight-bold;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--font-size-md);
+  background: $primary-color;
+  color: $white;
+  box-shadow: $shadow-base;
+
+  &:active {
+    box-shadow: $shadow-hover;
+  }
+}
+
+.primary {
+  background: $primary-color;
+  color: $white;
+}
+
+.secondary {
+  background: $white;
+  color: $primary-color;
+  border: 1.5px solid $primary-color;
+}
+
+.ghost {
+  background: transparent;
+  color: $primary-color;
+  border: none;
+  box-shadow: none;
+}
+
+.danger {
+  background: $error;
+  color: $white;
+}
+
+.disabled {
+  background: $gray-light;
+  color: $gray;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.sm {
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-xs) var(--spacing-md);
+}
+
+.md {
+  font-size: var(--font-size-md);
+  padding: var(--spacing-sm) var(--spacing-lg);
+}
+
+.lg {
+  font-size: var(--font-size-lg);
+  padding: var(--spacing-md) var(--spacing-xl);
+}
+
+// ===== 반응형 미디어 쿼리 =====
+
+// 극소형 모바일 (320px) 대응
+@media (max-width: 359px) {
+  :root {
+    --spacing-xs: 3px;
+    --spacing-sm: 6px;
+    --spacing-md: 8px;
+    --spacing-lg: 12px;
+    --spacing-xl: 16px;
+    --spacing-xxl: 20px;
+    --spacing-xxxl: 24px;
+    
+    --padding-xs: 6px;
+    --padding-sm: 8px;
+    --padding-md: 12px;
+    --padding-lg: 16px;
+    --padding-xl: 20px;
+    
+    --font-size-xs: 10px;
+    --font-size-sm: 12px;
+    --font-size-md: 13px;
+    --font-size-lg: 15px;
+    --font-size-xl: 16px;
+    --font-size-xxl: 18px;
+    
+    --border-radius-sm: 6px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 10px;
+    --border-radius-xl: 12px;
+    --border-radius-xxl: 16px;
+    
+    --gap-xs: 6px;
+    --gap-sm: 8px;
+    --gap-md: 12px;
+    --gap-lg: 16px;
+    --gap-xl: 20px;
+    --gap-xxl: 24px;
+    
+    --icon-size-sm: 18px;
+    --icon-size-md: 20px;
+    --icon-size-lg: 24px;
+    --icon-size-xl: 28px;
+  }
+  
+  .button {
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: var(--font-size-md);
+  }
+  
+  .sm {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-xs) var(--spacing-md);
+  }
+  
+  .md {
+    font-size: var(--font-size-md);
+    padding: var(--spacing-sm) var(--spacing-lg);
+  }
+  
+  .lg {
+    font-size: var(--font-size-lg);
+    padding: var(--spacing-md) var(--spacing-xl);
+  }
+}
+
+// 모바일 (360px - 767px) 최적화
+@media (min-width: 360px) and (max-width: 767px) {
+  :root {
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 20px;
+    --spacing-xxl: 24px;
+    --spacing-xxxl: 32px;
+    
+    --padding-xs: 8px;
+    --padding-sm: 12px;
+    --padding-md: 16px;
+    --padding-lg: 20px;
+    --padding-xl: 24px;
+    
+    --font-size-xs: 11px;
+    --font-size-sm: 13px;
+    --font-size-md: 15px;
+    --font-size-lg: 16px;
+    --font-size-xl: 18px;
+    --font-size-xxl: 20px;
+    
+    --border-radius-sm: 8px;
+    --border-radius-md: 10px;
+    --border-radius-lg: 12px;
+    --border-radius-xl: 16px;
+    --border-radius-xxl: 20px;
+    
+    --gap-xs: 8px;
+    --gap-sm: 12px;
+    --gap-md: 16px;
+    --gap-lg: 20px;
+    --gap-xl: 24px;
+    --gap-xxl: 32px;
+    
+    --icon-size-sm: 20px;
+    --icon-size-md: 24px;
+    --icon-size-lg: 28px;
+    --icon-size-xl: 32px;
+  }
+}
+
+// 태블릿 (768px - 1023px) 최적화
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root {
+    --spacing-xs: 6px;
+    --spacing-sm: 10px;
+    --spacing-md: 14px;
+    --spacing-lg: 18px;
+    --spacing-xl: 22px;
+    --spacing-xxl: 26px;
+    --spacing-xxxl: 36px;
+    
+    --padding-xs: 10px;
+    --padding-sm: 14px;
+    --padding-md: 18px;
+    --padding-lg: 22px;
+    --padding-xl: 28px;
+    
+    --font-size-xs: 12px;
+    --font-size-sm: 14px;
+    --font-size-md: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 20px;
+    --font-size-xxl: 22px;
+    
+    --border-radius-sm: 10px;
+    --border-radius-md: 12px;
+    --border-radius-lg: 14px;
+    --border-radius-xl: 18px;
+    --border-radius-xxl: 22px;
+    
+    --gap-xs: 10px;
+    --gap-sm: 14px;
+    --gap-md: 18px;
+    --gap-lg: 22px;
+    --gap-xl: 26px;
+    --gap-xxl: 36px;
+    
+    --icon-size-sm: 22px;
+    --icon-size-md: 26px;
+    --icon-size-lg: 30px;
+    --icon-size-xl: 34px;
+  }
+}
+
+// 데스크톱 (1024px+) 최적화
+@media (min-width: 1024px) {
+  :root {
+    --spacing-xs: 8px;
+    --spacing-sm: 12px;
+    --spacing-md: 16px;
+    --spacing-lg: 20px;
+    --spacing-xl: 24px;
+    --spacing-xxl: 28px;
+    --spacing-xxxl: 40px;
+    
+    --padding-xs: 12px;
+    --padding-sm: 16px;
+    --padding-md: 20px;
+    --padding-lg: 24px;
+    --padding-xl: 32px;
+    
+    --font-size-xs: 13px;
+    --font-size-sm: 15px;
+    --font-size-md: 17px;
+    --font-size-lg: 18px;
+    --font-size-xl: 20px;
+    --font-size-xxl: 22px;
+    
+    --border-radius-sm: 12px;
+    --border-radius-md: 14px;
+    --border-radius-lg: 16px;
+    --border-radius-xl: 20px;
+    --border-radius-xxl: 24px;
+    
+    --gap-xs: 12px;
+    --gap-sm: 16px;
+    --gap-md: 20px;
+    --gap-lg: 24px;
+    --gap-xl: 28px;
+    --gap-xxl: 40px;
+    
+    --icon-size-sm: 24px;
+    --icon-size-md: 28px;
+    --icon-size-lg: 32px;
+    --icon-size-xl: 36px;
+  }
+}
+
+// 터치 기기 최적화
+@media (hover: none) {
+  .button {
+    min-height: 44px; // 터치 영역 확대
+    font-size: 16px; // iOS 줌 방지
+  }
+  
+  .sm {
+    min-height: 40px;
+  }
+  
+  .lg {
+    min-height: 48px;
+  }
+}
+
+// 접근성 개선
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .button {
+    border: 2px solid currentColor !important;
+  }
+  
+  .secondary {
+    border-width: 2px !important;
+  }
+} 

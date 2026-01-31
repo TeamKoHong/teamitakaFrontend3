@@ -1,0 +1,279 @@
+{
+  "workflow_name": "M09 북마크 & 지원 내역 모듈 셀렉터 수정",
+  "version": "1.0.0",
+  "module_id": "M09",
+  "module_name": "북마크 & 지원 내역",
+  "file_path": "src/tests/e2e/modules/m09-bookmark.json",
+
+  "problem_analysis": {
+    "current_issues": [
+      "ApplicationHistorySlide 컴포넌트 클래스명 불일치",
+      "MyRecruitmentSlide 컴포넌트 클래스명 불일치",
+      "슬라이드 오버레이 클래스(.application-history-overlay, .my-recruitment-overlay) 확인 필요",
+      "상태 표시(.status-text) 및 액션 버튼(.view-application, .view-applicants) 셀렉터 확인"
+    ],
+    "actual_class_names": {
+      "bookmark_page": ".bookmark-page-container",
+      "bookmark_main": ".bookmark-main",
+      "bookmark_summary": ".bookmark-summary",
+      "summary_text": ".summary-text",
+      "urgent_count": ".urgent-count",
+      "bookmark_stats": ".bookmark-stats",
+      "stat_item": ".stat-item",
+      "stat_number": ".stat-number",
+      "stat_label": ".stat-label",
+      "tab_navigation": ".tab-navigation",
+      "tab_button": ".tab-button",
+      "bookmark_project_list": ".bookmark-project-list",
+      "bookmark_project_card": ".bookmark-project-card",
+      "application_history_overlay": ".application-history-overlay",
+      "application_history_slide": ".application-history-slide",
+      "application_history_header": ".application-history-header",
+      "application_history_title": ".application-history-title",
+      "application_history_close": ".application-history-close",
+      "application_history_list": ".application-history-list",
+      "application_history_card": ".application-history-card",
+      "application_history_status": ".application-history-status",
+      "status_text": ".status-text",
+      "application_history_action": ".application-history-action",
+      "view_application": ".view-application",
+      "my_recruitment_overlay": ".my-recruitment-overlay",
+      "my_recruitment_slide": ".my-recruitment-slide",
+      "my_recruitment_header": ".my-recruitment-header",
+      "my_recruitment_title": ".my-recruitment-title",
+      "my_recruitment_close": ".my-recruitment-close",
+      "my_recruitment_list": ".my-recruitment-list",
+      "my_recruitment_card": ".my-recruitment-card",
+      "my_recruitment_status": ".my-recruitment-status",
+      "my_recruitment_action": ".my-recruitment-action",
+      "view_applicants": ".view-applicants"
+    }
+  },
+
+  "selector_mappings": [
+    {
+      "test_id": "M09-F01-01",
+      "description": "북마크 목록이 표시되는가?",
+      "changes": [],
+      "status": "likely_passing",
+      "note": "셀렉터가 실제 클래스와 일치함"
+    },
+    {
+      "test_id": "M09-F01-02",
+      "description": "마감 임박 안내가 표시되는가?",
+      "changes": [],
+      "status": "likely_passing",
+      "note": ".bookmark-summary, .summary-text 클래스 존재"
+    },
+    {
+      "test_id": "M09-F01-03",
+      "description": "북마크 수가 표시되는가?",
+      "changes": [],
+      "status": "likely_passing",
+      "note": ".bookmark-stats .stat-number, .stat-item 클래스 존재"
+    },
+    {
+      "test_id": "M09-F02-01",
+      "description": "지원한 프로젝트 목록이 표시되는가?",
+      "changes": [
+        {
+          "type": "click_selector",
+          "current": "text=지원완료",
+          "fixed": ".stat-item:nth-child(3), text=지원완료",
+          "note": "'지원완료' stat-item을 클릭하여 슬라이드 열기"
+        },
+        {
+          "type": "wait_selector",
+          "current": ".application-history-overlay, .application-history-slide",
+          "fixed": ".application-history-overlay, .application-history-slide"
+        }
+      ],
+      "status": "needs_verification"
+    },
+    {
+      "test_id": "M09-F02-02",
+      "description": "'지원 완료' 상태가 표시되는가?",
+      "changes": [
+        {
+          "type": "validation",
+          "current": ".application-history-status, .status-text",
+          "fixed": ".application-history-status .status-text, .application-history-card .status-text"
+        }
+      ],
+      "status": "needs_fix"
+    },
+    {
+      "test_id": "M09-F02-03",
+      "description": "지원서 보기가 가능한가?",
+      "changes": [
+        {
+          "type": "click_selector",
+          "current": ".view-application, .application-history-action",
+          "fixed": ".view-application, .application-history-action .view-application"
+        },
+        {
+          "type": "validation",
+          "current": ".application-detail, .my-application, .view-application",
+          "fixed": ".application-detail, .view-application",
+          "note": "지원서 상세 모달/페이지 셀렉터 확인 필요"
+        }
+      ],
+      "status": "needs_verification"
+    },
+    {
+      "test_id": "M09-F03-01",
+      "description": "내가 작성한 모집글 목록이 표시되는가?",
+      "changes": [
+        {
+          "type": "click_selector",
+          "current": "text=내가올린 모집",
+          "fixed": ".stat-item:nth-child(5), text=내가올린 모집",
+          "note": "'내가올린 모집' stat-item을 클릭하여 슬라이드 열기"
+        },
+        {
+          "type": "wait_selector",
+          "current": ".my-recruitment-overlay, .my-recruitment-slide",
+          "fixed": ".my-recruitment-overlay, .my-recruitment-slide"
+        }
+      ],
+      "status": "needs_verification"
+    },
+    {
+      "test_id": "M09-F03-02",
+      "description": "모집글 상태가 표시되는가?",
+      "changes": [
+        {
+          "type": "validation",
+          "current": ".my-recruitment-status, .status-text",
+          "fixed": ".my-recruitment-status .status-text, .my-recruitment-card .status-text"
+        }
+      ],
+      "status": "needs_fix"
+    },
+    {
+      "test_id": "M09-F03-04",
+      "description": "'지원자 보기' 버튼이 동작하는가?",
+      "changes": [
+        {
+          "type": "click_selector",
+          "current": ".view-applicants, .my-recruitment-action span",
+          "fixed": ".view-applicants, .my-recruitment-action .view-applicants"
+        },
+        {
+          "type": "validation",
+          "current": ".view-applicants, .my-recruitment-action",
+          "fixed": ".view-applicants, .my-recruitment-action .view-applicants"
+        }
+      ],
+      "status": "needs_fix"
+    }
+  ],
+
+  "implementation_steps": [
+    {
+      "step": 1,
+      "action": "M09 테스트 실행하여 현재 상태 확인",
+      "command": "npx playwright test --workers=1 --grep 'M09' --reporter=list"
+    },
+    {
+      "step": 2,
+      "action": "실패한 테스트 분석",
+      "details": "에러 메시지 및 DOM 스냅샷 확인"
+    },
+    {
+      "step": 3,
+      "action": "m09-bookmark.json 셀렉터 수정",
+      "file": "src/tests/e2e/modules/m09-bookmark.json"
+    },
+    {
+      "step": 4,
+      "action": "테스트 재실행 및 검증",
+      "command": "npx playwright test --workers=1 --grep 'M09' --reporter=list"
+    }
+  ],
+
+  "fixed_test_json": {
+    "M09-F02-01": {
+      "steps": [
+        { "action": "navigate", "target": "/bookmark" },
+        { "action": "wait", "selector": ".bookmark-page-container", "timeout": 3000 },
+        { "action": "click", "selector": ".stat-item:nth-child(3), text=지원완료" },
+        { "action": "wait", "selector": ".application-history-overlay, .application-history-slide", "timeout": 3000 },
+        { "action": "screenshot", "name": "application-history" }
+      ],
+      "validations": [
+        { "type": "element_visible", "selector": ".application-history-slide, .application-history-list" }
+      ]
+    },
+    "M09-F02-02": {
+      "steps": [
+        { "action": "navigate", "target": "/bookmark" },
+        { "action": "wait", "selector": ".bookmark-page-container", "timeout": 3000 },
+        { "action": "click", "selector": ".stat-item:nth-child(3), text=지원완료" },
+        { "action": "wait", "selector": ".application-history-slide", "timeout": 3000 }
+      ],
+      "validations": [
+        { "type": "element_visible", "selector": ".application-history-status .status-text, .application-history-card .status-text" }
+      ]
+    },
+    "M09-F02-03": {
+      "steps": [
+        { "action": "navigate", "target": "/bookmark" },
+        { "action": "wait", "selector": ".bookmark-page-container", "timeout": 3000 },
+        { "action": "click", "selector": ".stat-item:nth-child(3), text=지원완료" },
+        { "action": "wait", "selector": ".application-history-slide", "timeout": 3000 },
+        { "action": "click", "selector": ".view-application, .application-history-action .view-application" }
+      ],
+      "validations": [
+        { "type": "element_visible", "selector": ".view-application, .application-history-action" }
+      ]
+    },
+    "M09-F03-01": {
+      "steps": [
+        { "action": "navigate", "target": "/bookmark" },
+        { "action": "wait", "selector": ".bookmark-page-container", "timeout": 3000 },
+        { "action": "click", "selector": ".stat-item:nth-child(5), text=내가올린 모집" },
+        { "action": "wait", "selector": ".my-recruitment-overlay, .my-recruitment-slide", "timeout": 3000 },
+        { "action": "screenshot", "name": "my-recruitments" }
+      ],
+      "validations": [
+        { "type": "element_visible", "selector": ".my-recruitment-slide, .my-recruitment-list" }
+      ]
+    },
+    "M09-F03-02": {
+      "steps": [
+        { "action": "navigate", "target": "/bookmark" },
+        { "action": "wait", "selector": ".bookmark-page-container", "timeout": 3000 },
+        { "action": "click", "selector": ".stat-item:nth-child(5), text=내가올린 모집" },
+        { "action": "wait", "selector": ".my-recruitment-slide", "timeout": 3000 }
+      ],
+      "validations": [
+        { "type": "element_visible", "selector": ".my-recruitment-status .status-text, .my-recruitment-card .status-text" }
+      ]
+    },
+    "M09-F03-04": {
+      "steps": [
+        { "action": "navigate", "target": "/bookmark" },
+        { "action": "wait", "selector": ".bookmark-page-container", "timeout": 3000 },
+        { "action": "click", "selector": ".stat-item:nth-child(5), text=내가올린 모집" },
+        { "action": "wait", "selector": ".my-recruitment-slide", "timeout": 3000 },
+        { "action": "click", "selector": ".view-applicants, .my-recruitment-action .view-applicants" }
+      ],
+      "validations": [
+        { "type": "element_visible", "selector": ".view-applicants, .my-recruitment-action" }
+      ]
+    }
+  },
+
+  "expected_results": {
+    "before": "M09 테스트 일부 실패",
+    "after": "M09 테스트 60-80% 통과 예상 (2개 skip 포함)"
+  },
+
+  "notes": [
+    "M09-F02-04 (지원 취소 기능)은 이미 skip 처리됨",
+    "M09-F03-03 (정렬 UI)은 이미 skip 처리됨",
+    "북마크/지원 데이터가 없는 경우 일부 테스트 실패 가능",
+    "슬라이드 오버레이가 정상적으로 열리는지 확인 필요"
+  ]
+}
