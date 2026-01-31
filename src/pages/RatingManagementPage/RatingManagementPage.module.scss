@@ -6,8 +6,11 @@
   max-width: 420px;
   margin: 0 auto;
   padding: 0 12px;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px) + 20px);
   background: $background;
   min-height: 100vh;
+  min-height: 100svh;
 }
 
 .customHeader {

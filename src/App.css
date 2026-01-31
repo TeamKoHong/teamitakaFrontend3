@@ -5,9 +5,24 @@
   box-sizing: border-box;
 }
 
-html,
+/* Safe Area CSS Variables */
+:root {
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+  --bottom-nav-height: 60px;
+}
+
+html {
+  height: 100%;
+  height: -webkit-fill-available;
+}
+
 body {
   height: 100%;
+  min-height: 100%;
+  min-height: -webkit-fill-available;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -16,19 +31,16 @@ body {
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
   overscroll-behavior: none;
-}
-
-body {
   line-height: 1.6;
-  padding-top: env(safe-area-inset-top);
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
   background-color: #F2F2F7;
+  /* Ensure body extends under safe areas */
+  padding: 0;
+  margin: 0;
 }
 
 /* Keyboard handling */
 body.keyboard-visible {
-  padding-bottom: var(--keyboard-height, 0px);
+  --keyboard-height: 0px;
 }
 
 /* App inactive state */
@@ -39,12 +51,73 @@ body.app-inactive {
 #root {
   height: 100%;
   min-height: 100%;
+  min-height: -webkit-fill-available;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Page wrapper - 모든 페이지의 최상위 컨테이너에 적용 */
+.page-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--safe-area-top);
+  padding-left: var(--safe-area-left);
+  padding-right: var(--safe-area-right);
+  min-height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* BottomNav가 있는 페이지용 */
+.page-container.has-bottom-nav {
+  padding-bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom));
+}
+
+/* Fixed header가 있는 페이지용 - 상단 여백 필요 없음 */
+.page-container.has-fixed-header {
+  padding-top: 0;
+}
+
+/* Fixed header 스타일 */
+.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding-top: var(--safe-area-top);
+  padding-left: var(--safe-area-left);
+  padding-right: var(--safe-area-right);
+  background: #FFFFFF;
+}
+
+/* Fixed header 아래 콘텐츠 시작점 */
+.header-spacer {
+  height: calc(var(--safe-area-top) + 44px);
+  flex-shrink: 0;
 }
 
 /* Bottom spacer for pages with BottomNav */
 .bottom-spacer {
-  height: calc(60px + env(safe-area-inset-bottom));
+  height: calc(var(--bottom-nav-height) + var(--safe-area-bottom));
   flex-shrink: 0;
+}
+
+/* Safe area utility classes */
+.safe-area-top {
+  padding-top: var(--safe-area-top);
+}
+
+.safe-area-bottom {
+  padding-bottom: var(--safe-area-bottom);
+}
+
+.safe-area-all {
+  padding-top: var(--safe-area-top);
+  padding-bottom: var(--safe-area-bottom);
+  padding-left: var(--safe-area-left);
+  padding-right: var(--safe-area-right);
 }
 
 ul,

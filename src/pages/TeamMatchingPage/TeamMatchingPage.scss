@@ -9,10 +9,14 @@
     overflow: hidden;
     position: relative;
     height: 100vh;
+    height: 100svh;
     display: flex;
     flex-direction: column;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
     .section-title {
-    font-size: 18px !important; 
+    font-size: 18px !important;
     font-weight: 600;
 }
 }
@@ -20,8 +24,10 @@
 // --- 메인 컨텐츠 ---
 .app-content {
     padding: 12px 0 100px 0;
+    padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px) + 40px);
     flex-grow: 1;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 // --- 공통 섹션 스타일 ---

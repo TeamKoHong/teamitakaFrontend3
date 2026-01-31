@@ -4,22 +4,27 @@
     position: fixed;
     bottom: 0;
     left: 0;
+    right: 0;
     width: 100%;
     z-index: 100;
     display: flex;
     flex-direction: column;
-    box-sizing: border-box; // Explicit box model
+    box-sizing: border-box;
+    background-color: #ffffff;
+    // Safe area padding - pushes content above home indicator
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-bottom: constant(safe-area-inset-bottom); // iOS 11.0-11.2
 }
 
 .visualRail {
-    height: 60px; // Adjusted: content height (excluding safe area)
+    height: 60px;
     background-color: #ffffff;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.25); // As per design intent
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-sizing: border-box; // Explicit box model
+    box-sizing: border-box;
 }
 
 .navItems {
@@ -68,9 +73,7 @@
 }
 
 .safeInset {
-    width: 100%;
-    height: env(safe-area-inset-bottom);
-    background-color: #ffffff; // Extend background visual through safe area
-    margin-top: -1px; // Prevent sub-pixel gap
-    box-sizing: border-box; // Explicit box model
+    // Safe area is now handled by padding on bottomNavRoot
+    // This div is kept for backwards compatibility but renders nothing
+    display: none;
 }

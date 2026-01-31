@@ -27,9 +27,10 @@ const config: CapacitorConfig = {
     },
   },
   ios: {
-    contentInset: 'automatic',
+    contentInset: 'never',
     preferredContentMode: 'mobile',
     scheme: 'teamitaka',
+    backgroundColor: '#FFFFFF',
   },
   android: {
     allowMixedContent: true,

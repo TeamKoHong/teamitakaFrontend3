@@ -22,8 +22,11 @@ $keywords-bottom-space: 16px;
 .main-page {
   background: $bg;
   min-height: 100vh;
+  min-height: 100svh;
   padding: 0 16px;
-  padding-top: $header-h;
+  padding-top: calc(#{$header-h} + env(safe-area-inset-top, 0px));
+  padding-left: calc(16px + env(safe-area-inset-left, 0px));
+  padding-right: calc(16px + env(safe-area-inset-right, 0px));
   color: $ink;
 
   .header {
@@ -32,12 +35,15 @@ $keywords-bottom-space: 16px;
     left: 0;
     right: 0;
     z-index: 100;
-    height: $header-h;
+    height: calc(#{$header-h} + env(safe-area-inset-top, 0px));
+    padding-top: env(safe-area-inset-top, 0px);
     display: flex;
     align-items: center;
     justify-content: space-between;
     background: $card;
-    padding: 16px 20px;
+    padding-left: calc(20px + env(safe-area-inset-left, 0px));
+    padding-right: calc(20px + env(safe-area-inset-right, 0px));
+    padding-bottom: 0;
     border-bottom: none;
     box-sizing: border-box;
   }

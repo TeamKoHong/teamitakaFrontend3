@@ -1,10 +1,14 @@
 // 북마크 페이지 스타일링
 .bookmark-page-container {
   min-height: 100vh;
+  min-height: 100svh;
   background-color: #f8f9fa;
   display: flex;
   flex-direction: column;
-  padding-top: 64px; // 헤더 높이만큼 상단 패딩
+  padding-top: calc(64px + env(safe-area-inset-top, 0px)); // 헤더 높이 + SafeArea
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px) + 20px);
 }
 
 .bookmark-main {

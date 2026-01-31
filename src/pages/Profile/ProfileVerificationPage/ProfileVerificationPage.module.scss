@@ -1,6 +1,7 @@
 .container {
   width: 100%;
   min-height: 100vh;
+  min-height: 100svh;
   position: relative;
   background-color: #fffdfc;
   overflow: hidden;
@@ -8,6 +9,10 @@
   flex-direction: column;
   font-family: 'Pretendard', sans-serif;
   color: #140805;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 /* Custom Header Override */
