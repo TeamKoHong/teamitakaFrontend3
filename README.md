@@ -120,14 +120,20 @@ src/
 │   │   ├── PullToRefresh.js # 당겨서 새로고침
 │   │   ├── PageTransition.js # 페이지 전환 애니메이션
 │   │   └── CollapsibleHeader.js # iOS Large Title 헤더
+│   ├── CharacterBanner/    # 캐릭터 배너
+│   ├── MyProjectSection/   # 나의 프로젝트 섹션
+│   ├── ProfileHeader/      # 프로필 헤더
+│   ├── TeamAnalysisBox/    # 팀플 능력치 분석
 │   └── Home/               # 홈 화면 컴포넌트
 ├── contexts/               # React Context
 │   ├── AuthContext.js      # 인증 상태
+│   ├── PushNotificationContext.js # 푸시 알림 상태
 │   └── UniversityFilterContext.js
 ├── features/               # 기능별 모듈
 │   └── type-test/          # 성향 테스트
 ├── hooks/                  # 커스텀 훅
-│   └── useNativeApp.js     # 네이티브 기능 훅
+│   ├── useNativeApp.js     # 네이티브 기능 훅
+│   └── usePushNotifications.js # 푸시 알림 훅
 ├── pages/                  # 페이지 컴포넌트
 │   ├── LoginPage/
 │   ├── RegisterPage/
@@ -273,6 +279,52 @@ import PullToRefresh from './components/Common/PullToRefresh';
 <PullToRefresh onRefresh={handleRefresh}>
   <YourContent />
 </PullToRefresh>
+```
+
+### Push Notifications
+
+```jsx
+// App.js에서 Provider 추가
+import { PushNotificationProvider } from './contexts/PushNotificationContext';
+
+function App() {
+  return (
+    <PushNotificationProvider>
+      {/* 앱 컴포넌트들 */}
+    </PushNotificationProvider>
+  );
+}
+
+// 컴포넌트에서 사용
+import { usePush } from './contexts/PushNotificationContext';
+
+const NotificationButton = () => {
+  const { requestPermission, permissionStatus, token } = usePush();
+
+  return (
+    <button onClick={requestPermission}>
+      알림 허용 ({permissionStatus})
+    </button>
+  );
+};
+```
+
+### 프로필 컴포넌트
+
+```jsx
+import ProfileHeader from './components/ProfileHeader/ProfileHeader';
+import CharacterBanner from './components/CharacterBanner/CharacterBanner';
+import MyProjectSection from './components/MyProjectSection/MyProjectSection';
+import TeamAnalysisBox from './components/TeamAnalysisBox/TeamAnalysisBox';
+
+<ProfileHeader
+  userData={userData}
+  isVerified={true}
+  onSettingClick={() => navigate('/settings')}
+/>
+<CharacterBanner />
+<MyProjectSection onAddProject={() => navigate('/project/new')} />
+<TeamAnalysisBox />
 ```
 
 ---
