@@ -62,6 +62,7 @@ import RegisterCompletePage from './pages/RegisterCompletePage/RegisterCompleteP
 
 import { AuthProvider } from './contexts/AuthContext';
 import { UniversityFilterProvider } from './contexts/UniversityFilterContext';
+import { PushNotificationProvider } from './contexts/PushNotificationContext';
 import GlobalToastSystem from './components/Common/GlobalToastSystem';
 import AuthEventBridge from './components/Common/AuthEventBridge';
 import ProtectedRoute, { PublicRoute } from './components/ProtectedRoute';
@@ -146,6 +147,7 @@ const App = () => {
   return (
     <Router>
       <NativeAppInitializer>
+      <PushNotificationProvider>
       <AuthProvider>
         <UniversityFilterProvider>
           <GlobalToastSystem />
@@ -221,6 +223,7 @@ const App = () => {
           </Routes>
         </UniversityFilterProvider>
       </AuthProvider>
+      </PushNotificationProvider>
       </NativeAppInitializer>
     </Router>
   );
