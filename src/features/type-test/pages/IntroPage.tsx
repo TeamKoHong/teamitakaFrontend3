@@ -24,6 +24,21 @@ export default function IntroPage() {
         fetchParticipantCount().then(setParticipantCount);
     }, []);
 
+    // 브라우저 뒤로가기 시 /profile로 이동
+    useEffect(() => {
+        const handlePopState = () => {
+            router.replace('/profile');
+        };
+
+        // 히스토리에 현재 상태 추가 (뒤로가기 감지용)
+        window.history.pushState(null, '', window.location.href);
+        window.addEventListener('popstate', handlePopState);
+
+        return () => {
+            window.removeEventListener('popstate', handlePopState);
+        };
+    }, [router]);
+
     const handleStartTest = () => {
         router.push('/type-test/quiz', { state: { from } });
     };

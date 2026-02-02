@@ -4,15 +4,15 @@
   align-items: center;
   gap: 10px;
   width: 100%;
-  background: #F5F5F5;
+  background: #fffdfc; // Figma spec
   border-radius: 100px;
-  padding: 8px 16px 8px 8px;
+  padding: 4px 16px 4px 3px; // Figma spec
 }
 
-// Figma: 40px x 40px
+// Figma: 48px x 48px
 .avatar {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;

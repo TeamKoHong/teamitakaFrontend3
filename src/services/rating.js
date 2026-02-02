@@ -1,5 +1,6 @@
 // src/services/rating.js
 import { apiFetch } from './api';
+import { formatDate } from '../utils/dateUtils';
 
 // ========== 백엔드 → 프론트엔드 필드 매핑 ==========
 
@@ -141,6 +142,7 @@ export async function fetchRatingProjectData(projectId, currentUserId) {
         id: review.reviewee_id,
         name: review.reviewee_username || '팀원',
         avatar: null,
+        task: review.target_member_task || review.reviewee_task || null, // 담당 업무
       },
       overallScore: review.overall_rating,
       categoryScores: [
@@ -169,7 +171,7 @@ export async function fetchRatingProjectData(projectId, currentUserId) {
     return {
       id: projectId,
       name: project.title || project.name || '프로젝트',
-      period: `${project.start_date || ''} ~ ${project.end_date || ''}`,
+      period: `${formatDate(project.start_date)} ~ ${formatDate(project.end_date)}`,
       meetingTime: project.meeting_time || '',
       dDay: { value: dDay, percent: ddayPercent },
       resultLink: project.result_link || project.resultLink || null,

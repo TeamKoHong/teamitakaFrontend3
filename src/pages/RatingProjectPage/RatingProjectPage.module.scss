@@ -124,7 +124,7 @@ $border-light: #e0e0e0;
   transition: background-color 0.3s ease, transform 0.2s ease;
 
   &:hover {
-    background-color: darken($accent-color, 10%); // Use darken or color.adjust
+    background-color: #208538; // darkened accent-color
     transform: translateY(-2px);
   }
 
@@ -143,24 +143,24 @@ $border-light: #e0e0e0;
 }
 
 .pageBg {
-  padding-top: 69px; // Header(47px) + margin(22px)
-  padding-bottom: 88px;
+  padding-top: 88px; // Header(64px) + margin(24px)
+  padding-bottom: 0; // BottomNav는 fixed이므로 scrollArea에서 처리
   background: #f2f2f2;
   min-height: 100vh;
   box-sizing: border-box;
 }
 
 // Figma 스펙: 각 섹션별 개별 padding, gap 없음
+// 좌우 패딩은 각 섹션에서 16px로 개별 관리 (scrollArea에서는 0)
 .scrollArea {
   display: flex;
   flex-direction: column;
   gap: 0; // 섹션별 개별 간격 적용
   padding: 0;
   box-sizing: border-box;
-  // 스크롤 영역을 헤더(47px)+여백(22px)=69px와 하단네비(88px) 사이로 제한
-  height: calc(100vh - 69px - 88px);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  // 하단 여백은 마지막 섹션(commentsSection)에서 91px로 처리
 }
 
 .card,
@@ -233,10 +233,7 @@ $border-light: #e0e0e0;
   margin-bottom: var(--gap-md);
 }
 
-// 슬라이더 그룹과 하단 네비 사이 공백 확보 (BottomNav 88px + 여유공간 12px)
-.scrollArea {
-  padding-bottom: 100px;
-}
+// padding-bottom은 위의 .scrollArea에서 120px로 설정됨
 
 .divider {
   height: 1px;
@@ -357,13 +354,16 @@ $border-light: #e0e0e0;
   color: #C7C7CB;
 }
 
-// 섹션 라벨 통일 - 부모 섹션의 padding과 정렬되도록 padding 제거
+// Figma: Pretendard SemiBold 16px, color #000
 .sectionLabel {
+  font-family: 'Pretendard', sans-serif;
   padding: 0;
   font-size: 16px;
   font-weight: 600;
-  color: #222;
-  margin: 0 0 8px 0;
+  color: #000;
+  margin: 0;
+  line-height: 140.98%;
+  text-align: left;
 }
 
 .sectionLabelTight {
@@ -395,19 +395,22 @@ $border-light: #e0e0e0;
   }
 }
 
-// 섹션 부제목 스타일 - 부모 섹션의 padding과 정렬
+// Figma: Pretendard Medium 12px, color #403e3e
 .sectionSubLabel {
+  font-family: 'Pretendard', sans-serif;
   padding: 0;
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #403e3e;
+  line-height: 140.98%;
+  margin: 0;
 }
 
 // ===== Figma 스펙 기준 섹션 간격 =====
 
-// 프로젝트 카드: Figma padding 24px 16px 8px
+// 프로젝트 카드: Figma padding 0 16px 8px (상단 여백은 pageBg에서 처리)
 .projectCardSection {
-  padding: 24px 16px 8px;
+  padding: 0 16px 8px;
 }
 
 // 팀원 목록: Figma padding 8px 16px
@@ -420,12 +423,12 @@ $border-light: #e0e0e0;
   padding: 8px 16px;
 }
 
-// 별점 섹션: Figma padding 24px 16px 24px
+// 별점 섹션: Figma padding 32px 16px 24px
 .ratingSection {
   background: transparent;
   border-radius: 0;
   box-shadow: none;
-  padding: 24px 16px 24px;
+  padding: 32px 16px 24px;
   text-align: center;
 }
 
@@ -434,21 +437,40 @@ $border-light: #e0e0e0;
   padding: 8px 16px;
 }
 
-// 카테고리별 점수 (내가 한 평가 모드)
+// 카테고리별 점수 (내가 한 평가 모드) - 제목은 카드 밖에 위치
 .slidersSection {
-  background: #fff;
-  border-radius: var(--border-radius-xl);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  padding: var(--spacing-lg);
-  margin: 8px 16px;
+  padding: 0 16px;
+  margin: 0;
 }
 
-// 팀원 평가지: Figma padding 24px 16px 8px
+// Figma: Pretendard SemiBold 16px, x값 16px (padding으로 처리)
+.slidersSectionTitle {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  margin: 0 0 8px 0;
+}
+
+// 팀원 평가지: Figma padding 32px 16px, 하단 여백 = 30px + BottomNav 61px = 91px
 .commentsSection {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 16px 16px 8px;
+  gap: 0;
+  padding: 32px 16px 91px;
+}
+
+// 팀원 평가지 헤더 (제목 + 부제목) - Figma: gap 4px, padding-bottom 8px
+.commentsSectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 8px;
+}
+
+// 코멘트 카드 wrapper - Figma: padding 4px 0 (좌우는 부모에서 처리)
+.commentCardWrapper {
+  padding: 4px 0;
 }
 
 .emptyComments {
@@ -520,7 +542,7 @@ $border-light: #e0e0e0;
   transition: background 0.2s;
 
   &:hover {
-    background: darken(#f76241, 8%);
+    background: #e55536;
   }
 }
 
@@ -667,7 +689,7 @@ $border-light: #e0e0e0;
   box-shadow: 0 2px 8px rgba(247, 98, 65, 0.08);
 
   &:hover {
-    background: darken(#f76241, 8%);
+    background: #e55536;
     transform: translateY(-1px);
   }
 
@@ -805,8 +827,8 @@ $border-light: #e0e0e0;
   }
 
   .scrollArea {
-    padding: var(--spacing-md) var(--padding-xs) 0 var(--padding-xs);
-    gap: var(--gap-sm);
+    padding: 0; // 좌우 패딩은 각 섹션에서 16px로 개별 관리
+    gap: 0;
   }
 
   .contentWrap {
@@ -891,8 +913,8 @@ $border-light: #e0e0e0;
   }
 
   .scrollArea {
-    padding: var(--spacing-lg) var(--padding-sm) 0 var(--padding-sm);
-    gap: var(--gap-md);
+    padding: 0; // 좌우 패딩은 각 섹션에서 16px로 개별 관리
+    gap: 0;
   }
 
   .contentWrap {
@@ -982,7 +1004,7 @@ $border-light: #e0e0e0;
   }
 
   .scrollArea {
-    padding: var(--spacing-xl) var(--padding-md) 0 var(--padding-md);
+    padding: 0; // 좌우 패딩은 각 섹션에서 16px로 개별 관리
   }
 }
 
@@ -1035,7 +1057,7 @@ $border-light: #e0e0e0;
   }
 
   .scrollArea {
-    padding: var(--spacing-xxl) var(--padding-lg) 0 var(--padding-lg);
+    padding: 0; // 좌우 패딩은 각 섹션에서 16px로 개별 관리
   }
 }
 

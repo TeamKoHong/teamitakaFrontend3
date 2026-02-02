@@ -10,6 +10,10 @@
     background: linear-gradient(to top, $background 80%, rgba(242, 242, 242, 0));
     pointer-events: none; // Allow clicks through transparent part
     z-index: 100;
+
+    &.solid {
+        background: $background;
+    }
 }
 
 .inner {

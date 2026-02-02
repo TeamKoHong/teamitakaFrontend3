@@ -28,7 +28,7 @@ $track-bg: #ececec;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
 }
 
 // Header
@@ -221,15 +221,28 @@ $track-bg: #ececec;
 
 // Step Container
 .stepContainer {
-  position: relative; // Required for absolute-positioned topBackgroundBox
+  position: relative;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+// Step 3 Full Page Container
+.step3Container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: #f2f2f2;
+  z-index: 1000;
+}
+
 .stepIndicatorContainer {
-  margin: 8px 0; // Adjusted to match Figma spec
+  margin: 16px 0 14px; // Figma spec: 16px top, 14px bottom
   display: flex;
   justify-content: flex-start;
   width: 100%;
@@ -253,16 +266,16 @@ $track-bg: #ececec;
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 8px; // Adjusted to match Figma spec
-  margin-bottom: 30px;
+  gap: 16px; // Figma spec
+  margin-bottom: 16px;
 }
 
 // Category Item
 .categoryItem {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 12px 16px;
+  gap: 12px;
+  padding: 16px;
   background-color: #ffffff;
   border-radius: 12px;
   border: 1px solid #ececec;
@@ -270,20 +283,22 @@ $track-bg: #ececec;
 
 .categoryHeader {
   display: flex;
-  flex-direction: column; // Stack title and description
+  flex-direction: column;
   align-items: flex-start;
-  gap: 4px; // Reduce gap for tighter stacking
+  gap: 2px;
 
   .categoryName {
-    font-size: 13px; // Requested: 13px
-    font-weight: 600; // Requested: semibold
+    font-size: 14px;
+    font-weight: 600;
     color: #140805;
+    line-height: 1.4;
   }
 
   .categoryDescription {
-    font-size: 10px; // Requested: 10px
-    font-weight: 400; // Requested: regular
+    font-size: 11px;
+    font-weight: 400;
     color: #807c7c;
+    line-height: 1.4;
   }
 }
 
@@ -293,7 +308,8 @@ $track-bg: #ececec;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 0 10px; // Provide some side padding for knob overhang
+  padding: 0 8px;
+  align-items: center;
 }
 
 .ratingTrackArea {
@@ -361,56 +377,76 @@ $track-bg: #ececec;
 
 // Step 2 Styles
 .overallRatingSection {
-  // Removed @extend .categoryItem to remove border/box
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-  padding: 0px 16px;
-  gap: 4px;
+  padding: 0;
+  gap: 0;
+  width: 100%;
 
   .overallLabel {
     font-size: 18px;
     font-weight: 600;
     color: #140805;
     line-height: 140.98%;
-    margin-bottom: 0;
+    margin-bottom: 4px; // 14px gap to subtitle
   }
 
   .overallSubtitle {
     font-size: 12px;
     color: #807c7c;
     letter-spacing: -0.01em;
-    margin-bottom: 20px;
+    margin-bottom: 32px; // Figma spec: 32px gap to stars
   }
 }
 
-// ... (Role Section unchanged) ...
+// RatingStars 가운데 정렬 wrapper
+.starsWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+}
+
+// Role Section - TextArea without white box
+.roleSection {
+  width: 100%;
+  padding: 0;
+  margin-top: 32px; // Figma spec: 32px gap from stars
+}
+
+// Custom TextArea styling - remove white box background
+.customTextArea {
+  div[class*="inputWrapper"] {
+    background-color: #f2f2f2 !important;
+    border: none !important;
+  }
+}
 
 // Step 3 Styles - Simplified flex-based layout
 
 // Top Section - White background with header, card and date
 .topSection {
-  width: calc(100% + 32px);
-  margin-left: -16px;
-  margin-right: -16px;
+  width: 100%;
   background-color: #fffdfc;
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.15);
-  padding: 0 16px 20px; // Increased bottom padding
+  padding: 0 16px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px; // Increased gap between elements
+  gap: 8px;
 
   // Modal header with title and close button
   .modalHeader {
     width: 100%;
+    max-width: 390px;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    height: 56px; // Slightly taller for better spacing
-    margin-bottom: 4px; // Reduced bottom margin
+    height: 56px;
+    margin-bottom: 4px;
 
     .headerTitle {
       font-size: 17px;
@@ -420,7 +456,7 @@ $track-bg: #ececec;
 
     .closeButton {
       position: absolute;
-      right: 16px;
+      right: 0;
       background: none;
       border: none;
       font-size: 22px;
@@ -495,29 +531,21 @@ $track-bg: #ececec;
 .evaluationDate {
   width: 100%;
   max-width: 420px;
-  font-size: 13px; // Slightly larger
-  color: #666666; // Slightly lighter gray
+  font-size: 12px;
+  color: #807c7c;
   text-align: right;
-  margin-top: -8px; // Pull closer to card
-  // User wanted position fix. Usually right aligned below card is standard, 
-  // but if user says "position fix", maybe they want it inside? 
-  // For now keeping right aligned but ensuring margin.
-  margin-top: 4px;
+  padding-right: 4px;
 }
 
-// Bottom Section - Gray background with centered content
-.bottomSection {
-  width: calc(100% + 32px);
-  margin-left: -16px;
-  margin-right: -16px;
+// Gray Section - fills remaining space
+.graySection {
   flex: 1;
-  min-height: calc(100vh - 280px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 24px 16px 34px; // Adjusted padding-bottom for Safari balance
-  background-color: inherit;
+  padding: 40px 16px 34px;
+  background-color: #f2f2f2;
 
   // Centered content wrapper (check icon + message)
   .centeredContent {

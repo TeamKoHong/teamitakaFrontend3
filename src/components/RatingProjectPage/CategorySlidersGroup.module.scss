@@ -1,13 +1,17 @@
 @use '../../styles/variables' as *;
 
+// Figma: gap 24px between categories
 .group {
     display: flex;
     flex-direction: column;
-    margin: $spacing-md 0;
+    margin: 0;
 }
 
 // Figma 스펙: border-radius 24px, padding 24px
 .unifiedCard {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
     background: $white;
     border-radius: 24px;
     box-shadow: $shadow-sm;
@@ -15,11 +19,12 @@
 }
 
 .row {
-    padding: 12px 0;
+    padding: 0;
 }
 
+// Figma: 카테고리 사이 구분선
 .divider {
     height: 1px;
     background: #eee;
-    margin: $spacing-xs 0;
+    margin: 0;
 }

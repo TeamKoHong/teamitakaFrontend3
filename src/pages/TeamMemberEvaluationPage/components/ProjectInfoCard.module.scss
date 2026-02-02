@@ -11,12 +11,11 @@
     flex-direction: column;
     align-items: center;
     box-shadow: $shadow-card;
-    overflow: hidden;
 }
 
 .projectHeader {
     width: 100%;
-    min-height: 140px;
+    min-height: 121px;
     border-radius: $border-radius-lg;
     background-color: #F0F0F0;
     background-size: cover;
@@ -24,7 +23,7 @@
     position: relative;
     padding: 23px 26px;
     box-sizing: border-box;
-    margin-bottom: 20px;
+    margin-bottom: 8px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -50,6 +49,8 @@
     font-weight: 600;
     color: $text-primary;
     margin-bottom: 8px;
+    word-break: keep-all;
+    overflow-wrap: break-word;
 }
 
 .infoRow {
@@ -82,7 +83,7 @@
 .teamAvatars {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 16px;
 }
 
@@ -90,7 +91,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 6px; // Figma spec: avatar to name
     cursor: pointer;
     transition: opacity 0.2s;
 

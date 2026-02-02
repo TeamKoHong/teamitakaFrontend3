@@ -205,19 +205,21 @@ function RatingProjectPage(props) {
           />
         </div>
 
-        {/* 5. 한 줄 요약 (장점/개선점) */}
-        <div className={styles.summarySection}>
-          <div className={styles.sectionLabel}>한 줄 요약</div>
-          <ProsConsCards
-            good={summary?.good || []}
-            improve={summary?.improve || []}
-          />
-        </div>
+        {/* 5. 한 줄 요약 (장점/개선점) - 내가 받은 평가 모드에서만 표시 */}
+        {!isGivenMode && (
+          <div className={styles.summarySection}>
+            <div className={styles.sectionLabel}>한 줄 요약</div>
+            <ProsConsCards
+              good={summary?.good || []}
+              improve={summary?.improve || []}
+            />
+          </div>
+        )}
 
         {/* 6. 능력 별 점수 (내가 한 평가 모드에서만 표시) */}
         {isGivenMode && (
           <div className={styles.slidersSection}>
-            <div className={styles.sectionLabel}>능력 별 점수</div>
+            <div className={styles.slidersSectionTitle}>능력 별 점수</div>
             <CategorySlidersGroup
               items={givenRating ? givenRating.categoryScores : sliders}
               readOnly
@@ -228,24 +230,29 @@ function RatingProjectPage(props) {
 
         {/* 7. 평가 코멘트 */}
         <div className={styles.commentsSection}>
-          <div className={styles.sectionLabel}>팀원 평가지</div>
-          <div className={styles.sectionSubLabel}>
-            업무 분담 및 구체적인 역할은 무엇이었나요?
+          <div className={styles.commentsSectionHeader}>
+            <div className={styles.sectionLabel}>팀원 평가지</div>
+            <div className={styles.sectionSubLabel}>
+              업무 분담 및 구체적인 역할은 무엇이었나요?
+            </div>
           </div>
           {isGivenMode && givenRating ? (
-            <EvaluationCommentCard
-              avatar={givenRating.targetMember.avatar}
-              text={givenRating.comment}
-            />
+            <div className={styles.commentCardWrapper}>
+              <EvaluationCommentCard
+                avatar={givenRating.targetMember.avatar}
+                text={givenRating.comment}
+              />
+            </div>
           ) : (
             comments.length > 0 ? (
               comments.map((c, i) => (
-                <EvaluationCommentCard
-                  key={i}
-                  avatar={c.avatar}
-                  text={c.text}
-                  onClick={() => navigate(`/evaluation/project/${projectId}/feedback/${c.memberId || i}`)}
-                />
+                <div key={i} className={styles.commentCardWrapper}>
+                  <EvaluationCommentCard
+                    avatar={c.avatar}
+                    text={c.text}
+                    onClick={() => navigate(`/evaluation/project/${projectId}/feedback/${c.memberId || i}`)}
+                  />
+                </div>
               ))
             ) : (
               <div className={styles.emptyComments}>

@@ -1,23 +1,24 @@
-// Figma: padding 8px 16px, gap 16px
+// Figma: padding 8px 0 (좌우는 부모 섹션에서 처리), gap 16px
 .wrapper {
   display: flex;
   gap: 16px;
-  padding: 8px 16px;
+  padding: 8px 0;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  font-family: 'Pretendard', sans-serif;
 
   &::-webkit-scrollbar {
     display: none;
   }
 }
 
-// Figma: gap 8px (avatar-name), gap 4px (name-role)
+// Figma: width 55px, gap 8px (avatar to text)
 .item {
+  width: 55px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  min-width: 60px;
 }
 
 // Figma: 55px x 55px
@@ -26,27 +27,34 @@
   height: 55px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
 }
 
-// Figma: 14px, weight 600
+// Text group wrapper - Figma: gap 4px
+.textGroup {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+// Figma: 14px, weight 600, color #807c7c (unselected)
 .name {
+  align-self: stretch;
   font-size: 14px;
   font-weight: 600;
-  color: #222;
+  color: #807c7c;
   text-align: center;
-  white-space: nowrap;
 }
 
-// Figma: 12px, color #403E3E
+// Figma: 12px, color #807c7c (unselected)
 .role {
+  align-self: stretch;
   font-size: 12px;
   font-weight: 400;
-  color: #403E3E;
+  color: #807c7c;
   text-align: center;
-  white-space: nowrap;
-  margin-top: -4px;
 }
 
 // 클릭 가능한 아이템 스타일
@@ -65,15 +73,18 @@
   }
 }
 
-// 선택된 아이템 스타일
+// 선택된 아이템 스타일 - Figma: name #000, role #403e3e, avatar orange stroke (outside)
 .selected {
   .avatar {
-    border: 3px solid #F76241;
-    box-shadow: 0 0 0 3px rgba(247, 98, 65, 0.2);
+    outline: 2px solid #F76241;
+    outline-offset: 0px;
   }
 
   .name {
-    color: #F76241;
-    font-weight: 700;
+    color: #000;
+  }
+
+  .role {
+    color: #403e3e;
   }
 }

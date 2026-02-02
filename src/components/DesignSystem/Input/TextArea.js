@@ -9,6 +9,7 @@ const TextArea = ({
     maxLength,
     showCount = false,
     error = false,
+    variant = 'default', // 'default' | 'transparent'
     className,
     ...props
 }) => {
@@ -18,7 +19,7 @@ const TextArea = ({
         <div className={`${styles.container} ${className || ''}`}>
             {label && <label className={styles.label}>{label}</label>}
 
-            <div className={`${styles.inputWrapper} ${error ? styles.error : ''}`}>
+            <div className={`${styles.inputWrapper} ${error ? styles.error : ''} ${variant === 'transparent' ? styles.transparent : ''}`}>
                 <textarea
                     className={styles.textarea}
                     value={value}

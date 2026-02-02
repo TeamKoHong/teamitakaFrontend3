@@ -4,24 +4,25 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    gap: 16px;
+    gap: 12px; // Figma spec
 }
 
 .label {
-    font-size: $font-size-h2;
-    font-weight: $font-weight-bold;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 18px;
+    font-weight: 600; // SemiBold
     color: $text-primary;
-    line-height: 1.4;
+    line-height: 140.98%;
 }
 
 .inputWrapper {
     position: relative;
     width: 100%;
-    min-height: 162px;
+    min-height: 199px; // Figma spec: content 199px + padding 32px = 231px total
     background-color: $white;
     border: 1px solid #d1cccb;
     border-radius: 20px;
-    padding: 16px;
+    padding: 16px; // Figma spec: 16px all sides
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -33,6 +34,11 @@
 
     &.error {
         border-color: $error-color;
+    }
+
+    &.transparent {
+        background-color: transparent;
+        border: 1px solid #d1cccb;
     }
 }
 

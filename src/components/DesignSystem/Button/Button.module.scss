@@ -49,7 +49,7 @@
         color: $white;
 
         &:hover:not(:disabled) {
-            background-color: darken($primary-color, 5%);
+            background-color: #e55536; // darkened primary-color
         }
 
         &:disabled {
@@ -64,7 +64,7 @@
         color: $text-secondary;
 
         &:hover:not(:disabled) {
-            background-color: darken(#DADADA, 5%);
+            background-color: #c7c7c7; // darkened #DADADA
         }
     }
 
@@ -87,7 +87,7 @@
     &.md {
         height: 59px; // Figma spec
         font-size: 15px;
-        padding: 0 $spacing-xxl;
+        padding: 18px 24px; // Figma spec: 18px vertical
     }
 
     &.lg {

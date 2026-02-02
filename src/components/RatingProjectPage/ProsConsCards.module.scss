@@ -1,6 +1,6 @@
 @use '../../styles/variables' as *;
 
-// Figma 스펙: gap 0, height 72px, radius 10px
+// Figma 스펙: gap 0 (붙어있음), height 72px, radius 10px
 .wrap {
   display: flex;
   gap: 0;
@@ -29,8 +29,9 @@
   color: $white;
 }
 
-// Figma: 11px, weight 600
+// Figma: Pretendard SemiBold 11px
 .badge {
+  font-family: 'Pretendard', sans-serif;
   font-size: 11px;
   font-weight: 600;
   margin-bottom: 4px;
@@ -44,12 +45,14 @@
   overflow: hidden;
 }
 
-// Figma: 10px, line-height 165.04%
+// Figma: Pretendard Regular 10px, line-height 165.04%
 .list li {
+  font-family: 'Pretendard', sans-serif;
   position: relative;
   padding-left: 10px;
   line-height: 165.04%;
   font-size: 10px;
+  font-weight: 400;
   margin: 2px 0;
   word-break: keep-all;
   white-space: normal;

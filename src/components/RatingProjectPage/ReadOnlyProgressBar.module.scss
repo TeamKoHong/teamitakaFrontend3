@@ -15,11 +15,11 @@
   align-items: center;
 }
 
-// Figma: 13px, weight 600, color #403E3E
+// Figma: 13px, weight 600, color #140805
 .label {
-  font-size: 14px; // Slightly bumped for readability
-  font-weight: 700;
-  color: #333;
+  font-size: 13px;
+  font-weight: 600;
+  color: #140805;
 }
 
 .value {
@@ -28,19 +28,19 @@
   font-weight: 700;
 }
 
-// Figma: height 7px -> 8px for cleaner render
+// Figma: height 7px, border-radius 50px
 .track {
-  height: 8px;
-  background: #EFEFEF; // Slightly softer gray
-  border-radius: 10px;
+  height: 7px;
+  background: #ECECEC; // Figma spec
+  border-radius: 50px;
   overflow: hidden;
 }
 
-// Branding Orange Fill
+// Figma: solid #F76241
 .fill {
   height: 100%;
-  background: linear-gradient(90deg, #F76241 0%, #FF8A65 100%); // Premium gradient
-  border-radius: 10px;
+  background: #F76241; // Figma spec (solid)
+  border-radius: 50px;
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); // Smooth easing
   box-shadow: 0 1px 2px rgba(247, 98, 65, 0.2); // Soft glow
 }
@@ -55,8 +55,8 @@
 
 // Figma: 10px, color #807C7C
 .scaleNum {
-  font-size: 11px;
-  color: #999;
+  font-size: 10px;
+  color: #807C7C;
   font-weight: 500;
   width: 16px;
   text-align: center;

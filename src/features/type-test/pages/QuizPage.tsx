@@ -88,6 +88,26 @@ export default function QuizPage() {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [handleBack]);
 
+    // 브라우저 뒤로가기 시 이전 질문으로 이동
+    useEffect(() => {
+        // 최초 마운트 시에만 히스토리 상태 추가
+        window.history.pushState({ quiz: true }, '', window.location.href);
+    }, []);
+
+    useEffect(() => {
+        const handlePopState = () => {
+            // 뒤로가기 시 다시 pushState하여 페이지 이탈 방지
+            window.history.pushState({ quiz: true }, '', window.location.href);
+            handleBack();
+        };
+
+        window.addEventListener('popstate', handlePopState);
+
+        return () => {
+            window.removeEventListener('popstate', handlePopState);
+        };
+    }, [handleBack]);
+
     return (
         <div className="tw-min-h-screen" style={{
             fontFamily: 'Pretendard, Noto Sans KR, system-ui, sans-serif',
