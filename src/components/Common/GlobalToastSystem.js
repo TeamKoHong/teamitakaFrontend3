@@ -41,32 +41,30 @@ export default function GlobalToastSystem() {
     // Nuclear Cleanup: Remove any existing ghost toasts from DOM
     const ghosts = document.querySelectorAll('.toast-notification, .toast-notification-v2');
     if (ghosts.length > 0) {
-      console.warn('👻 Found ghost toasts in DOM. Removing them...', ghosts);
+
       ghosts.forEach(el => el.remove());
     }
 
     // Singleton Guard: Prevent multiple instances
     if (window.__GLOBAL_TOAST_SYSTEM_ACTIVE__) {
-      console.warn('⚠️ Duplicate GlobalToastSystem detected! This instance will be ignored.');
+
       return; // Do not attach listeners
     }
     window.__GLOBAL_TOAST_SYSTEM_ACTIVE__ = true;
     if (process.env.NODE_ENV === 'development') {
-      console.log('GlobalToastSystem mounted (Singleton Active)');
+
     }
 
     let lastToast = { message: '', timestamp: 0 };
 
     const handler = (e) => {
       const { message, type = 'info', duration = 3000 } = e.detail || {};
-      console.log('GlobalToastSystem received event:', { message, type }); // Debug log
 
       if (!message) return; // Ignore empty messages
 
       // Debounce: ignore if same message within 500ms
       const now = Date.now();
       if (lastToast.message === message && now - lastToast.timestamp < 500) {
-        console.log('GlobalToastSystem debounced duplicate:', message); // Debug log
         return;
       }
       lastToast = { message, timestamp: now };
@@ -78,7 +76,7 @@ export default function GlobalToastSystem() {
 
       // Show toast with stable timestamp for React key
       const newToast = { message, type, timestamp: Date.now() };
-      console.log('🔔 [DEBUG] Setting toast:', newToast);
+
       setToast(newToast);
 
       // Auto-dismiss
@@ -112,7 +110,7 @@ export default function GlobalToastSystem() {
           ref={(el) => {
             if (el) {
               const allToasts = document.querySelectorAll('.toast-notification-v2');
-              console.log(`🎯 [DEBUG] Toast rendered. Total in DOM: ${allToasts.length}`, { toast, allToasts });
+
             }
           }}
         >
@@ -144,5 +142,4 @@ export default function GlobalToastSystem() {
     </>
   );
 }
-
 

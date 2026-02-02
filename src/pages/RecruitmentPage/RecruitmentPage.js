@@ -54,7 +54,7 @@ export default function RecruitmentPage() {
         const sortedTags = Array.from(allTags).sort();
         setFilterOptions(['전체', ...sortedTags]);
       } catch (error) {
-        console.error('Failed to fetch recruitments:', error);
+
         setRecruitments([]);
       } finally {
         setLoading(false);

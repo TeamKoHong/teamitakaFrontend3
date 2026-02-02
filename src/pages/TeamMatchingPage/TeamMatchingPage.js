@@ -149,7 +149,7 @@ export default function TeamMatchingPage() {
                 setActiveFilter(sortedTags.length > 0 ? sortedTags[0] : '전체');
                 setAllPosts(formattedData);
             } catch (error) {
-                console.error("❌ 데이터 불러오기 실패:", error);
+
             } finally {
                 setIsLoading(false);
             }
@@ -161,7 +161,7 @@ export default function TeamMatchingPage() {
         if (!currentUser) return alert('로그인이 필요합니다.');
         setHotProjects(prev => prev.map(item => item.id === id ? { ...item, isBookmarked: !item.isBookmarked } : item));
         setAllPosts(prev => prev.map(item => item.id === id ? { ...item, isBookmarked: !item.isBookmarked } : item));
-        try { await toggleRecruitmentScrap(id); } catch (error) { console.error('북마크 실패', error); }
+        try { await toggleRecruitmentScrap(id); } catch { /* 북마크 실패 무시 */ }
     };
 
     // 학교 필터 적용된 게시물 목록

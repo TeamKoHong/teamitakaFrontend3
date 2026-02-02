@@ -40,7 +40,7 @@ export async function submitEvaluation(projectId, reviewerId, revieweeId, evalua
 
     return await response.json();
   } catch (error) {
-    console.error('평가 제출 오류:', error);
+
     throw error;
   }
 }
@@ -58,7 +58,7 @@ export async function fetchProjectReviews(projectId) {
       .then(sData => {
         if (sData && sData.summary) {
           localStorage.setItem('cached_evaluation_summary', JSON.stringify(sData));
-          console.log('✅ 프로필용 요약 데이터 캐시 완료');
+
         }
       })
       .catch(() => { /* 요약본 조회 실패 시 조용히 무시 */ });
@@ -78,7 +78,7 @@ export async function fetchProjectReviews(projectId) {
     return result; 
 
   } catch (error) {
-    console.error('평가 조회 오류:', error);
+
     throw error;
   }
 }
@@ -97,7 +97,7 @@ export async function fetchProjectMembers(projectId) {
 
     return await response.json();
   } catch (error) {
-    console.error('팀원 조회 오류:', error);
+
     throw error;
   }
 }
@@ -139,7 +139,7 @@ export async function fetchEvaluationTargets(projectId, currentUserId) {
       allCompleted: targetsWithStatus.every(target => target.status === 'completed'),
     };
   } catch (error) {
-    console.error('평가 대상 조회 오류:', error);
+
     throw error;
   }
 }

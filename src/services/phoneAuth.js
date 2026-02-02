@@ -14,7 +14,7 @@ export const verifyPhoneAuth = async (idToken) => {
 
     if (!res.ok) {
         const errorData = await res.json();
-        console.error('🚨 Phone auth verification failed:', errorData);
+
         const err = new Error(errorData.error || 'Phone authentication failed');
         err.code = 'PHONE_AUTH_ERROR';
         err.details = errorData.details;

@@ -14,4 +14,3 @@ export default function MyRatingSection({ score = 0, showTitle = true, title = '
   );
 }
 
-

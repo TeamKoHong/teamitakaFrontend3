@@ -16,7 +16,7 @@ export const useNativeApp = () => {
         await StatusBar.setStyle({ style: Style.Dark });
         await StatusBar.setBackgroundColor({ color: '#FFFFFF' });
       } catch (e) {
-        console.log('StatusBar init error:', e);
+
       }
     };
 
@@ -71,7 +71,7 @@ export const useNativeApp = () => {
     try {
       await Haptics.impact({ style: styles[style] || ImpactStyle.Medium });
     } catch (e) {
-      console.log('Haptic error:', e);
+
     }
   }, []);
 
@@ -82,7 +82,7 @@ export const useNativeApp = () => {
       await Haptics.selectionChanged();
       await Haptics.selectionEnd();
     } catch (e) {
-      console.log('Haptic selection error:', e);
+
     }
   }, []);
 
@@ -98,7 +98,7 @@ export const useNativeApp = () => {
     try {
       await Haptics.notification({ type: types[type] || NotificationType.Success });
     } catch (e) {
-      console.log('Haptic notification error:', e);
+
     }
   }, []);
 
@@ -107,7 +107,7 @@ export const useNativeApp = () => {
     try {
       await Keyboard.hide();
     } catch (e) {
-      console.log('Keyboard hide error:', e);
+
     }
   }, []);
 

@@ -67,8 +67,6 @@ function LoginPage() {
                 password: password
             };
 
-
-
             const result = await loginUser(loginData);
 
             if (result.success && result.token && result.user) {
@@ -85,7 +83,7 @@ function LoginPage() {
             }
 
         } catch (error) {
-            console.error('로그인 오류:', error);
+
             setLoginError(error.message || '로그인 중 오류가 발생했습니다.');
         } finally {
             setIsLoginLoading(false);

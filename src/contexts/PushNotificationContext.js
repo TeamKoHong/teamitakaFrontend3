@@ -9,7 +9,7 @@ export const PushNotificationProvider = ({ children }) => {
 
   // 알림 수신 핸들러
   const handleNotificationReceived = useCallback((notification) => {
-    console.log('Notification received in foreground:', notification);
+
     // 포그라운드에서 알림 수신 시 햅틱 피드백
     hapticNotification('success');
 
@@ -19,7 +19,6 @@ export const PushNotificationProvider = ({ children }) => {
 
   // 알림 탭 핸들러
   const handleNotificationTapped = useCallback((notification, actionId) => {
-    console.log('Notification tapped:', notification, actionId);
 
     // 알림 데이터에 따라 적절한 화면으로 네비게이션
     const data = notification.data;
@@ -32,7 +31,6 @@ export const PushNotificationProvider = ({ children }) => {
 
   // 토큰 수신 핸들러
   const handleTokenReceived = useCallback((token) => {
-    console.log('FCM Token received:', token);
 
     // 서버에 토큰 등록
     // await api.registerPushToken(token);

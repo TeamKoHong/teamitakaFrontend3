@@ -50,7 +50,7 @@ export default function SearchPage() {
 
         setPopularTags(sortedTags);
       } catch (error) {
-        console.error("인기 검색어 로딩 실패:", error);
+
       } finally {
         setLoading(false);
       }

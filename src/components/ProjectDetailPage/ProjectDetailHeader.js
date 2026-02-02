@@ -50,7 +50,7 @@ function ProjectDetailHeader({ projectName }) {
       setBackgroundImage(result); // 미리보기 state 업데이트
       
       // TODO: 여기서 서버로 이미지를 전송하거나 상위 컴포넌트에 전달하는 로직 추가
-      console.log("선택된 이미지 데이터:", result); 
+
     };
     reader.onerror = () => alert('이미지를 불러오지 못했어요. 다시 시도해주세요.');
     reader.readAsDataURL(file);

@@ -33,10 +33,10 @@ const EmailVerificationExample = () => {
         try {
             const result = await sendVerificationCode(email);
             setSuccess(true);
-            console.log('인증 코드 전송 성공:', result);
+
         } catch (error) {
             setError(error.message);
-            console.error('인증 코드 전송 실패:', error);
+
         } finally {
             setIsLoading(false);
         }
@@ -55,10 +55,10 @@ const EmailVerificationExample = () => {
         try {
             const result = await verifyCode(email, code);
             setSuccess(true);
-            console.log('인증 코드 검증 성공:', result);
+
         } catch (error) {
             setError(error.message);
-            console.error('인증 코드 검증 실패:', error);
+
         } finally {
             setIsLoading(false);
         }
@@ -77,10 +77,10 @@ const EmailVerificationExample = () => {
         try {
             const result = await resendVerificationCode(email);
             setSuccess(true);
-            console.log('인증 코드 재전송 성공:', result);
+
         } catch (error) {
             setError(error.message);
-            console.error('인증 코드 재전송 실패:', error);
+
         } finally {
             setIsLoading(false);
         }

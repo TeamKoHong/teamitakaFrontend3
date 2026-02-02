@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 
 import "./TodoBox.scss";
 
-
 import { getProjectActivityLogs, getProjectTodos, createProjectTodo, updateProjectTodo } from "../../services/projects";
 
 // projectId props를 받아야 해당 프로젝트의 투두를 불러올 수 있습니다.
@@ -54,7 +53,7 @@ function TodoBox({ showFeed = true, projectId }) {
           }
         ]);
       } catch (error) {
-        console.error("투두 불러오기 실패:", error);
+
         // 에러 발생 시 빈 배열로 설정
         setProjects([]);
       }
@@ -63,7 +62,6 @@ function TodoBox({ showFeed = true, projectId }) {
     fetchTodos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId]);
-
 
   // 활동 로그 다시 불러오기 함수
   const refreshActivityLogs = async () => {
@@ -85,7 +83,7 @@ function TodoBox({ showFeed = true, projectId }) {
     } catch (error) {
       // 에러는 조용히 처리 (활동 로그가 없거나 엔드포인트 미구현)
       if (error.code !== 'RESOURCE_NOT_FOUND') {
-        console.error("활동 로그 불러오기 실패:", error);
+
       }
     }
   };
@@ -139,7 +137,7 @@ function TodoBox({ showFeed = true, projectId }) {
       }
 
     } catch (error) {
-      console.error("투두 상태 업데이트 실패:", error);
+
       alert("상태 변경에 실패했습니다.");
     }
   };
@@ -280,7 +278,7 @@ function TodoBox({ showFeed = true, projectId }) {
       } catch (error) {
         // 404 에러는 조용히 처리 (활동 로그가 없거나 엔드포인트 미구현)
         if (error.code !== 'RESOURCE_NOT_FOUND') {
-          console.error("활동 로그 불러오기 실패:", error);
+
         }
         setProjectFeeds([]);
       } finally {

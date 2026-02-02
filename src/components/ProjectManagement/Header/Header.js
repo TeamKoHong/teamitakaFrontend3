@@ -8,8 +8,6 @@ import { OTHER_ROUTES } from "../../../constants/routes";
 function Header({ onTabChange, activeTabIndex }) {
   const navigate = useNavigate();
 
-
-
   const handleBookmarkClick = () => {
     navigate(OTHER_ROUTES.BOOKMARK);
   };

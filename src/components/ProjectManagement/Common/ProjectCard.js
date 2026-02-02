@@ -41,7 +41,6 @@ const ProjectCard = ({ project, type = "project" }) => {
     recruitment_start,
     recruitment_end,
 
-
     progress_percent,
     applicant_count,
     members = []
@@ -55,7 +54,6 @@ const ProjectCard = ({ project, type = "project" }) => {
   const formattedPeriod = formatDateRange(startDate, endDate);
   const period = formattedPeriod ||
     (isRecruitment ? "모집 기간 미정" : "프로젝트 기간 미정");
-
 
   // Calculate progress and remaining days
   const progressValue = startDate && endDate

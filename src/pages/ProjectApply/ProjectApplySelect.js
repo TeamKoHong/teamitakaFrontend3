@@ -47,7 +47,7 @@ export default function ProjectApplySelect() {
 
         setProjects(formattedProjects);
       } catch (error) {
-        console.error('Failed to fetch projects:', error);
+
         alert('프로젝트 목록을 불러오는데 실패했습니다.');
         setProjects([]);
       } finally {
@@ -96,8 +96,6 @@ export default function ProjectApplySelect() {
         portfolio_project_ids: Array.from(selected)
       });
 
-      console.log('✅ Application submitted:', application);
-
       nav('/apply2/complete', {
         state: {
           applicationId: application.application_id,
@@ -106,7 +104,6 @@ export default function ProjectApplySelect() {
       });
 
     } catch (error) {
-      console.error('❌ Submission failed:', error);
 
       // Handle specific error codes
       switch (error.code) {

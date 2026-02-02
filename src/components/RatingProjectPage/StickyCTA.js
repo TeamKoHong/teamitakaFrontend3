@@ -16,4 +16,3 @@ export default function StickyCTA({ label = '상세 내용 더보기', expanded 
   );
 }
 
-

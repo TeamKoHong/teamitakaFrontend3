@@ -23,12 +23,12 @@ function ProjectDetailPage() {
       }
 
       try {
-        console.log("🔍 [ProjectDetailPage] Fetching project:", id);
+
         const data = await fetchProjectDetails(id);
-        console.log("✅ [ProjectDetailPage] Project data:", data);
+
         setProject(data);
       } catch (err) {
-        console.error("❌ [ProjectDetailPage] Error:", err);
+
         setError(err.message);
         if (err.code === "UNAUTHORIZED") {
           navigate("/login");

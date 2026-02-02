@@ -58,26 +58,21 @@ export default function KickoffSlide({ open, onClose, selectedMembers, recruitme
         memberUserIds: selectedMembers.map(member => member.user_id)
       };
 
-      console.log('✅ 프로젝트 생성 요청:', requestData);
-
       // 프로젝트 생성 API 호출 (KickoffSlide에서 직접 호출)
       const result = await createProjectFromRecruitment(recruitmentId, requestData);
       
-      console.log('✅ 프로젝트 생성 성공:', result);
-      
+
       // 프로젝트 ID 저장 (data.project_id 또는 result.project_id)
       const projectId = result.data?.project_id || result.project_id;
-      console.log('📌 생성된 프로젝트 ID:', projectId);
+
       setCreatedProjectId(projectId);
 
       // 팀원 정보 입력 슬라이드 열기
-      console.log('📌 팀원 정보 슬라이드 열기 시도');
+
       setTeamInfoOpen(true);
-      console.log('📌 teamInfoOpen 상태 설정 완료');
-      
+
     } catch (err) {
-      console.error('❌ 프로젝트 생성 실패:', err);
-      
+
       if (err.code === 'UNAUTHORIZED') {
         alert('로그인이 필요합니다.');
         navigate('/login');
@@ -119,7 +114,7 @@ export default function KickoffSlide({ open, onClose, selectedMembers, recruitme
               type="button"
               className={`field date-picker-btn ${start && end ? 'field--active' : ''}`}
               onClick={() => {
-                console.log('🔍 날짜 선택 버튼 클릭');
+
                 setDatePickerOpen(true);
               }}
             >

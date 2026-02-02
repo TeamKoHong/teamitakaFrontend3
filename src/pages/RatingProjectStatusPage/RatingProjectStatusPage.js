@@ -30,7 +30,7 @@ function RatingProjectStatusPage() {
         setProjectStatus(status);
       } catch (err) {
         setError("평가 현황을 불러오는데 실패했습니다.");
-        console.error("Failed to fetch project status:", err);
+
       } finally {
         setLoading(false);
       }

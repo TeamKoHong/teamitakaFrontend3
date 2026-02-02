@@ -61,7 +61,7 @@ function BookmarkPage() {
         const applicationsData = applicationsResponse.data || [];
         setApplicationCount(applicationsData.length);
       } catch (err) {
-        console.error('북마크 목록 조회 실패:', err);
+
         if (err.message === 'UNAUTHORIZED' || err.code === 'UNAUTHORIZED') {
           setError('로그인이 필요합니다.');
         } else {
@@ -122,7 +122,7 @@ function BookmarkPage() {
       // 북마크 해제 후 목록에서 제거
       setBookmarks(prev => prev.filter(b => b.recruitment_id !== recruitmentId));
     } catch (err) {
-      console.error('북마크 토글 실패:', err);
+
       alert('북마크 해제에 실패했습니다.');
     }
   };

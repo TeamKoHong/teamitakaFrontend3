@@ -23,7 +23,7 @@ export default function NotificationsPage() {
       const notifications = Array.isArray(response.data) ? response.data : [];
       setItems(notifications);
     } catch (err) {
-      console.error('Failed to fetch notifications:', err);
+
       setError(err.message);
       setItems([]);
     } finally {
@@ -45,7 +45,7 @@ export default function NotificationsPage() {
         )
       );
     } catch (err) {
-      console.error('Failed to mark notification as read:', err);
+
     }
   };
 
@@ -55,7 +55,7 @@ export default function NotificationsPage() {
       // 로컬 상태 업데이트
       setItems(prev => prev.map(item => ({ ...item, is_read: true })));
     } catch (err) {
-      console.error('Failed to mark all notifications as read:', err);
+
     }
   };
 
@@ -65,7 +65,7 @@ export default function NotificationsPage() {
       // 로컬 상태에서 제거
       setItems(prev => prev.filter(item => item.id !== notificationId));
     } catch (err) {
-      console.error('Failed to delete notification:', err);
+
     }
   };
 

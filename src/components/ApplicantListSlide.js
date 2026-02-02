@@ -43,7 +43,7 @@ export default function ApplicantListSlide({ open, onClose, recruitmentId }) {
         const user = JSON.parse(userStr);
         setCurrentUsername(user.username || "모집자");
       } catch (err) {
-        console.error('로컬스토리지 user 파싱 실패:', err);
+
       }
     }
   }, []);
@@ -58,7 +58,7 @@ export default function ApplicantListSlide({ open, onClose, recruitmentId }) {
       try {
         // 프로젝트명(recruitment 정보)을 먼저 가져오기
         const recruitmentData = await getRecruitment(recruitmentId);
-        console.log('🔍 [ApplicantListSlide] Recruitment 정보:', recruitmentData);
+
         if (recruitmentData?.data?.title) {
           setProjectName(recruitmentData.data.title);
         } else if (recruitmentData?.title) {
@@ -67,17 +67,13 @@ export default function ApplicantListSlide({ open, onClose, recruitmentId }) {
 
         // 지원자 목록 가져오기
         const data = await getRecruitmentApplicants(recruitmentId);
-        console.log('🔍 [ApplicantListSlide] API 응답 전체:', data);
-        console.log('🔍 [ApplicantListSlide] recruitmentId:', recruitmentId);
 
         // API가 배열을 직접 반환하는 경우와 객체로 감싸서 반환하는 경우 모두 처리
         const applications = Array.isArray(data) ? data : (data.applications || []);
-        console.log('🔍 [ApplicantListSlide] applications 배열:', applications);
 
         // Map backend data to component format
         const mappedApplicants = applications.map((app) => {
-          console.log('🔍 [ApplicantListSlide] 개별 application:', app);
-          console.log('🔍 [ApplicantListSlide] User 정보:', app.User);
+
           return {
             id: app.application_id,
             name: app.User?.username || "지원자",
@@ -98,13 +94,13 @@ export default function ApplicantListSlide({ open, onClose, recruitmentId }) {
             User: app.User,
           };
         });
-        console.log('🔍 [ApplicantListSlide] 매핑된 지원자 목록:', mappedApplicants);
+
         setApplicants(mappedApplicants);
 
         // 슬라이드를 열 때마다 선택 상태 초기화 (로컬 상태로만 관리)
         setSelectedTeamMembers([]);
       } catch (err) {
-        console.error("Failed to fetch applicants:", err);
+
         if (err.code === 'UNAUTHORIZED') {
           alert("로그인이 필요합니다.");
           navigate("/login");
@@ -175,12 +171,10 @@ export default function ApplicantListSlide({ open, onClose, recruitmentId }) {
 
   const handleStartProject = () => {
     if (!hasSelection || !recruitmentId) {
-      console.log("❌ 조건 미충족 - return");
+
       return;
     }
 
-    console.log("✅ 선택된 팀원:", selectedTeamMembers);
-    console.log("✅ 팀 매칭 완료 슬라이드 열기");
     // 팀 매칭 완료 슬라이드 열기
     setIsMatchingCompleteOpen(true);
   };

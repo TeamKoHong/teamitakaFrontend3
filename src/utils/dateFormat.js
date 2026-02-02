@@ -28,7 +28,7 @@ export const formatDate = (isoString, format = 'dot') => {
 
     // Invalid date check
     if (isNaN(date.getTime())) {
-      console.warn('Invalid date string:', isoString);
+
       return null;
     }
 
@@ -39,7 +39,7 @@ export const formatDate = (isoString, format = 'dot') => {
     const separator = format === 'dot' ? '.' : '-';
     return `${year}${separator}${month}${separator}${day}`;
   } catch (error) {
-    console.error('날짜 포맷팅 실패:', error);
+
     return null;
   }
 };
@@ -102,7 +102,7 @@ export const getRelativeDate = (startDate, endDate) => {
       return '종료됨';
     }
   } catch (error) {
-    console.error('상대 날짜 계산 실패:', error);
+
     return null;
   }
 };
@@ -121,12 +121,12 @@ export const getRelativeTime = (dateString) => {
   try {
     const date = dayjs(dateString);
     if (!date.isValid()) {
-      console.warn('Invalid date string:', dateString);
+
       return null;
     }
     return date.fromNow();
   } catch (error) {
-    console.error('상대 시간 계산 실패:', error);
+
     return null;
   }
 };

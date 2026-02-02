@@ -26,7 +26,7 @@ export default function ProfileVerificationPage() {
           setAuthDate(formattedDate);
         }
       } catch (err) {
-        console.error('데이터 로드 실패:', err);
+
       } finally {
         setIsLoading(false);
       }

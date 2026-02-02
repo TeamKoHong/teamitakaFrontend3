@@ -111,7 +111,7 @@ const MainPage = () => {
       if (sumRes?.success) setSummary(sumRes.data || sumRes.summary || null);
       if (projRes?.success) setProjects(projRes.items || []);
     } catch (e) {
-      console.log('Refresh error:', e);
+
     }
   }, []);
 

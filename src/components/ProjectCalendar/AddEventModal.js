@@ -43,8 +43,6 @@ export default function AddEventModal({ isOpen, onClose, projectId, selectedDate
         description: description.trim()
       };
 
-      console.log("📝 전송 데이터:", payload);
-
       const response = await axios.post(
         `${API_BASE_URL}/api/schedule/create`, 
         payload, 
@@ -53,8 +51,6 @@ export default function AddEventModal({ isOpen, onClose, projectId, selectedDate
           withCredentials: true
         }
       );
-
-      console.log("✅ 저장 성공:", response.data);
 
       // 성공 시 화면 즉시 반영
       const dateKey = eventDate.format("YYYY-MM-DD");
@@ -76,7 +72,7 @@ export default function AddEventModal({ isOpen, onClose, projectId, selectedDate
       setDescription("");
       onClose();
     } catch (error) {
-      console.error("❌ 일정 저장 실패:", error);
+
       if (error.response) {
         alert(`저장 실패 (${error.response.status}): ${error.response.data.message || "오류 발생"}`);
       } else {

@@ -48,7 +48,7 @@ export default function ProjectRegisterPage() {
           setAvailableProjects(validProjects);
         }
       } catch (error) {
-        console.error("프로젝트 로딩 실패", error);
+
       } finally {
         setIsLoading(false);
       }
@@ -80,7 +80,7 @@ export default function ProjectRegisterPage() {
         alert('프로젝트가 프로필에 등록되었습니다.');
         navigate('/profile'); 
     } catch (error) {
-        console.error("저장 실패", error);
+
         alert("오류가 발생했습니다.");
     }
   };

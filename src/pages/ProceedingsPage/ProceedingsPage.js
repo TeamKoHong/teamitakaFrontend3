@@ -70,8 +70,7 @@ export default function ProceedingsPage() {
       
       setMeetingData(formattedData);
     } catch (err) {
-      console.error("Failed to load meetings:", err);
-      
+
       if (err.code === 'UNAUTHORIZED') {
         alert("로그인이 필요합니다.");
         navigate("/login");

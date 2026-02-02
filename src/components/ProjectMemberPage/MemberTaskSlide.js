@@ -16,8 +16,7 @@ export default function MemberTaskSlide({ open, member, onClose, projectId }) {
     }
 
     try {
-      console.log('💾 팀원 정보 수정 시작:', editedData);
-      
+
       // API 형식에 맞게 데이터 변환
       const taskString = `${editedData.responsibility || ''}${editedData.responsibility && editedData.tasks ? ' - ' : ''}${editedData.tasks || ''}`.trim();
       
@@ -26,11 +25,8 @@ export default function MemberTaskSlide({ open, member, onClose, projectId }) {
         task: taskString
       }];
 
-      console.log('📤 API 전송 데이터:', memberToUpdate);
-
       // API 호출
       const response = await updateProjectMembers(projectId, memberToUpdate);
-      console.log('✅ 팀원 정보 수정 성공:', response);
 
       // 편집 모드 종료
       setIsEditing(false);
@@ -38,8 +34,7 @@ export default function MemberTaskSlide({ open, member, onClose, projectId }) {
       // 슬라이드 닫기 (목록 새로고침을 위해)
       handleClose();
     } catch (error) {
-      console.error('❌ 팀원 정보 수정 실패:', error);
-      
+
       // 에러 메시지 표시
       if (error.code === 'NOT_PROJECT_LEADER') {
         alert('팀장만 멤버 역할을 수정할 수 있습니다.');

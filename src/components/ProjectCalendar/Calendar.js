@@ -17,8 +17,6 @@ export default function Calendar({ projectId, onDayClick, isModalOpen, onCloseMo
   const [events, setEvents] = useState({});
   const [loading, setLoading] = useState(false);
 
-
-
   // ✅ 1. 일정 조회 (GET) - 새로운 API 함수 사용
   useEffect(() => {
     const fetchSchedules = async () => {
@@ -26,10 +24,8 @@ export default function Calendar({ projectId, onDayClick, isModalOpen, onCloseMo
 
       try {
         setLoading(true);
-        console.log(`📅 일정 조회 요청: Project ID ${projectId}`);
 
         const schedules = await getProjectSchedules(projectId);
-        console.log("✅ 불러온 일정:", schedules);
 
         const newEvents = {};
         if (Array.isArray(schedules)) {
@@ -49,7 +45,6 @@ export default function Calendar({ projectId, onDayClick, isModalOpen, onCloseMo
         }
         setEvents(newEvents);
       } catch (error) {
-        console.error("❌ 일정 불러오기 실패:", error);
 
         if (error.code === 'UNAUTHORIZED') {
           alert("로그인이 필요합니다.");

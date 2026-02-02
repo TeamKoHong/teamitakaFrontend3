@@ -24,7 +24,7 @@ export const getProfileDetail = async () => {
             }
         };
     } catch (err) {
-        console.error('📊 프로필 상세 조회 실패:', err);
+
         return { success: false, data: null };
     }
 };

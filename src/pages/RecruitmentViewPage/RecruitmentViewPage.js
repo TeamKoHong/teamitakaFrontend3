@@ -84,7 +84,7 @@ export default function RecruitmentViewPage() {
                 setPost(formattedPost);
                 setIsBookmarked(!!data.is_scrapped);
             } catch (err) {
-                console.error('Failed to fetch recruitment:', err);
+
                 setError(err.message);
             }
         };

@@ -38,9 +38,9 @@ export default function ProjectRecruitPublish() {
           try {
             const imageFile = dataURLtoFile(draft.coverImage.dataUrl, 'recruitment-image.jpg');
             photo_url = await uploadRecruitmentImage(imageFile);
-            console.log("✅ Image uploaded:", photo_url);
+
           } catch (imgErr) {
-            console.warn("⚠️ Image upload failed, continuing without image:", imgErr);
+
             // 이미지 업로드 실패해도 모집공고는 생성 (이미지는 선택사항)
           }
         }
@@ -60,7 +60,6 @@ export default function ProjectRecruitPublish() {
 
         // 4. API 호출
         const result = await createRecruitment(recruitmentData);
-        console.log("✅ Recruitment created:", result);
 
         // 5. localStorage draft 삭제
         clearRecruitDraft();
@@ -73,7 +72,6 @@ export default function ProjectRecruitPublish() {
           }
         });
       } catch (err) {
-        console.error("🚨 Recruitment creation error:", err);
 
         // 에러 처리
         if (err.code === "UNAUTHORIZED") {

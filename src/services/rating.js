@@ -188,7 +188,7 @@ export async function fetchRatingProjectData(projectId, currentUserId) {
       myGivenRatings,
     };
   } catch (error) {
-    console.error('RatingProjectPage 데이터 조회 오류:', error);
+
     throw error;
   }
 }

@@ -117,10 +117,10 @@ export default function ProfileEditPage() {
         prevDataRef.current = updatedData;
         setError(null);
       } else {
-        console.error("Autosave failed without exception");
+
       }
     } catch (err) {
-      console.error("Autosave error:", err);
+
       // 토큰 만료 등 치명적 에러 외에는 사용자에게 방해되지 않도록 조용히 처리하거나
       // 우측 상단에 작게 표시할 수 있음. 여기선 치명적 에러만 처리.
       if (err?.code === "UNAUTHORIZED") {

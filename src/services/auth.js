@@ -36,11 +36,9 @@ export const sendVerificationCode = async (email, retryCount = 0) => {
 
         const { API_BASE_URL, headers } = getApiConfig();
 
-        console.log(`📧 이메일 인증 요청 시도 ${retryCount + 1}: ${email}`);
-
         // 🧪 [개발용] 테스트 이메일 우회 로직
         if (email === 'test@email.com') {
-            console.log('🧪 테스트 이메일 감지: 백엔드 요청을 우회합니다.');
+
             // 실제 네트워크 딜레이 흉내
             await new Promise(resolve => setTimeout(resolve, 500));
             return { success: true, message: '인증 코드가 전송되었습니다. (테스트 모드)' };
@@ -57,8 +55,6 @@ export const sendVerificationCode = async (email, retryCount = 0) => {
                 error: 'UNKNOWN_ERROR',
                 message: '응답을 파싱할 수 없습니다.'
             }));
-
-            console.error('Backend error details:', errorData);
 
             // 409 Conflict: 중복 이메일 에러 처리
             if (response.status === 409) {
@@ -86,7 +82,7 @@ export const sendVerificationCode = async (email, retryCount = 0) => {
 
             // 재시도 가능한 에러인지 확인
             if (shouldRetry(response.status, retryCount)) {
-                console.log(`🔄 재시도 중... (${retryCount + 1}/3)`);
+
                 await new Promise(resolve => setTimeout(resolve, 1000 * (retryCount + 1))); // 지수 백오프
                 return sendVerificationCode(email, retryCount + 1);
             }
@@ -95,15 +91,14 @@ export const sendVerificationCode = async (email, retryCount = 0) => {
         }
 
         const result = await response.json();
-        console.log(`✅ 이메일 인증 코드 전송 성공: ${email}`);
+
         return result;
 
     } catch (error) {
-        console.error('이메일 발송 오류:', error);
 
         // 네트워크 에러인 경우 재시도
         if (isNetworkError(error) && retryCount < 2) {
-            console.log(`🔄 네트워크 에러로 인한 재시도... (${retryCount + 1}/3)`);
+
             await new Promise(resolve => setTimeout(resolve, 1000 * (retryCount + 1)));
             return sendVerificationCode(email, retryCount + 1);
         }
@@ -219,8 +214,6 @@ export const verifyCode = async (email, code) => {
 
         const { API_BASE_URL, headers } = getApiConfig();
 
-        console.log(`🔐 인증 코드 검증: ${email}`);
-
         const response = await fetch(`${API_BASE_URL}/api/auth/verify-code`, {
             method: 'POST',
             headers,
@@ -233,16 +226,15 @@ export const verifyCode = async (email, code) => {
                 message: '응답을 파싱할 수 없습니다.'
             }));
 
-            console.error('인증 코드 검증 오류:', errorData);
             throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
         }
 
         const result = await response.json();
-        console.log(`✅ 인증 코드 검증 성공: ${email}`);
+
         return result;
 
     } catch (error) {
-        console.error('인증 코드 검증 오류:', error);
+
         throw new Error(error.message || '인증번호 확인에 실패했습니다.');
     }
 };
@@ -277,8 +269,6 @@ export const resendVerificationCode = async (email) => {
 
         const { API_BASE_URL, headers } = getApiConfig();
 
-        console.log(`🔄 인증 코드 재전송: ${email}`);
-
         const response = await fetch(`${API_BASE_URL}/api/auth/send-verification`, {
             method: 'POST',
             headers,
@@ -291,16 +281,15 @@ export const resendVerificationCode = async (email) => {
                 message: '응답을 파싱할 수 없습니다.'
             }));
 
-            console.error('인증 코드 재전송 오류:', errorData);
             throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
         }
 
         const result = await response.json();
-        console.log(`✅ 인증 코드 재전송 성공: ${email}`);
+
         return result;
 
     } catch (error) {
-        console.error('인증 코드 재전송 오류:', error);
+
         throw new Error(error.message || '인증번호 재전송에 실패했습니다.');
     }
 };
@@ -318,9 +307,7 @@ export const registerUser = async (userData) => {
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({ message: '응답을 파싱할 수 없습니다.' }));
-            console.error('Registration error details:', errorData);
-            console.error('Response status:', response.status);
-            console.error('Response headers:', Object.fromEntries(response.headers.entries()));
+
             throw new Error(errorData.message || errorData.error || `HTTP error! status: ${response.status}`);
         }
 
@@ -333,7 +320,7 @@ export const registerUser = async (userData) => {
 
         return result;
     } catch (error) {
-        console.error('Registration error:', error);
+
         throw new Error(error.message || '회원가입에 실패했습니다.');
     }
 };
@@ -384,7 +371,7 @@ export const loginUser = async (loginData) => {
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({ message: '응답을 파싱할 수 없습니다.' }));
-            console.error('Login error details:', errorData);
+
             const friendly = mapLoginErrorMessage(response.status, errorData);
             const err = new Error(friendly);
             err.code = (errorData && (errorData.code || errorData.error)) || `HTTP_${response.status}`;
@@ -408,7 +395,7 @@ export const loginUser = async (loginData) => {
 
         return result;
     } catch (error) {
-        console.error('Login error:', error);
+
         if (isNetworkError(error)) {
             const err = new Error('네트워크 오류가 발생했습니다. 연결을 확인하고 다시 시도해주세요.');
             err.code = 'NETWORK_ERROR';
@@ -425,7 +412,7 @@ export const logoutUser = () => {
         localStorage.removeItem('user');
         return { success: true };
     } catch (error) {
-        console.error('Logout error:', error);
+
         throw new Error('로그아웃에 실패했습니다.');
     }
 };
@@ -445,7 +432,7 @@ export const getCurrentUser = () => {
             user: JSON.parse(userStr)
         };
     } catch (error) {
-        console.error('Get current user error:', error);
+
         localStorage.removeItem('authToken');
         localStorage.removeItem('user');
         return null;
@@ -494,7 +481,7 @@ export const refreshToken = async () => {
 
         return result;
     } catch (error) {
-        console.error('Token refresh error:', error);
+
         logoutUser();
         throw new Error(error.message || '토큰 갱신에 실패했습니다.');
     }

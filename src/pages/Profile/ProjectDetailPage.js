@@ -46,7 +46,7 @@ export default function ProjectDetailPage() {
         setMemberCount(mData.length); // 🔥 팀원 배열의 길이 저장
 
       } catch (err) {
-        console.error('데이터 로드 실패:', err);
+
       } finally {
         setIsLoading(false);
       }

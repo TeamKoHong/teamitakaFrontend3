@@ -11,7 +11,7 @@ export default function TeamMemberInfoSlide({ open, onClose, selectedMembers, pr
   const navigate = useNavigate();
 
   if (process.env.NODE_ENV === 'development') {
-    console.log('🔍 TeamMemberInfoSlide 렌더링:', { open, projectId, membersCount: selectedMembers?.length });
+
   }
 
   const [memberInfo, setMemberInfo] = useState(
@@ -37,7 +37,6 @@ export default function TeamMemberInfoSlide({ open, onClose, selectedMembers, pr
 
   const handleComplete = async () => {
     try {
-      console.log('💾 팀원 정보 저장 시작:', memberInfo);
 
       // API 형식에 맞게 데이터 변환
       const membersToUpdate = memberInfo.map(member => ({
@@ -45,17 +44,13 @@ export default function TeamMemberInfoSlide({ open, onClose, selectedMembers, pr
         task: `${member.position || ''}${member.position && member.tasks ? ' - ' : ''}${member.tasks || ''}`.trim()
       }));
 
-      console.log('📤 API 전송 데이터:', membersToUpdate);
-
       // API 호출
       const response = await updateProjectMembers(projectId, membersToUpdate);
-      console.log('✅ 팀원 정보 저장 성공:', response);
 
       // 프로젝트 상세 페이지로 이동
       navigate(`/project/${projectId}`);
       onClose();
     } catch (error) {
-      console.error('❌ 팀원 정보 저장 실패:', error);
 
       // 에러 메시지 표시
       if (error.code === 'NOT_PROJECT_LEADER') {
@@ -99,7 +94,7 @@ export default function TeamMemberInfoSlide({ open, onClose, selectedMembers, pr
 
   if (!projectId || !selectedMembers || selectedMembers.length === 0) {
     if (process.env.NODE_ENV === 'development') {
-      console.log('⚠️ TeamMemberInfoSlide - 필수 데이터 없음');
+
     }
     return null;
   }

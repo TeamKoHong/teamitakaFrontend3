@@ -46,7 +46,7 @@ export default function ProjectApplyComplete() {
       // 잠시 후 메인 페이지로 이동
       setTimeout(() => nav("/"), 1500);
     } catch (err) {
-      console.error('Cancel failed:', err);
+
       setShowModal(false);
       setToastMessage(err.message || "지원 취소에 실패했습니다.");
       setShowToast(true);

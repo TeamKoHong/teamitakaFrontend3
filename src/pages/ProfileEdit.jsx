@@ -9,7 +9,6 @@ import TeamExperience from "../components/TeamExperience";
 import InterestKeywords from "../components/InterestKeywords";
 import Withdrawal from "../components/Withdrawal";
 
-
 export default function ProfileEdit() {
   return (
     <div className="page-frame">

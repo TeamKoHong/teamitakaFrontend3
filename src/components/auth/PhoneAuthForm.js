@@ -15,10 +15,7 @@ const PhoneAuthForm = () => {
 
   // 개발자 디버깅 로그
   useEffect(() => {
-    console.log('=== Phone Auth Form State ===');
-    console.log('Step:', step);
-    console.log('Phone Number:', phoneNumber);
-    console.log('Has Confirmation Result:', !!confirmationResult);
+
   }, [step, phoneNumber, confirmationResult]);
 
   // 1️⃣ reCAPTCHA 초기화
@@ -27,15 +24,15 @@ const PhoneAuthForm = () => {
       window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
         size: 'normal', // visible 모드 (401 오류 방지 및 안정성)
         callback: () => {
-          console.log('✅ reCAPTCHA 검증 완료');
+
         },
         'expired-callback': () => {
-          console.log('⚠️ reCAPTCHA 만료됨');
+
           if (window.recaptchaVerifier) {
             window.recaptchaVerifier.render().then((widgetId) => {
               window.grecaptcha.reset(widgetId);
             }).catch(err => {
-              console.error('❌ reCAPTCHA 리셋 실패:', err);
+
             });
           }
         }
@@ -76,16 +73,15 @@ const PhoneAuthForm = () => {
 
       // E.164 형식으로 변환
       const formattedPhone = formatPhoneNumber(phoneNumber);
-      console.log('📱 전화번호:', formattedPhone);
 
       // 🧪 테스트 모드 (개발 및 배포 환경에서 사용 가능)
       if (process.env.REACT_APP_ENABLE_TEST_MODE === 'true' && formattedPhone === '+821012345678') {
-        console.log('🧪 테스트 모드 활성화: 인증 코드 123456 사용');
+
         // 가짜 confirmationResult 객체 생성
         setConfirmationResult({
           confirm: async (code) => {
             if (code === '123456') {
-              console.log('✅ 테스트 모드 인증 성공');
+
               // 임시 사용자 객체 반환
               return {
                 user: {
@@ -93,7 +89,7 @@ const PhoneAuthForm = () => {
                   phoneNumber: formattedPhone,
                   getIdToken: async () => {
                     // 테스트용 임시 토큰 (백엔드에서 dev-test-token으로 검증)
-                    console.log('⚠️ 테스트 모드: 실제 Firebase ID 토큰 대신 테스트 토큰 사용');
+
                     return 'dev-test-token-' + Date.now();
                   }
                 }
@@ -115,11 +111,9 @@ const PhoneAuthForm = () => {
       const appVerifier = window.recaptchaVerifier;
       const result = await signInWithPhoneNumber(auth, formattedPhone, appVerifier);
 
-      console.log('✅ SMS 인증 코드 전송 완료');
       setConfirmationResult(result);
       setStep('code');
     } catch (err) {
-      console.error('❌ SMS 전송 실패:', err);
 
       // 상세한 에러 분석 및 사용자 친화적 메시지
       let userMessage = 'SMS 전송에 실패했습니다.';
@@ -130,16 +124,10 @@ const PhoneAuthForm = () => {
         userMessage = '너무 많은 시도가 있었습니다. 잠시 후 다시 시도해주세요.';
       } else if (err.code === 'auth/invalid-app-credential') {
         userMessage = 'Firebase 설정 오류입니다. 관리자에게 문의해주세요.';
-        console.error('🚨 Firebase 설정 확인 필요:', {
-          projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-          error: err.code
-        });
+
       } else if (err.message && err.message.includes('reCAPTCHA')) {
         userMessage = 'reCAPTCHA 검증 실패. 페이지를 새로고침하고 다시 시도해주세요.';
-        console.error('🚨 reCAPTCHA 오류 상세:', {
-          error: err,
-          hint: '개발 환경에서는 전화번호 010-1234-5678 (인증코드: 123456)를 사용해보세요.'
-        });
+
       }
 
       setError(userMessage);
@@ -166,32 +154,22 @@ const PhoneAuthForm = () => {
         throw new Error('6자리 인증 코드를 입력하세요.');
       }
 
-      console.log('🔐 인증 코드 확인 중...');
-
       // Firebase에서 인증 코드 확인 및 ID Token 획득
       const credential = await confirmationResult.confirm(verificationCode);
       const idToken = await credential.user.getIdToken();
 
-      console.log('✅ Firebase 인증 완료');
-      console.log('🎫 ID Token 획득');
-
       // 백엔드 API 호출
       const response = await verifyPhoneAuth(idToken);
-
-      console.log('✅ 백엔드 인증 완료:', response);
 
       // 🧪 테스트용: JWT 토큰과 사용자 정보를 localStorage에 저장 (디버깅용)
       localStorage.setItem('token', response.token);
       localStorage.setItem('user', JSON.stringify(response.user));
-      console.log('💾 localStorage에 저장 완료');
-      console.log('📄 User:', response.user);
-      console.log('🎫 Token:', response.token);
 
       // 테스트 성공 화면 표시 (AuthContext 연동 없음, 자동 리다이렉트 없음)
       setStep('complete');
 
     } catch (err) {
-      console.error('❌ 인증 실패:', err);
+
       setError(err.message || '인증에 실패했습니다.');
     } finally {
       setLoading(false);

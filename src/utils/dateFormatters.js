@@ -31,7 +31,7 @@ export const calculateDaysFromStart = (startDate) => {
   // Return D+0 if no start date provided
   if (!startDate) {
     if (process.env.NODE_ENV === 'development') {
-      console.log('[calculateDaysFromStart] No startDate provided');
+
     }
     return 'D+0';
   }
@@ -41,7 +41,7 @@ export const calculateDaysFromStart = (startDate) => {
 
     // Check if date is valid
     if (isNaN(start.getTime())) {
-      console.error('[calculateDaysFromStart] Invalid date:', startDate);
+
       return 'D+0';
     }
 
@@ -49,10 +49,9 @@ export const calculateDaysFromStart = (startDate) => {
     const diffTime = Math.abs(today - start);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    console.log(`[calculateDaysFromStart] startDate: ${startDate}, days: ${diffDays}`);
     return `D+${diffDays}`;
   } catch (error) {
-    console.error('[calculateDaysFromStart] Error calculating days:', error);
+
     return 'D+0';
   }
 };

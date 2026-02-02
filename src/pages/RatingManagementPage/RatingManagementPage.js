@@ -36,7 +36,7 @@ function RatingManagementPage() {
         setUserProjects(projects);
       } catch (err) {
         setError("프로젝트 정보를 불러오는데 실패했습니다.");
-        console.error("Failed to fetch user projects:", err);
+
       } finally {
         setLoading(false);
       }

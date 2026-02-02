@@ -26,24 +26,19 @@ export default function ProjectMemberPage() {
       setLoading(true);
       setError(null);
 
-      console.log("🔍 팀원 목록 조회 시작 - projectId:", projectId);
       const response = await fetchProjectMembers(projectId);
-      console.log("📦 API 응답 전체:", response);
-      
+
       // API 응답 구조에 맞게 데이터 변환
       const membersData = response.data?.items || response.items || response.data || response;
-      console.log("📋 추출된 membersData:", membersData);
-      console.log("📋 membersData 타입:", typeof membersData, "isArray:", Array.isArray(membersData));
-      
+
       if (!Array.isArray(membersData)) {
-        console.error("❌ 배열이 아닌 데이터:", membersData);
+
         throw new Error("팀원 데이터 형식이 올바르지 않습니다.");
       }
 
       // 백엔드 응답을 프론트엔드 형식으로 변환
       const formattedMembers = membersData.map((member, index) => {
-        console.log(`👤 멤버 ${index + 1}:`, member);
-        
+
         // role에 따른 기본 역할명
         const defaultRole = member.role === 'LEADER' ? '조장' : '팀원';
         
@@ -81,10 +76,9 @@ export default function ProjectMemberPage() {
         };
       });
 
-      console.log("✅ 변환된 멤버 목록:", formattedMembers);
       setMembers(formattedMembers);
     } catch (err) {
-      console.error("❌ 팀원 목록 조회 실패:", err);
+
       setError(err.message || "팀원 목록을 불러오는데 실패했습니다.");
     } finally {
       setLoading(false);

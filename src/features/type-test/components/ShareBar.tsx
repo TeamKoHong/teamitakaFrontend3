@@ -35,7 +35,7 @@ export default function ShareBar({ typeCode, nickname, onRetest, className = '' 
                 showToast('링크가 복사되었습니다!');
             }
         } catch (error) {
-            console.error('공유 실패:', error);
+
             try {
                 await navigator.clipboard.writeText(window.location.href);
                 showToast('링크가 복사되었습니다!');
@@ -76,7 +76,7 @@ export default function ShareBar({ typeCode, nickname, onRetest, className = '' 
             showToast('이미지가 저장되었습니다!');
 
         } catch (error) {
-            console.error('이미지 저장 실패:', error);
+
             showToast('이미지 저장에 실패했습니다.');
         } finally {
             setIsSaving(false);

@@ -25,9 +25,7 @@ const RecruitingComponent = () => {
       const res = await getMyRecruitments({ limit: page.limit || 10, offset: nextOffset });
 
       if (process.env.NODE_ENV === 'development') {
-        console.log('🔍 [Debug] Recruitment API 응답:', res);
-        console.log('🔍 [Debug] Recruitments 배열:', res.items);
-        console.log('🔍 [Debug] 모집글 개수:', res.items?.length);
+
       }
 
       if (res?.success) {
@@ -37,7 +35,7 @@ const RecruitingComponent = () => {
         throw new Error('SERVER_ERROR');
       }
     } catch (e) {
-      console.error('❌ [Error] Recruitment 로딩 실패:', e);
+
       if (e?.code === 'UNAUTHORIZED') {
         localStorage.removeItem('authToken');
         localStorage.removeItem('user');
@@ -83,7 +81,6 @@ const RecruitingComponent = () => {
         alert('모집글이 삭제되었습니다.');
       }
     } catch (error) {
-      console.error('❌ 모집글 삭제 실패:', error);
 
       if (error.code === 'UNAUTHORIZED') {
         alert('로그인이 필요합니다.');
@@ -100,7 +97,7 @@ const RecruitingComponent = () => {
   };
 
   const handleReRecruit = (recruitmentId) => {
-    console.log('다시 모집하기:', recruitmentId);
+
     navigate(`/recruit?edit=${recruitmentId}`);
   };
 

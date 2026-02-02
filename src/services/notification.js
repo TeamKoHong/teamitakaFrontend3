@@ -21,7 +21,7 @@ export async function fetchProjectNotifications(projectId) {
         const result = await response.json();
         return result.data || result || [];
     } catch (error) {
-        console.error('알림 조회 오류:', error);
+
         // Return empty array on error to prevent UI crash, but log error
         return [];
     }

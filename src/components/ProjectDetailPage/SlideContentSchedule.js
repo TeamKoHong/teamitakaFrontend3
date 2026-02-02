@@ -41,10 +41,8 @@ export default function SlideContentSchedule({ projectId }) {
       try {
         setLoading(true);
         setError(null);
-        console.log(`📅 SlideContentSchedule - 일정 조회: Project ID ${projectId}`);
 
         const schedules = await getProjectSchedules(projectId);
-        console.log("✅ 불러온 일정:", schedules);
 
         const newEvents = {};
         if (Array.isArray(schedules)) {
@@ -64,13 +62,7 @@ export default function SlideContentSchedule({ projectId }) {
         }
         setEvents(newEvents);
       } catch (error) {
-        console.error("❌ 일정 불러오기 실패:", error);
-        console.error("❌ 에러 상세:", {
-          message: error.message,
-          code: error.code,
-          stack: error.stack
-        });
-        
+
         if (error.code === 'UNAUTHORIZED') {
           alert("로그인이 필요합니다.");
           navigate("/login");
@@ -78,7 +70,7 @@ export default function SlideContentSchedule({ projectId }) {
         }
         
         // 500 에러 등 서버 오류의 경우 빈 배열로 처리 (에러 메시지 표시하지 않음)
-        console.warn("⚠️ 서버에서 일정을 불러올 수 없습니다. 빈 상태로 표시합니다.");
+
         setEvents({});
         setError(null); // 에러 메시지를 표시하지 않음
       } finally {

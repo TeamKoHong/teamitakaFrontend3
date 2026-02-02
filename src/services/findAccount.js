@@ -49,7 +49,6 @@ export const requestFindIdSms = async (data) => {
     await new Promise(resolve => setTimeout(resolve, 500));
 
     // Mock: 항상 성공
-    console.log('📱 [Mock] 아이디 찾기 SMS 발송:', data.phone);
 
     return {
         success: true,
@@ -75,7 +74,7 @@ export const verifyFindIdCode = async (data) => {
     const user = MOCK_USERS.find(u => u.phone === data.phone && u.name === data.name);
 
     if (user) {
-        console.log('✅ [Mock] 아이디 찾기 성공:', user.email);
+
         return {
             success: true,
             email: user.email,
@@ -84,7 +83,7 @@ export const verifyFindIdCode = async (data) => {
     }
 
     // 매칭되는 사용자가 없어도 테스트용 기본값 반환
-    console.log('✅ [Mock] 아이디 찾기 성공 (기본값)');
+
     return {
         success: true,
         email: 'qwer1234@univ.com',
@@ -112,8 +111,6 @@ export const requestPasswordReset = async (email) => {
     // Mock: 시뮬레이션 딜레이
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    console.log('📧 [Mock] 비밀번호 재설정 이메일 발송:', email);
-
     return {
         success: true,
         message: '비밀번호 재설정 이메일이 발송되었습니다.'
@@ -134,8 +131,6 @@ export const verifyPasswordResetCode = async (email, code) => {
     if (code !== TEST_VERIFICATION_CODE) {
         throw new Error('인증번호가 일치하지 않습니다.');
     }
-
-    console.log('✅ [Mock] 비밀번호 재설정 인증번호 확인 성공:', email);
 
     return { success: true };
 };
@@ -159,8 +154,6 @@ export const resetPassword = async (data) => {
 
     // Mock: 시뮬레이션 딜레이
     await new Promise(resolve => setTimeout(resolve, 500));
-
-    console.log('🔐 [Mock] 비밀번호 재설정 완료');
 
     return {
         success: true,

@@ -65,7 +65,7 @@ function ApplicationHistorySlide({ isOpen, onClose }) {
 
         setApplications(mappedApplications);
       } catch (err) {
-        console.error('지원 내역 조회 실패:', err);
+
         if (err.message === 'UNAUTHORIZED' || err.code === 'UNAUTHORIZED') {
           setError('로그인이 필요합니다.');
         } else {

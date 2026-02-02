@@ -46,7 +46,7 @@ const CompletedComponent = () => {
     // 평가 대기 프로젝트는 팀원 평가 페이지로 이동
     try {
       if (!user || !user.userId) {
-        console.error('사용자 정보 없음');
+
         alert('로그인이 필요합니다.');
         navigate('/login');
         return;
@@ -76,7 +76,7 @@ const CompletedComponent = () => {
         });
       }
     } catch (error) {
-      console.error('❌ 평가 대상 조회 실패:', error);
+
       // 에러 발생 시 사용자에게 알림
       alert('평가 정보를 불러오는데 실패했습니다. 다시 시도해주세요.');
     }

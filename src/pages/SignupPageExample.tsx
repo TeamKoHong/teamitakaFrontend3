@@ -5,7 +5,7 @@ const SignupPageExample: React.FC = () => {
     const [isPhoneVerified, setIsPhoneVerified] = useState(false);
 
     const handleVerificationSuccess = () => {
-        console.log('Phone verified successfully!');
+
         setIsPhoneVerified(true);
     };
 

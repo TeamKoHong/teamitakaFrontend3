@@ -41,7 +41,7 @@ export default function ReceivedFeedbackDetailPage() {
           setError('해당 평가를 찾을 수 없습니다.');
         }
       } catch (err) {
-        console.error('평가 상세 조회 실패:', err);
+
         setError('평가 정보를 불러오는데 실패했습니다.');
       } finally {
         setLoading(false);

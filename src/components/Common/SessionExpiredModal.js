@@ -34,4 +34,3 @@ export default function SessionExpiredModal({ isOpen, message, autoCloseMs = 200
   );
 }
 
-

@@ -17,7 +17,7 @@ export default function ProjectCalendar() {
   const [selectedDate, setSelectedDate] = useState(null);
 
   const handleDayClick = (date) => {
-    console.log("선택된 날짜:", date);
+
     setSelectedDate(date);
   };
 
@@ -25,7 +25,6 @@ export default function ProjectCalendar() {
     setIsModalOpen(true);
   };
   
-
 
   return (
     <div className="project-calendar-page-container">

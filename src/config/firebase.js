@@ -20,11 +20,10 @@ try {
   app = initializeApp(firebaseConfig);
   auth = getAuth(app);
   if (process.env.NODE_ENV === 'development') {
-    console.log('✅ Firebase initialized successfully');
+
   }
 } catch (error) {
-  console.error('❌ Firebase initialization error:', error);
-  console.error('⚠️  Please check your environment variables in .env.local');
+
 }
 
 export { auth };

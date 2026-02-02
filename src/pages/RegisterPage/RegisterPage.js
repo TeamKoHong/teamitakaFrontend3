@@ -105,7 +105,7 @@ function RegisterPage() {
                         setCodeVerificationError(result.message || '인증번호가 일치하지 않습니다.');
                     }
                 } catch (error) {
-                    console.error('인증 실패:', error);
+
                     setCodeVerificationError(error.message || '인증번호 확인 중 오류가 발생했습니다.');
                 } finally {
                     setIsVerificationLoading(false);
@@ -147,7 +147,7 @@ function RegisterPage() {
                     }
 
                 } catch (error) {
-                    console.error('회원가입 실패:', error);
+
                     alert(error.message || '회원가입 중 오류가 발생했습니다.');
                 } finally {
                     setIsVerificationLoading(false);
@@ -340,7 +340,6 @@ function RegisterPage() {
             }
 
         } catch (error) {
-            console.error('인증번호 전송 에러:', error);
 
             // 409 Conflict: 중복 이메일 에러 처리
             if (error.code === 'DUPLICATE_EMAIL' || error.statusCode === 409) {

@@ -12,7 +12,7 @@ export const createRecruitment = async (recruitmentData) => {
 
     if (!res.ok) {
         const errorData = await res.json();
-        console.error('🚨 Backend error response:', errorData);
+
         const err = new Error(errorData.error || 'Failed to create recruitment');
         err.code = 'SERVER_ERROR';
         throw err;
@@ -236,7 +236,7 @@ export const updateRecruitment = async (recruitmentId, recruitmentData) => {
 
     if (!res.ok) {
         const errorData = await res.json();
-        console.error('🚨 Update recruitment error:', errorData);
+
         const err = new Error(errorData.error || '모집글 수정에 실패했습니다.');
         err.code = 'SERVER_ERROR';
         throw err;
@@ -267,7 +267,7 @@ export const deleteRecruitment = async (recruitmentId) => {
 
     if (!res.ok) {
         const errorData = await res.json();
-        console.error('🚨 Delete recruitment error:', errorData);
+
         const err = new Error(errorData.error || '모집글 삭제에 실패했습니다.');
         err.code = 'SERVER_ERROR';
         throw err;
@@ -318,7 +318,7 @@ export const createProjectFromRecruitment = async (recruitmentId, kickoffData) =
 
     if (!res.ok) {
         const errorData = await res.json();
-        console.error('🚨 Create project error:', errorData);
+
         const err = new Error(errorData.message || '프로젝트 생성에 실패했습니다.');
         err.code = 'SERVER_ERROR';
         throw err;

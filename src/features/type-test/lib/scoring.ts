@@ -91,18 +91,13 @@ export function determinePersonality(scores: AxisScores, answers: Answers): Pers
  * @returns 12개 성격 유형 중 하나
  */
 export function calculateMBTIType(answers: Answers): PersonalityType {
-    console.log('calculateMBTIType 호출됨, 답변 길이:', answers.length);
 
     if (!Array.isArray(answers)) {
         throw new Error('답변은 배열이어야 합니다.');
     }
 
     if (answers.length !== 15) {
-        console.error('답변 길이 오류:', {
-            received: answers.length,
-            expected: 15,
-            answers: answers
-        });
+
         throw new Error(`15개의 답변이 모두 필요합니다. 현재: ${answers.length}개`);
     }
 

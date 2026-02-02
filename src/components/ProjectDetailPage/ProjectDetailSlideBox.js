@@ -32,7 +32,6 @@ function ProjectDetailSlideBox({ project }) {
     }
   }, [progressPercent]);
 
-  console.log(iconLeft);
   return (
     <div className="project-detail-slide-box">
       <Swiper

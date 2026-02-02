@@ -66,7 +66,7 @@ const setupRecaptcha = () => {
         try {
             window.recaptchaVerifier.clear();
         } catch (e) {
-            console.warn('⚠️ RecaptchaVerifier clear failed:', e);
+
         }
         window.recaptchaVerifier = null;
     }
@@ -74,7 +74,7 @@ const setupRecaptcha = () => {
     // 2. Check for container element
     const container = document.getElementById('recaptcha-container');
     if (!container) {
-        console.error('❌ recaptcha-container element not found');
+
         return null;
     }
 
@@ -83,10 +83,10 @@ const setupRecaptcha = () => {
         window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
             size: 'invisible', // invisible mode
             callback: () => {
-                console.log('✅ reCAPTCHA solved');
+
             },
             'expired-callback': () => {
-                console.log('⚠️ reCAPTCHA expired');
+
                 if (window.recaptchaVerifier) {
                     try {
                         window.recaptchaVerifier.clear();
@@ -96,7 +96,7 @@ const setupRecaptcha = () => {
             }
         });
     } catch (e) {
-        console.error('❌ RecaptchaVerifier creation failed:', e);
+
         return null;
     }
 
@@ -135,11 +135,9 @@ export const requestPhoneVerification = async (formData) => {
     }
 
     const formattedPhone = toE164Format(formData.phone);
-    console.log('📱 SMS 발송 요청:', formattedPhone);
 
     // 🧪 테스트 번호 체크 (Firebase 우회)
     if (isTestPhone(formData.phone)) {
-        console.log('🧪 테스트 번호 감지:', formData.phone, '→ Firebase 우회');
 
         // 테스트용 가짜 confirmationResult
         confirmationResult = {
@@ -173,14 +171,12 @@ export const requestPhoneVerification = async (formData) => {
         const result = await signInWithPhoneNumber(auth, formattedPhone, appVerifier);
         confirmationResult = result;
 
-        console.log('✅ Firebase SMS 전송 완료');
-
         return {
             success: true,
             message: '인증번호가 전송되었습니다.'
         };
     } catch (err) {
-        console.error('❌ Firebase SMS 전송 실패:', err);
+
         cleanupRecaptcha();
 
         // 에러 처리
@@ -211,17 +207,13 @@ export const verifyCode = async (code, formData = {}) => {
     }
 
     try {
-        console.log('🔐 인증 코드 확인 중...');
 
         // Firebase 인증 코드 확인
         const credential = await confirmationResult.confirm(code);
         const idToken = await credential.user.getIdToken();
 
-        console.log('✅ Firebase 인증 완료');
-
         // 🧪 테스트 번호는 백엔드 검증 우회
         if (isTestPhone(formData.phone)) {
-            console.log('🧪 테스트 번호 → 백엔드 검증 우회');
 
             // confirmationResult 정리
             confirmationResult = null;
@@ -244,8 +236,6 @@ export const verifyCode = async (code, formData = {}) => {
         // 백엔드 API로 검증 & 사용자 정보 획득
         const response = await verifyPhoneAuth(idToken);
 
-        console.log('✅ 백엔드 인증 완료:', response);
-
         // confirmationResult 정리
         confirmationResult = null;
 
@@ -258,7 +248,6 @@ export const verifyCode = async (code, formData = {}) => {
             user: response.user
         };
     } catch (err) {
-        console.error('❌ 인증 확인 실패:', err);
 
         let userMessage = '인증번호가 일치하지 않습니다.';
         if (err.code === 'auth/invalid-verification-code') {

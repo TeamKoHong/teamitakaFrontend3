@@ -13,7 +13,7 @@ const decodeJWT = (token) => {
         const payload = JSON.parse(atob(parts[1]));
         return payload;
     } catch (error) {
-        console.error('JWT 디코딩 실패:', error);
+
         return null;
     }
 };
@@ -33,10 +33,9 @@ export const setToken = (token, user = null) => {
             localStorage.setItem(TOKEN_EXPIRY_KEY, payload.exp.toString());
         }
 
-        console.log('토큰 저장 완료');
         return true;
     } catch (error) {
-        console.error('토큰 저장 실패:', error);
+
         return false;
     }
 };
@@ -46,7 +45,7 @@ export const getToken = () => {
     try {
         return localStorage.getItem(TOKEN_KEY);
     } catch (error) {
-        console.error('토큰 가져오기 실패:', error);
+
         return null;
     }
 };
@@ -57,7 +56,7 @@ export const getUser = () => {
         const userStr = localStorage.getItem(USER_KEY);
         return userStr ? JSON.parse(userStr) : null;
     } catch (error) {
-        console.error('사용자 정보 가져오기 실패:', error);
+
         return null;
     }
 };
@@ -73,11 +72,11 @@ export const removeToken = () => {
 
         // 실제로 토큰이 있었던 경우에만 로그 출력
         if (hadToken) {
-            console.log('토큰 삭제 완료');
+
         }
         return true;
     } catch (error) {
-        console.error('토큰 삭제 실패:', error);
+
         return false;
     }
 };
@@ -103,7 +102,7 @@ export const isTokenValid = () => {
 
         return expiry > now;
     } catch (error) {
-        console.error('토큰 유효성 검사 실패:', error);
+
         return false;
     }
 };
@@ -128,7 +127,7 @@ export const getTokenRemainingTime = () => {
 
         return Math.max(0, expiry - now);
     } catch (error) {
-        console.error('토큰 남은 시간 계산 실패:', error);
+
         return 0;
     }
 };
@@ -160,7 +159,7 @@ export const shouldRefreshToken = () => {
 export const logout = () => {
     removeToken();
     // 필요한 경우 추가 정리 작업
-    console.log('로그아웃 완료');
+
 };
 
 // 토큰 정보 디버깅용
@@ -180,7 +179,7 @@ export const getTokenInfo = () => {
             remainingTime: getTokenRemainingTime()
         };
     } catch (error) {
-        console.error('토큰 정보 가져오기 실패:', error);
+
         return null;
     }
 };

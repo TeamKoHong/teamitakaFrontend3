@@ -18,7 +18,7 @@ export default function NotificationBox({ projectName = "프로젝트명" }) {
         const data = await fetchProjectNotifications(projectId);
         setAlerts(data);
       } catch (error) {
-        console.error("Failed to load notifications", error);
+
         setAlerts([]);
       } finally {
         setLoading(false);

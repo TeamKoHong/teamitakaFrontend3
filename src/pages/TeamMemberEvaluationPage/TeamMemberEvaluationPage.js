@@ -67,7 +67,7 @@ function TeamMemberEvaluationPage() {
         let projectDetails = null;
         if (location.state?.projectSummary) {
           if (process.env.NODE_ENV === 'development') {
-            console.log('📦 Using project data from location.state:', location.state.projectSummary);
+
           }
           // Use data passed via navigation state
           const stateProject = location.state.projectSummary;
@@ -80,10 +80,10 @@ function TeamMemberEvaluationPage() {
         } else {
           // Fallback: Try to fetch project details from API
           try {
-            console.log('🌐 Fetching project details from API...');
+
             projectDetails = await fetchProjectDetails(projectId);
           } catch (projectErr) {
-            console.warn('프로젝트 상세 정보를 불러오지 못했습니다. 기본 정보를 사용합니다:', projectErr);
+
             // Fallback to basic project data
             projectDetails = {
               title: '프로젝트',
@@ -135,7 +135,7 @@ function TeamMemberEvaluationPage() {
         setRemainingCount(pendingCount);
 
       } catch (err) {
-        console.error('Failed to fetch data:', err);
+
         setError(err.message || '데이터를 불러오는데 실패했습니다.');
       } finally {
         setLoading(false);

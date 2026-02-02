@@ -158,20 +158,20 @@ export const AuthProvider = ({ children }) => {
                     });
 
                     if (process.env.NODE_ENV === 'development') {
-                        console.log('기존 인증 정보 복원됨:', { user: user.email, tokenValid: true });
+
                     }
                 } else {
                     // 유효하지 않은 토큰이나 사용자 정보가 있으면 정리
                     if (token || user) {
                         // 실제로 토큰이나 사용자 정보가 있었던 경우에만 정리하고 로그 출력
                         removeToken();
-                        console.log('저장된 인증 정보 없음 또는 만료됨');
+
                     }
                     // 인증 정보가 없으면 로그아웃 상태로 초기화 (로딩 종료)
                     dispatch({ type: AUTH_ACTIONS.LOGOUT });
                 }
             } catch (error) {
-                console.error('인증 초기화 오류:', error);
+
                 removeToken();
                 dispatch({ type: AUTH_ACTIONS.LOGOUT });
             } finally {
@@ -191,7 +191,7 @@ export const AuthProvider = ({ children }) => {
 
         const checkTokenRefresh = () => {
             if (shouldRefreshToken()) {
-                console.log('토큰 갱신 필요');
+
                 handleRefreshToken();
             }
         };
@@ -218,13 +218,13 @@ export const AuthProvider = ({ children }) => {
                     type: AUTH_ACTIONS.LOGIN_SUCCESS,
                     payload: { user, token }
                 });
-                console.log('로그인 성공:', user.email);
+
                 return true;
             } else {
                 throw new Error('토큰 저장 실패');
             }
         } catch (error) {
-            console.error('로그인 처리 오류:', error);
+
             dispatch({
                 type: AUTH_ACTIONS.LOGIN_FAILURE,
                 payload: { error: error.message }
@@ -238,9 +238,9 @@ export const AuthProvider = ({ children }) => {
         try {
             removeToken();
             dispatch({ type: AUTH_ACTIONS.LOGOUT });
-            console.log('로그아웃 완료');
+
         } catch (error) {
-            console.error('로그아웃 오류:', error);
+
             // 오류가 있어도 강제로 로그아웃 상태로 변경
             dispatch({ type: AUTH_ACTIONS.LOGOUT });
         }
@@ -258,12 +258,12 @@ export const AuthProvider = ({ children }) => {
                     type: AUTH_ACTIONS.REFRESH_TOKEN_SUCCESS,
                     payload: { token: result.token }
                 });
-                console.log('토큰 갱신 성공');
+
             } else {
                 throw new Error('토큰 갱신 응답에 토큰이 없음');
             }
         } catch (error) {
-            console.error('토큰 갱신 실패:', error);
+
             dispatch({
                 type: AUTH_ACTIONS.REFRESH_TOKEN_FAILURE,
                 payload: { error: error.message }
@@ -290,7 +290,7 @@ export const AuthProvider = ({ children }) => {
                 });
             }
         } catch (error) {
-            console.error('사용자 정보 업데이트 오류:', error);
+
         }
     };
 

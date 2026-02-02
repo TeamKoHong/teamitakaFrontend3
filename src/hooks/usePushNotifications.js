@@ -12,7 +12,7 @@ export const usePushNotifications = (options = {}) => {
   // 권한 요청
   const requestPermission = useCallback(async () => {
     if (!isNative) {
-      console.log('Push notifications only work on native platforms');
+
       return false;
     }
 
@@ -26,7 +26,7 @@ export const usePushNotifications = (options = {}) => {
       }
       return false;
     } catch (e) {
-      console.error('Push permission error:', e);
+
       return false;
     }
   }, []);
@@ -40,7 +40,7 @@ export const usePushNotifications = (options = {}) => {
       setPermissionStatus(result.receive);
       return result.receive;
     } catch (e) {
-      console.error('Check permission error:', e);
+
       return 'denied';
     }
   }, []);
@@ -53,7 +53,7 @@ export const usePushNotifications = (options = {}) => {
     const registrationListener = PushNotifications.addListener(
       'registration',
       (token) => {
-        console.log('Push registration success:', token.value);
+
         setToken(token.value);
         onTokenReceived?.(token.value);
       }
@@ -63,7 +63,7 @@ export const usePushNotifications = (options = {}) => {
     const registrationErrorListener = PushNotifications.addListener(
       'registrationError',
       (error) => {
-        console.error('Push registration error:', error);
+
       }
     );
 
@@ -71,7 +71,7 @@ export const usePushNotifications = (options = {}) => {
     const pushReceivedListener = PushNotifications.addListener(
       'pushNotificationReceived',
       (notification) => {
-        console.log('Push received:', notification);
+
         onNotificationReceived?.(notification);
       }
     );
@@ -80,7 +80,7 @@ export const usePushNotifications = (options = {}) => {
     const pushActionListener = PushNotifications.addListener(
       'pushNotificationActionPerformed',
       (action) => {
-        console.log('Push action performed:', action);
+
         onNotificationTapped?.(action.notification, action.actionId);
       }
     );
@@ -103,7 +103,7 @@ export const usePushNotifications = (options = {}) => {
     try {
       await PushNotifications.removeAllDeliveredNotifications();
     } catch (e) {
-      console.error('Clear badge error:', e);
+
     }
   }, []);
 

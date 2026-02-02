@@ -98,19 +98,19 @@ export function logComparisonReport(report, label = "Project Comparison") {
 
   // Show warnings only if there are issues
   if (report.duplicatesUI.length) {
-    console.warn("⚠️ Duplicate IDs in UI:", report.duplicatesUI);
+
   }
 
   if (report.missingInUI.length) {
-    console.warn("⚠️ Missing in UI (present in server):", report.missingInUI);
+
   }
 
   if (report.extraInUI.length) {
-    console.warn("⚠️ Extra in UI (not in server):", report.extraInUI);
+
   }
 
   if (report.fieldMismatches.length) {
-    console.warn("⚠️ Field Mismatches:");
+
     report.fieldMismatches.forEach(({ id, diff }) => {
       console.group(`  ID: ${id}`);
       console.table(diff);
@@ -124,7 +124,7 @@ export function logComparisonReport(report, label = "Project Comparison") {
     !report.extraInUI.length &&
     !report.fieldMismatches.length
   ) {
-    console.log("✅ All checks passed - Server and UI are in sync");
+
   }
 
   console.groupEnd();

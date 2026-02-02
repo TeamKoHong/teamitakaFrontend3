@@ -26,4 +26,3 @@ export function navigateToRatingProjectById(navigate, projectId) {
   navigate(`/project/${projectId}/rating-project`);
 }
 
-

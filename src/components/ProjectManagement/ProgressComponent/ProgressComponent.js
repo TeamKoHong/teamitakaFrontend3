@@ -79,7 +79,7 @@ function ProgressComponent() {
                 { value: "date", label: "날짜순" },
                 { value: "meeting", label: "회의 빠른 순" },
               ]}
-              onFilterChange={(e) => console.log(e.target.value)}
+              onFilterChange={() => {}}
             />
           </section>
           

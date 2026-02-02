@@ -50,14 +50,14 @@ export default function QuizPage() {
                         localStorage.setItem('user_mbti_type', mbtiType);
 
                     } catch (apiError) {
-                        console.error('Failed to save result:', apiError);
+
                         // Even if server save fails, save locally so user sees result
                         localStorage.setItem('user_mbti_type', mbtiType);
                     }
 
                     router.push(`/type-test/complete?type=${encodeURIComponent(mbtiType)}`, { state: { from } });
                 } catch (error) {
-                    console.error('타입 계산 오류:', error);
+
                     alert('결과 분석 중 오류가 발생했습니다. 다시 시도해주세요.');
                     setIsProcessing(false);
                 }

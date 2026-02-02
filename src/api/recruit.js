@@ -77,7 +77,6 @@ export const saveDraftToList = (partial) => {
 export const getCurrentDraftId = () => localStorage.getItem(CURRENT_ID_KEY);
 export const setCurrentDraftId = (id) => localStorage.setItem(CURRENT_ID_KEY, id);
 
-
 // ───────── API 요청 함수들 ─────────
 
 /**

@@ -24,7 +24,7 @@ const CompletedProjectSimpleCard = ({ project, onClick }) => {
             const { toggleProjectFavorite } = await import('../../../services/projects');
             await toggleProjectFavorite(project.project_id);
         } catch (error) {
-            console.error('Failed to toggle favorite:', error);
+
             // 3. Rollback on failure
             setIsStarred(previousState);
             alert('즐겨찾기 변경에 실패했습니다.');

@@ -22,12 +22,12 @@ export default function TeamSelectPage() {
       }
 
       try {
-        console.log("🔍 [TeamSelectPage] Fetching recruitment:", id);
+
         const data = await getRecruitment(id);
-        console.log("✅ [TeamSelectPage] Recruitment data:", data);
+
         setRecruitment(data);
       } catch (err) {
-        console.error("❌ [TeamSelectPage] Error:", err);
+
         setError(err.message);
         if (err.code === "UNAUTHORIZED") {
           navigate("/login");

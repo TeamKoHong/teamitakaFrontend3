@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './OnboardingPage.scss';
 
-
 function OnboardingPage() {
     const navigate = useNavigate();
 

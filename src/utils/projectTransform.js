@@ -34,7 +34,7 @@ import { calculateProgress, calculateRemainingDays } from './calculateProgress';
  */
 export function transformProjectForEvaluation(apiProject) {
   if (!apiProject) {
-    console.warn('transformProjectForEvaluation: 프로젝트 데이터가 없습니다.');
+
     return null;
   }
 
@@ -75,7 +75,7 @@ export function transformProjectForEvaluation(apiProject) {
         percent: Math.round(progress)
       };
     } catch (error) {
-      console.error('D-day 계산 실패:', error);
+
       dday = { value: 'D-?', percent: 0 };
     }
   }
@@ -100,7 +100,7 @@ export function transformProjectForEvaluation(apiProject) {
  */
 export function transformProjectsForEvaluation(projects) {
   if (!Array.isArray(projects)) {
-    console.warn('transformProjectsForEvaluation: 배열이 아닙니다.');
+
     return [];
   }
 

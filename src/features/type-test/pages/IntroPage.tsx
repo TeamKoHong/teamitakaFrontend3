@@ -58,7 +58,7 @@ export default function IntroPage() {
                 alert('링크가 복사되었습니다!');
             }
         } catch (error) {
-            console.error('공유 실패:', error);
+
         }
     };
 

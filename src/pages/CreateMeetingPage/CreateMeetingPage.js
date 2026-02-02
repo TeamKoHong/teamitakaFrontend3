@@ -45,8 +45,7 @@ export default function CreateMeetingPage() {
       // 성공 시 회의록 목록 페이지로 이동
       navigate(`/project/${projectId}/proceedings`);
     } catch (err) {
-      console.error("Failed to create meeting:", err);
-      
+
       if (err.code === 'UNAUTHORIZED') {
         alert("로그인이 필요합니다.");
         navigate("/login");
