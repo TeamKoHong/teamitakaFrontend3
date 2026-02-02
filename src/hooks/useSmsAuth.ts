@@ -3,6 +3,11 @@ import { getApiConfig } from '../services/auth';
 
 type SmsAuthStep = 'INPUT_PHONE' | 'INPUT_CODE' | 'VERIFIED';
 
+interface SmsError {
+    message: string;
+    subMessage?: string;
+}
+
 interface UseSmsAuthOptions {
     initialSessionId?: string;
     initialTimerStart?: number;
@@ -16,6 +21,7 @@ interface UseSmsAuthReturn {
     timer: number;
     isLoading: boolean;
     error: string | null;
+    errorSubMessage: string | null;
     sessionId: string | null;
     handlePhoneChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleCodeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -49,9 +55,29 @@ export const useSmsAuth = (options?: UseSmsAuthOptions): UseSmsAuthReturn => {
     const [timer, setTimer] = useState(calculateInitialTimer);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [errorSubMessage, setErrorSubMessage] = useState<string | null>(null);
     const [sessionId, setSessionId] = useState<string | null>(
         options?.initialSessionId || null
     );
+
+    // SMS 에러 코드별 메시지 매핑
+    const getSmsErrorMessage = (errorCode: string, defaultMessage?: string): SmsError => {
+        switch (errorCode) {
+            case 'SMS_SERVICE_UNAVAILABLE':
+                return {
+                    message: '인증 서비스가 일시적으로 이용 불가합니다.',
+                    subMessage: '문제가 지속되면 teamitaka.official@gmail.com으로 문의해주세요.'
+                };
+            case 'SMS_SEND_FAILED':
+                return {
+                    message: '인증번호 발송에 실패했습니다. 잠시 후 다시 시도해주세요.'
+                };
+            default:
+                return {
+                    message: defaultMessage || '서버 오류입니다. 인증번호 전송에 실패했습니다.'
+                };
+        }
+    };
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
@@ -67,12 +93,14 @@ export const useSmsAuth = (options?: UseSmsAuthOptions): UseSmsAuthReturn => {
         const formatted = formatPhoneNumber(e.target.value);
         setPhone(formatted);
         setError(null);
+        setErrorSubMessage(null);
     };
 
     const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value.replace(/[^\d]/g, '').slice(0, 4);
         setCode(val);
         setError(null);
+        setErrorSubMessage(null);
     };
 
     const sendSms = async (): Promise<string | undefined> => {
@@ -81,11 +109,13 @@ export const useSmsAuth = (options?: UseSmsAuthOptions): UseSmsAuthReturn => {
 
         if (!phoneRegex.test(plainPhone)) {
             setError('올바른 전화번호를 입력해주세요 (010-XXXX-XXXX).');
+            setErrorSubMessage(null);
             return;
         }
 
         setIsLoading(true);
         setError(null);
+        setErrorSubMessage(null);
 
         try {
             const { API_BASE_URL, headers } = getApiConfig();
@@ -98,16 +128,28 @@ export const useSmsAuth = (options?: UseSmsAuthOptions): UseSmsAuthReturn => {
 
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
+                const errorCode = errorData.errorCode || errorData.code;
 
                 if (response.status === 409) {
                     // 전화번호 중복 (백엔드에서 체크)
                     setError(errorData.message || '이미 가입된 전화번호입니다.');
+                    setErrorSubMessage(null);
                 } else if (response.status === 429) {
                     setError('요청이 너무 많습니다. 잠시 후 다시 시도해주세요.');
+                    setErrorSubMessage(null);
                 } else if (response.status === 400) {
                     setError(errorData.message || '입력값 오류입니다.');
+                    setErrorSubMessage(null);
+                } else if (errorCode === 'SMS_SERVICE_UNAVAILABLE' || errorCode === 'SMS_SEND_FAILED') {
+                    // SMS 서비스 에러
+                    const smsError = getSmsErrorMessage(errorCode, errorData.message);
+                    setError(smsError.message);
+                    setErrorSubMessage(smsError.subMessage || null);
                 } else {
-                    setError('서버 오류입니다. 인증번호 전송에 실패했습니다.');
+                    // 기타 서버 에러
+                    const smsError = getSmsErrorMessage('', errorData.message);
+                    setError(smsError.message);
+                    setErrorSubMessage(null);
                 }
                 return;
             }
@@ -121,7 +163,8 @@ export const useSmsAuth = (options?: UseSmsAuthOptions): UseSmsAuthReturn => {
 
             return newSessionId;
         } catch (err) {
-            setError('네트워크 오류입니다. 연결 상태를 확인해주세요.');
+            setError('네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.');
+            setErrorSubMessage(null);
         } finally {
             setIsLoading(false);
         }
@@ -174,6 +217,7 @@ export const useSmsAuth = (options?: UseSmsAuthOptions): UseSmsAuthReturn => {
         setStep('INPUT_PHONE');
         setTimer(0);
         setError(null);
+        setErrorSubMessage(null);
         setSessionId(null);
     }, []);
 
@@ -184,6 +228,7 @@ export const useSmsAuth = (options?: UseSmsAuthOptions): UseSmsAuthReturn => {
         timer,
         isLoading,
         error,
+        errorSubMessage,
         sessionId,
         handlePhoneChange,
         handleCodeChange,

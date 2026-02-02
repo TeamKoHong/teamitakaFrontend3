@@ -1,3 +1,5 @@
+import supabase from '../config/supabase';
+
 // API 기본 URL과 인증 헤더를 설정하는 헬퍼 함수
 export const getApiConfig = () => {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -26,7 +28,16 @@ export const getApiConfig = () => {
     return { API_BASE_URL, headers };
 };
 
-// 이메일 인증 코드 전송
+// 대학교 이메일 도메인 검증 (.ac.kr, .edu만 허용)
+const ALLOWED_DOMAIN_SUFFIXES = ['.ac.kr', '.edu'];
+
+export const isUniversityEmail = (email) => {
+    if (!email || !email.includes('@')) return false;
+    const domain = email.split('@')[1].toLowerCase();
+    return ALLOWED_DOMAIN_SUFFIXES.some(suffix => domain.endsWith(suffix));
+};
+
+// 이메일 인증 코드 전송 (Supabase OTP)
 export const sendVerificationCode = async (email, retryCount = 0) => {
     try {
         // 이메일 형식 검증
@@ -34,73 +45,64 @@ export const sendVerificationCode = async (email, retryCount = 0) => {
             throw new Error('올바른 이메일 형식이 아닙니다.');
         }
 
-        const { API_BASE_URL, headers } = getApiConfig();
+        // 대학교 이메일 도메인 검증
+        if (!isUniversityEmail(email)) {
+            const error = new Error('대학교 이메일만 사용 가능합니다. (.ac.kr 또는 .edu)');
+            error.code = 'INVALID_UNIVERSITY_EMAIL';
+            throw error;
+        }
 
         // 🧪 [개발용] 테스트 이메일 우회 로직
-        if (email === 'test@email.com') {
-
-            // 실제 네트워크 딜레이 흉내
+        if (email === 'test@test.ac.kr') {
             await new Promise(resolve => setTimeout(resolve, 500));
             return { success: true, message: '인증 코드가 전송되었습니다. (테스트 모드)' };
         }
 
-        const response = await fetch(`${API_BASE_URL}/api/auth/send-verification`, {
+        // 백엔드에서 이메일 중복 체크
+        const { API_BASE_URL, headers } = getApiConfig();
+        const checkResponse = await fetch(`${API_BASE_URL}/api/auth/check-email`, {
             method: 'POST',
             headers,
             body: JSON.stringify({ email }),
         });
 
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({
-                error: 'UNKNOWN_ERROR',
-                message: '응답을 파싱할 수 없습니다.'
-            }));
+        if (checkResponse.status === 409) {
+            const error = new Error('이미 가입된 이메일입니다. 다른 이메일을 사용하거나 로그인해주세요.');
+            error.code = 'DUPLICATE_EMAIL';
+            error.statusCode = 409;
+            throw error;
+        }
 
-            // 409 Conflict: 중복 이메일 에러 처리
-            if (response.status === 409) {
-                const error = new Error('이미 가입된 이메일입니다. 다른 이메일을 사용하거나 로그인해주세요.');
-                error.code = 'DUPLICATE_EMAIL';
-                error.statusCode = 409;
-                throw error;
-            }
+        // Supabase OTP 발송
+        const { error: supabaseError } = await supabase.auth.signInWithOtp({
+            email,
+            options: { shouldCreateUser: true }
+        });
 
-            // 429 Too Many Requests: Rate Limiting 초과
-            if (response.status === 429) {
+        if (supabaseError) {
+            // Rate Limiting 에러
+            if (supabaseError.message?.includes('rate') || supabaseError.status === 429) {
                 const error = new Error('요청 횟수가 너무 많습니다. 잠시 후 다시 시도해주세요.');
                 error.code = 'RATE_LIMITED';
                 error.statusCode = 429;
                 throw error;
             }
 
-            // 400 Bad Request: 이메일 형식 오류
-            if (response.status === 400) {
-                const error = new Error(errorData.message || '유효하지 않은 이메일 형식입니다.');
-                error.code = errorData.error || 'INVALID_EMAIL';
-                error.statusCode = 400;
-                throw error;
-            }
-
-            // 재시도 가능한 에러인지 확인
-            if (shouldRetry(response.status, retryCount)) {
-
-                await new Promise(resolve => setTimeout(resolve, 1000 * (retryCount + 1))); // 지수 백오프
-                return sendVerificationCode(email, retryCount + 1);
-            }
-
-            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            throw new Error(supabaseError.message || '인증번호 전송에 실패했습니다.');
         }
 
-        const result = await response.json();
-
-        return result;
+        return { success: true, message: '인증 코드가 전송되었습니다.' };
 
     } catch (error) {
-
         // 네트워크 에러인 경우 재시도
         if (isNetworkError(error) && retryCount < 2) {
-
             await new Promise(resolve => setTimeout(resolve, 1000 * (retryCount + 1)));
             return sendVerificationCode(email, retryCount + 1);
+        }
+
+        // 이미 처리된 에러는 그대로 전달
+        if (error.code) {
+            throw error;
         }
 
         throw new Error(error.message || '인증번호 전송에 실패했습니다.');
@@ -111,12 +113,6 @@ export const sendVerificationCode = async (email, retryCount = 0) => {
 const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
-};
-
-// 재시도 여부 판단 함수
-const shouldRetry = (statusCode, retryCount) => {
-    const retryableStatuses = [408, 429, 502, 503, 504];
-    return retryableStatuses.includes(statusCode) && retryCount < 2;
 };
 
 // 네트워크 에러 판단 함수
@@ -205,36 +201,53 @@ export const useEmailVerification = () => {
 };
 */
 
-// 인증 코드 검증
+// 인증 코드 검증 (Supabase OTP)
 export const verifyCode = async (email, code) => {
     try {
         if (!email || !code) {
             throw new Error('이메일과 인증 코드가 필요합니다.');
         }
 
-        const { API_BASE_URL, headers } = getApiConfig();
-
-        const response = await fetch(`${API_BASE_URL}/api/auth/verify-code`, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify({ email, code }),
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({
-                error: 'UNKNOWN_ERROR',
-                message: '응답을 파싱할 수 없습니다.'
-            }));
-
-            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        // 🧪 [개발용] 테스트 이메일 우회 로직
+        if (email === 'test@test.ac.kr' && code === '123456') {
+            await new Promise(resolve => setTimeout(resolve, 500));
+            return {
+                success: true,
+                accessToken: 'test-supabase-access-token-' + Date.now(),
+                message: '인증 완료 (테스트 모드)'
+            };
         }
 
-        const result = await response.json();
+        // Supabase OTP 검증
+        const { data, error: supabaseError } = await supabase.auth.verifyOtp({
+            email,
+            token: code,
+            type: 'email'
+        });
 
-        return result;
+        if (supabaseError) {
+            if (supabaseError.message?.includes('expired')) {
+                throw new Error('인증 코드가 만료되었습니다. 다시 요청해주세요.');
+            }
+            if (supabaseError.message?.includes('invalid')) {
+                throw new Error('인증번호가 일치하지 않습니다.');
+            }
+            throw new Error(supabaseError.message || '인증번호 확인에 실패했습니다.');
+        }
+
+        // accessToken 추출
+        const accessToken = data.session?.access_token;
+
+        // Supabase 세션 정리 (회원가입 전이므로 로그아웃)
+        await supabase.auth.signOut();
+
+        return {
+            success: true,
+            accessToken,
+            message: '이메일 인증이 완료되었습니다.'
+        };
 
     } catch (error) {
-
         throw new Error(error.message || '인증번호 확인에 실패했습니다.');
     }
 };
@@ -260,38 +273,10 @@ export const checkVerificationStatus = async (email) => {
     }
 };
 
-// 인증 코드 재전송
+// 인증 코드 재전송 (Supabase OTP)
 export const resendVerificationCode = async (email) => {
-    try {
-        if (!email || !isValidEmail(email)) {
-            throw new Error('올바른 이메일 형식이 아닙니다.');
-        }
-
-        const { API_BASE_URL, headers } = getApiConfig();
-
-        const response = await fetch(`${API_BASE_URL}/api/auth/send-verification`, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify({ email }),
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({
-                error: 'UNKNOWN_ERROR',
-                message: '응답을 파싱할 수 없습니다.'
-            }));
-
-            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-        }
-
-        const result = await response.json();
-
-        return result;
-
-    } catch (error) {
-
-        throw new Error(error.message || '인증번호 재전송에 실패했습니다.');
-    }
+    // sendVerificationCode와 동일한 로직 사용
+    return sendVerificationCode(email);
 };
 
 // 사용자 등록

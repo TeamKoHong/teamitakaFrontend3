@@ -71,6 +71,7 @@ function RegisterPage() {
     const [verificationErrorCode, setVerificationErrorCode] = useState('');
     const [codeVerificationError, setCodeVerificationError] = useState(''); // 인증코드 확인 에러
     const [isVerificationLoading, setIsVerificationLoading] = useState(false);
+    const [supabaseAccessToken, setSupabaseAccessToken] = useState(''); // Supabase 이메일 인증 토큰
 
     // 이미 로그인된 사용자는 메인 페이지로 리디렉션
     useEffect(() => {
@@ -99,6 +100,10 @@ function RegisterPage() {
                     const result = await verifyCode(email, verificationCode);
 
                     if (result.success) {
+                        // Supabase accessToken 저장
+                        if (result.accessToken) {
+                            setSupabaseAccessToken(result.accessToken);
+                        }
                         // 인증 성공 → 완료 화면으로 이동
                         setCurrentStep(4);
                     } else {
@@ -122,7 +127,7 @@ function RegisterPage() {
 
                     // Construct Payload
                     // phoneData is { name, phone, birthDate, genderCode, carrier }
-                    // API expects: name, phoneNumber, residentNumber, schoolEmail, password
+                    // API expects: name, phoneNumber, residentNumber, schoolEmail, password, supabaseAccessToken
                     const payload = {
                         name: phoneData?.name || '',
                         phoneNumber: phoneData?.phone || '',
@@ -132,7 +137,8 @@ function RegisterPage() {
                         marketingAgreed: consents.marketing,
                         thirdPartyAgreed: consents.thirdParty,
                         isSmsVerified: true,
-                        isEmailVerified: true
+                        isEmailVerified: true,
+                        supabaseAccessToken: supabaseAccessToken // Supabase 이메일 인증 토큰
                     };
 
                     const result = await registerUser(payload);
@@ -353,6 +359,13 @@ function RegisterPage() {
             if (error.code === 'RATE_LIMITED' || error.statusCode === 429) {
                 setVerificationError('요청 횟수가 너무 많습니다. 잠시 후 다시 시도해주세요.');
                 setVerificationErrorCode('RATE_LIMITED');
+                return;
+            }
+
+            // 대학교 이메일이 아닌 경우
+            if (error.code === 'INVALID_UNIVERSITY_EMAIL') {
+                setVerificationError('대학교 이메일만 사용 가능합니다. (.ac.kr 또는 .edu)');
+                setVerificationErrorCode('INVALID_UNIVERSITY_EMAIL');
                 return;
             }
 

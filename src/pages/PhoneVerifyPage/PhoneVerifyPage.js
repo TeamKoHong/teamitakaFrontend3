@@ -20,6 +20,7 @@ function PhoneVerifyPage() {
         phone,
         isLoading: isSmsLoading,
         error: smsError,
+        errorSubMessage: smsErrorSubMessage,
         handlePhoneChange,
         sendSms,
     } = useSmsAuth();
@@ -131,7 +132,12 @@ function PhoneVerifyPage() {
 
                 {/* Error Message */}
                 {smsError && (
-                    <div className={styles.errorMessage}>{smsError}</div>
+                    <div className={styles.errorMessage}>
+                        {smsError}
+                        {smsErrorSubMessage && (
+                            <div className={styles.errorSubMessage}>{smsErrorSubMessage}</div>
+                        )}
+                    </div>
                 )}
             </div>
 
