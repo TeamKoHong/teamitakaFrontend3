@@ -9,8 +9,8 @@ import styles from './ProfileMainPage.module.scss';
 
 // Assets
 import backIcon from '../../../assets/back.png';
-import settingIcon from '../../../assets/setting.png'; 
-import profileDefault from '../../../assets/profile_default.png'; 
+import settingIcon from '../../../assets/setting.png';
+import profileDefault from '../../../assets/profile_default.png';
 import verificationBadge from '../../../assets/대학_인증_완료.svg';
 import 비회원배너 from '../../../assets/character_banner/비회원 캐릭터 배너_테스트유도용.png';
 import skillDefaultImg from '../../../assets/skill_default.png';
@@ -98,7 +98,7 @@ export default function ProfileMainPage() {
       try {
         setIsLoading(true);
         const [userRes, profileRes] = await Promise.all([getMe(), getProfileDetail()]);
-        
+
         if (userRes?.success) setUserData(userRes.user);
         if (profileRes?.success) setProfileData(profileRes.data);
 
@@ -115,7 +115,7 @@ export default function ProfileMainPage() {
         setRegisteredProjectIds(savedIds);
 
       } catch (err) {
-
+        // Data load failed silently
       } finally {
         setIsLoading(false);
       }
@@ -125,16 +125,15 @@ export default function ProfileMainPage() {
 
   const ongoingCount = profileData?.currentProjects || 0;
   const allProjects = profileData?.projects || [];
-  
-  // 등록된 ID에 해당하는 프로젝트만 필터링
+
   const displayProjects = allProjects.filter(p => {
     const pId = p.projectId || p.id || p._id;
     return registeredProjectIds.includes(pId);
   });
 
   const skills = profileData?.skills || {};
-  const hasValidSkills = skills && 
-                         Object.keys(skills).length > 0 && 
+  const hasValidSkills = skills &&
+                         Object.keys(skills).length > 0 &&
                          Object.values(skills).some(value => value > 0);
 
   const feedbackStrengths = summaryData.strengths.length > 0 ? summaryData.strengths : (profileData?.feedback?.positive || []);
@@ -163,7 +162,7 @@ export default function ProfileMainPage() {
             <div className={styles.profileName}>
               <span className={styles.nameBold}>{userData?.username || '사용자'}</span>
               <span className={styles.nameRegular}>&nbsp;티미님</span>
-            </div>      
+            </div>
             <div className={styles.profileUniversity}>
               <GraduationCapIcon />
               <span>{userData?.university ? `${userData.university} ${userData.major || ''}` : '정보를 입력해주세요'}</span>
@@ -222,14 +221,13 @@ export default function ProfileMainPage() {
             <div className={styles.projectGrid}>
               {displayProjects.map((p, i) => {
                 const targetId = p.projectId || p.id || p._id;
-                
-                // [UI] 제목에서 "[상호평가 완료]" 제거
+
                 const cleanTitle = (p.title || "").replace("[상호평가 완료]", "").trim();
 
                 return (
-                    <div 
-                      key={targetId || i} 
-                      className={styles.projectCard} 
+                    <div
+                      key={targetId || i}
+                      className={styles.projectCard}
                       onClick={() => targetId && navigate(`/profile/project/view/${targetId}`)}
                     >
                       <img src={p.thumbnail || profileDefault} alt="썸네일" className={styles.projectThumbnail} />
@@ -237,18 +235,16 @@ export default function ProfileMainPage() {
                     </div>
                 );
               })}
-              
-               {/* 🔥 등록된 프로젝트가 있을 때 뜨는 작은 추가 카드 */}
-               <div 
-                 className={styles.emptyProjectCard} 
-                 style={{height: 'auto', minHeight: '100px'}} 
+
+               <div
+                 className={styles.emptyProjectCard}
+                 style={{height: 'auto', minHeight: '100px'}}
                  onClick={() => navigate('/profile/register-project')}
                >
                   <span className={styles.plusIcon}>+</span>
-                  {/* 🔥 아래 텍스트 추가 */}
-                  <span 
-                    className={styles.emptyProjectText} 
-                    style={{ fontSize: '12px', marginTop: '4px' }}
+                  <span
+                    className={styles.emptyProjectText}
+                    style={{ fontSize: '12px' }}
                   >
                     프로젝트 등록하기
                   </span>
