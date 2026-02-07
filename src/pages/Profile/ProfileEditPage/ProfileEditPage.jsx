@@ -150,7 +150,7 @@ export default function ProfileEditPage() {
 
   // 로그아웃 핸들러
   const handleLogout = () => {
-    try { sessionStorage.setItem('suppress-session-expired', '1'); } catch (e) { }
+    try { sessionStorage.setItem('suppress-session-expired', '1'); } catch (e) { /* silent: sessionStorage 접근 불가 무시 */ }
     try { logout(); } catch (e) {
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');

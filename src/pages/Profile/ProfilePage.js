@@ -49,7 +49,7 @@ const ProfilePage = () => {
 
   const onLogout = () => {
     // 수동 로그아웃에서는 세션 만료 모달을 띄우지 않도록 suppress 플래그 설정
-    try { sessionStorage.setItem('suppress-session-expired', '1'); } catch (e) {}
+    try { sessionStorage.setItem('suppress-session-expired', '1'); } catch (e) { /* silent: sessionStorage 접근 불가 무시 */ }
     // 컨텍스트 로그아웃으로 상태까지 정리
     try { logout(); } catch (e) {
       localStorage.removeItem("authToken");

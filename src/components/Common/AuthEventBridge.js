@@ -14,7 +14,7 @@ export default function AuthEventBridge() {
     const onExpired = () => {
       if (redirecting) return;
       redirecting = true;
-      try { logout(); } catch (e) { }
+      try { logout(); } catch (e) { /* silent: logout 실패 무시 */ }
       if (location.pathname !== '/login') {
         navigate('/login', { replace: true });
       }

@@ -76,6 +76,7 @@ import { UniversityFilterProvider } from './contexts/UniversityFilterContext';
 import { PushNotificationProvider } from './contexts/PushNotificationContext';
 import GlobalToastSystem from './components/Common/GlobalToastSystem';
 import AuthEventBridge from './components/Common/AuthEventBridge';
+import ErrorBoundary from './components/Common/ErrorBoundary';
 import ProtectedRoute, { PublicRoute } from './components/ProtectedRoute';
 import ProfileVerificationPage from './pages/Profile/ProfileVerificationPage';
 
@@ -282,6 +283,7 @@ const NativeAppInitializer = ({ children }) => {
 
 const App = () => {
   return (
+    <ErrorBoundary>
     <Router>
       <NativeAppInitializer>
       <PushNotificationProvider>
@@ -393,6 +395,7 @@ const App = () => {
       </PushNotificationProvider>
       </NativeAppInitializer>
     </Router>
+    </ErrorBoundary>
   );
 };
 
