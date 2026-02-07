@@ -1,14 +1,10 @@
 // 북마크 페이지 스타일링
 .bookmark-page-container {
   min-height: 100vh;
-  min-height: 100svh;
   background-color: #f8f9fa;
   display: flex;
   flex-direction: column;
-  padding-top: calc(64px + env(safe-area-inset-top, 0px)); // 헤더 높이 + SafeArea
-  padding-left: env(safe-area-inset-left, 0px);
-  padding-right: env(safe-area-inset-right, 0px);
-  padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px) + 20px);
+  padding-top: 64px; // 헤더 높이만큼 상단 패딩
 }
 
 .bookmark-main {
@@ -17,10 +13,10 @@
   padding-bottom: 20px;
 }
 
-// 북마크 요약 섹션
+// 북마크 요약 문구
 .bookmark-summary {
   margin-bottom: 20px;
-  
+
   .summary-text {
     font-size: 20px;
     color: #140805;
@@ -29,73 +25,17 @@
     font-family: Pretendard;
     text-transform: capitalize;
     line-height: 140%;
-    
+
     .urgent-count {
       color: #ff6b35;
       font-weight: 600;
     }
+
+    .summary-second-line {
+      font-size: 15px;
+    }
   }
 }
-
-// 통계 섹션
-.bookmark-stats {
-  display: flex;
-  align-items: center;
-  
-  
-  
-  .stat-item {
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
-    transition: opacity 0.2s ease;
-    
-    &:hover {
-      opacity: 0.7;
-    }
-    
-    .stat-top {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    
-    .stat-icon {
-      width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
-    }
-    
-    .stat-number {
-      font-size: 18px;
-      font-weight: 600;
-      color: #333;
-    }
-    
-    .stat-label {
-      font-size: 14px;
-      color: #666;
-      font-weight: 400;
-    }
-  }
-  
-  .stat-divider {
-    width: 1px;
-    height: 28px;
-    margin: 0 20px;
-    background-color: #e0e0e0;
-  }
-}
-
-
 
 // 탭 네비게이션
 .tab-navigation {
@@ -103,7 +43,7 @@
   gap: 12px;
   margin-top: 24px;
   margin-bottom: 26px;
-  
+
   .tab-button {
     flex: 1;
     padding: 8px 12px;
@@ -117,13 +57,13 @@
     color: #D1CCCB;
     cursor: pointer;
     transition: all 0.2s ease;
-    
+
     &.active {
       background-color: #ff6b35;
       color: white;
       border-color: #ff6b35;
     }
-    
+
     &:hover:not(.active) {
       border-color: #ff6b35;
       color: #ff6b35;
@@ -142,27 +82,27 @@
 .bookmark-page-container .bookmark-project-list .bookmark-project-card {
   background-color: white;
   border-radius: 12px;
-  padding: 16px !important; 
+  padding: 16px !important;
   display: flex;
   gap: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   font-family: Pretendard;
   line-height: normal;
-  
+
   .bookmark-project-content {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    
+
     .bookmark-project-dates {
       font-size: 12px;
       color: #807C7C;
       font-weight: 500;
-    
+
     }
-    
+
     .bookmark-project-title {
       font-size: 14px;
       font-weight: 600;
@@ -170,7 +110,7 @@
 
       line-height: 1.3;
     }
-    
+
     .bookmark-project-description {
       font-size: 11px;
       color: #807C7C;
@@ -180,16 +120,16 @@
       overflow: hidden;
     }
   }
-  
+
     .bookmark-project-image {
       width: 30%;
       min-width: 80px;
       max-width: 116px;
       aspect-ratio: 1;
       border-radius: 8px;
-      overflow: visible; // 북마크 아이콘이 밖으로 나올 수 있도록
+      overflow: visible;
       flex-shrink: 0;
-      position: relative; // 북마크 아이콘 absolute 위치 기준
+      position: relative;
 
       img {
         width: 100%;
@@ -226,7 +166,7 @@
   .bookmark-main {
     padding: 16px 12px;
   }
-  
+
   .bookmark-page-container .bookmark-project-list .bookmark-project-card {
     padding: 12px !important;
     gap: 12px;
@@ -241,28 +181,6 @@
         height: 20px;
         top: 4px;
         right: 4px;
-      }
-    }
-  }
-  
-  .bookmark-stats {
-    
-    .stat-item {
-      .stat-icon {
-        width: 11px;
-        height: 11px;
-      }
-      
-      .stat-number {
-        font-size: 12px;
-        font-weight: 600;
-        line-height: normal;
-        text-transform: capitalize;
-        font-family: Pretendard;
-      }
-      
-      .stat-label {
-        font-size: 12px;
       }
     }
   }

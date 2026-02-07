@@ -1,25 +1,16 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DefaultHeader from "../../components/Common/DefaultHeader";
 import projectDefaultImg from "../../assets/icons/project_default_img.png";
-import SmallBookmarkIcon from "../../assets/icons/small_bookMark.svg";
-import BookmarkCheckCircleIcon from "../../assets/icons/bookMark_checkCircle.svg";
-import BookmarkCalendarIcon from "../../assets/icons/bookMark_calendar.svg";
 import ApplicationHistorySlide from "../../components/BookmarkPage/ApplicationHistorySlide";
-import MyRecruitmentSlide from "../../components/BookmarkPage/MyRecruitmentSlide";
-import { getBookmarkedRecruitments, getMyApplications, toggleRecruitmentScrap } from "../../services/recruitment";
-import { useUniversityFilter } from "../../hooks/useUniversityFilter";
+import { getBookmarkedRecruitments, toggleRecruitmentScrap } from "../../services/recruitment";
 import "./BookmarkPage.scss";
 
 function BookmarkPage() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("recruiting"); // "recruiting" | "completed"
-  const [isApplicationHistoryOpen, setIsApplicationHistoryOpen] = useState(false);
-  const [isMyRecruitmentOpen, setIsMyRecruitmentOpen] = useState(false);
-  const { filterByUniv } = useUniversityFilter();
+  const [mainTab, setMainTab] = useState("bookmark"); // "bookmark" | "application"
 
   const [bookmarks, setBookmarks] = useState([]);
-  const [applicationCount, setApplicationCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -29,46 +20,35 @@ function BookmarkPage() {
         setIsLoading(true);
         setError(null);
 
-        // 북마크와 지원 내역을 병렬로 조회
-        const [bookmarksResponse, applicationsResponse] = await Promise.all([
-          getBookmarkedRecruitments(),
-          getMyApplications().catch(() => ({ data: [] })), // 지원 내역 실패해도 북마크는 표시
-        ]);
+        const bookmarksResponse = await getBookmarkedRecruitments();
 
-        // 북마크 처리 - 백엔드가 이미 평탄화된 데이터를 반환함
         const bookmarksData = bookmarksResponse.data || [];
         const bookmarksWithUniv = bookmarksData.map(item => {
           return {
             scrap_id: item.scrap_id,
             recruitment_id: item.recruitment_id,
-            id: item.recruitment_id, // 호환성을 위해
+            id: item.recruitment_id,
             title: item.title || '제목 없음',
             description: item.description || '',
-            status: item.status, // 'ACTIVE' or 'CLOSED'
+            status: item.status,
             photo_url: item.photo_url,
-            imageUrl: item.photo_url, // 호환성을 위해
+            imageUrl: item.photo_url,
             scrap_count: item.scrap_count,
             created_at: item.created_at,
             start_date: item.start_date || item.created_at,
             deadline: item.deadline,
             end_date: item.deadline,
-            university: item.university || null, // 백엔드에서 User 정보 미포함 시 null
+            university: item.university || null,
           };
         });
         setBookmarks(bookmarksWithUniv);
-
-        // 지원 내역 카운트 설정
-        const applicationsData = applicationsResponse.data || [];
-        setApplicationCount(applicationsData.length);
       } catch (err) {
-
         if (err.message === 'UNAUTHORIZED' || err.code === 'UNAUTHORIZED') {
           setError('로그인이 필요합니다.');
         } else {
           setError('북마크 목록을 불러오는데 실패했습니다.');
         }
         setBookmarks([]);
-        setApplicationCount(0);
       } finally {
         setIsLoading(false);
       }
@@ -77,35 +57,10 @@ function BookmarkPage() {
     fetchData();
   }, []);
 
-  // 대학 필터 적용
-  const univFilteredBookmarks = useMemo(() => {
-    return filterByUniv(bookmarks, 'university');
-  }, [bookmarks, filterByUniv]);
+  const totalBookmarkCount = bookmarks.length;
 
-  // 모집 중/마감 필터링 (백엔드 status: 'ACTIVE', 'CLOSED', 'FILLED')
-  const filteredProjects = univFilteredBookmarks.filter(project => {
-    if (activeTab === "recruiting") {
-      return project.status === 'ACTIVE' || project.status === 'open' || project.status === 'recruiting' || !project.status;
-    } else {
-      return project.status === 'CLOSED' || project.status === 'FILLED' || project.status === 'closed' || project.status === 'completed';
-    }
-  });
-
-  // 통계 계산 (대학 필터 적용된 데이터 기준)
-  const bookmarkStats = {
-    totalBookmarks: univFilteredBookmarks.length,
-    appliedProjects: applicationCount,
-    myRecruitmentPosts: 0, // TODO: 내 모집글 API 연동 시 업데이트
-    urgentDeadlines: univFilteredBookmarks.filter(b => {
-      if (!b.deadline) return false;
-      const deadline = new Date(b.deadline);
-      const today = new Date();
-      return deadline.toDateString() === today.toDateString();
-    }).length
-  };
-
-  const handleProjectClick = (projectId) => {
-    navigate(`/recruitment/${projectId}`);
+  const handleProjectClick = (recruitmentId) => {
+    navigate(`/recruitment/${recruitmentId}`);
   };
 
   const formatDate = (dateString) => {
@@ -115,14 +70,12 @@ function BookmarkPage() {
   };
 
   const handleBookmarkToggle = async (e, recruitmentId) => {
-    e.stopPropagation(); // 카드 클릭 이벤트 방지
+    e.stopPropagation();
 
     try {
       await toggleRecruitmentScrap(recruitmentId);
-      // 북마크 해제 후 목록에서 제거
       setBookmarks(prev => prev.filter(b => b.recruitment_id !== recruitmentId));
     } catch (err) {
-
       alert('북마크 해제에 실패했습니다.');
     }
   };
@@ -132,95 +85,61 @@ function BookmarkPage() {
       <DefaultHeader title="북마크" />
 
       <main className="bookmark-main">
-        {/* 북마크 요약 */}
+        {/* 북마크 요약 문구 */}
         <div className="bookmark-summary">
           <p className="summary-text">
-            오늘 지원 마감인 북마크
+            내가 저장한 프로젝트입니다.
             <br />
-            프로젝트가 총{" "}
-            <span className="urgent-count">{bookmarkStats.urgentDeadlines}건</span>
-            {" "}있습니다
+            <span className="summary-second-line">
+              지원한 프로젝트가 총{" "}
+              <span className="urgent-count">{totalBookmarkCount}건</span>
+              {" "}있습니다.
+            </span>
           </p>
         </div>
 
-        {/* 통계 섹션 */}
-        <div className="bookmark-stats">
-          <div className="stat-item">
-            <div className="stat-top">
-              <div className="stat-icon">
-                <img src={SmallBookmarkIcon} alt="북마크" />
-              </div>
-              <span className="stat-number">{bookmarkStats.totalBookmarks}</span>
-            </div>
-            <div className="stat-label">북마크수</div>
-          </div>
-          <div className="stat-divider"></div>
-          <div className="stat-item" onClick={() => setIsApplicationHistoryOpen(true)}>
-            <div className="stat-top">
-              <div className="stat-icon">
-                <img src={BookmarkCheckCircleIcon} alt="지원완료" />
-              </div>
-              <span className="stat-number">{bookmarkStats.appliedProjects}</span>
-            </div>
-            <div className="stat-label">지원완료</div>
-          </div>
-          <div className="stat-divider"></div>
-          <div className="stat-item" onClick={() => setIsMyRecruitmentOpen(true)}>
-            <div className="stat-top">
-              <div className="stat-icon">
-                <img src={BookmarkCalendarIcon} alt="내가올린모집" />
-              </div>
-              <span className="stat-number">{bookmarkStats.myRecruitmentPosts}</span>
-            </div>
-            <div className="stat-label">내가올린 모집</div>
-          </div>
-        </div>
-
-        {/* 탭 네비게이션 */}
+        {/* 탭: 북마크 | 지원 내역 */}
         <div className="tab-navigation">
           <button
-            className={`tab-button ${activeTab === "recruiting" ? "active" : ""}`}
-            onClick={() => setActiveTab("recruiting")}
+            className={`tab-button ${mainTab === "bookmark" ? "active" : ""}`}
+            onClick={() => setMainTab("bookmark")}
           >
-            모집 중
+            북마크
           </button>
           <button
-            className={`tab-button ${activeTab === "completed" ? "active" : ""}`}
-            onClick={() => setActiveTab("completed")}
+            className={`tab-button ${mainTab === "application" ? "active" : ""}`}
+            onClick={() => setMainTab("application")}
           >
-            모집 마감
+            지원 내역
           </button>
         </div>
 
-        {/* 프로젝트 목록 */}
-        <div className="bookmark-project-list">
+        {/* 북마크 탭: 프로젝트 목록 */}
+        {mainTab === "bookmark" && (
+          <div className="bookmark-project-list">
           {isLoading ? (
             <div className="bookmark-loading">로딩 중...</div>
           ) : error ? (
             <div className="bookmark-error">{error}</div>
-          ) : filteredProjects.length === 0 ? (
-            <div className="bookmark-empty">
-              {activeTab === "recruiting"
-                ? "모집 중인 북마크가 없습니다."
-                : "마감된 북마크가 없습니다."}
-            </div>
+          ) : bookmarks.length === 0 ? (
+            <div className="bookmark-empty">북마크가 없습니다.</div>
           ) : (
-            filteredProjects.map((project) => (
+            bookmarks.map((project) => (
               <div
-                key={project.recruitment_id || project.id}
+                key={project.recruitment_id}
                 className="bookmark-project-card"
-                onClick={() => handleProjectClick(project.recruitment_id || project.id)}
+                onClick={() => handleProjectClick(project.recruitment_id)}
               >
                 <div className="bookmark-project-content">
                   <div className="bookmark-project-dates">
-                    {formatDate(project.start_date || project.created_at)} ~ {formatDate(project.deadline || project.end_date)}
+                    {formatDate(project.start_date)} ~ {formatDate(project.deadline)}
                   </div>
                   <h3 className="bookmark-project-title">{project.title}</h3>
                   <p className="bookmark-project-description">{project.description}</p>
                 </div>
                 <div className="bookmark-project-image">
                   <img
-                    src={project.photo_url || project.imageUrl || projectDefaultImg}
+                    src={project.photo_url || projectDefaultImg}
                     alt={project.title}
                     onError={(e) => { e.target.src = projectDefaultImg; }}
                   />
@@ -239,20 +158,17 @@ function BookmarkPage() {
               </div>
             ))
           )}
-        </div>
+          </div>
+        )}
+
+        {/* 지원 내역 탭 */}
+        {mainTab === "application" && (
+          <ApplicationHistorySlide
+            inline={true}
+            isActive={true}
+          />
+        )}
       </main>
-
-      {/* 지원 내역 슬라이드 */}
-      <ApplicationHistorySlide
-        isOpen={isApplicationHistoryOpen}
-        onClose={() => setIsApplicationHistoryOpen(false)}
-      />
-
-      {/* 내가 올린 모집글 슬라이드 */}
-      <MyRecruitmentSlide
-        isOpen={isMyRecruitmentOpen}
-        onClose={() => setIsMyRecruitmentOpen(false)}
-      />
     </div>
   );
 }
