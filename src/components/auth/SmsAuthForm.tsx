@@ -68,7 +68,7 @@ export const SmsAuthForm: React.FC<SmsAuthFormProps> = ({ onVerificationSuccess 
                                 onChange={handlePhoneChange}
                                 disabled={step === 'INPUT_CODE' || isLoading}
                                 placeholder="휴대폰 번호 입력"
-                                className={`w-full bg-[#F2F4F6] rounded-xl px-4 py-3.5 outline-none text-gray-900 placeholder-gray-400 ${error && step === 'INPUT_PHONE' ? 'ring-1 ring-red-400' : ''
+                                className={`w-full bg-[#F2F4F6] rounded-xl px-4 py-3.5 outline-none text-gray-900 placeholder-gray-400 ${error?.message && step === 'INPUT_PHONE' ? 'ring-1 ring-red-400' : ''
                                     } disabled:text-gray-500`}
                             />
                         </div>
@@ -141,11 +141,15 @@ export const SmsAuthForm: React.FC<SmsAuthFormProps> = ({ onVerificationSuccess 
                 {/* Error Message */}
                 {error && (
                     <div className="text-red-500 text-xs px-1">
-                        {error}
+                        <div>{error.message}</div>
+                        {error.isServiceError && (
+                            <div className="mt-1 opacity-80">
+                                문제가 지속되면 teamitaka.official@gmail.com으로 문의해주세요.
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
         </div>
     );
 };
-

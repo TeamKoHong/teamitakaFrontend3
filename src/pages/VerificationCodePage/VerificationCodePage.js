@@ -131,7 +131,14 @@ function VerificationCodePage() {
 
                     {/* Error Message */}
                     {error && (
-                        <div className={styles.errorMessage}>{error}</div>
+                        <div className={styles.errorMessage}>
+                            <div>{error.message}</div>
+                            {error.isServiceError && (
+                                <div className={styles.errorContact}>
+                                    문제가 지속되면 teamitaka.official@gmail.com으로 문의해주세요.
+                                </div>
+                            )}
+                        </div>
                     )}
                 </div>
             </div>

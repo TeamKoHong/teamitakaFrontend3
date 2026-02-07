@@ -105,6 +105,12 @@
     font-size: $font-size-body;
 }
 
+.errorContact {
+    margin-top: 8px;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
 .bottomButton {
     padding: 16px;
     padding-bottom: max(16px, env(safe-area-inset-bottom));
