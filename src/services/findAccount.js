@@ -4,8 +4,9 @@
  * 백엔드 API 연동 전까지 Mock 데이터 사용
  */
 
-// Mock 데이터
-const MOCK_USERS = [
+// Mock 데이터 — 개발 모드에서만 활성화
+const IS_TEST_MODE = process.env.NODE_ENV !== 'production';
+const MOCK_USERS = IS_TEST_MODE ? [
     {
         name: '김철수',
         phone: '010-1234-5678',
@@ -18,9 +19,9 @@ const MOCK_USERS = [
         email: 'test@test.com',
         joinDate: '2024.06.01'
     }
-];
+] : [];
 
-const TEST_VERIFICATION_CODE = '123456';
+const TEST_VERIFICATION_CODE = IS_TEST_MODE ? '123456' : '';
 
 /**
  * 휴대폰 번호 포맷팅 (010-XXXX-XXXX)
@@ -52,7 +53,7 @@ export const requestFindIdSms = async (data) => {
 
     return {
         success: true,
-        message: '인증번호가 전송되었습니다. (테스트: 123456)'
+        message: IS_TEST_MODE ? '인증번호가 전송되었습니다. (테스트: 123456)' : '인증번호가 전송되었습니다.'
     };
 };
 

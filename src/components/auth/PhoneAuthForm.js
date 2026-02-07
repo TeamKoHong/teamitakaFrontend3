@@ -75,7 +75,7 @@ const PhoneAuthForm = () => {
       const formattedPhone = formatPhoneNumber(phoneNumber);
 
       // 🧪 테스트 모드 (개발 및 배포 환경에서 사용 가능)
-      if (process.env.REACT_APP_ENABLE_TEST_MODE === 'true' && formattedPhone === '+821012345678') {
+      if (process.env.NODE_ENV !== 'production' && formattedPhone === '+821012345678') {
 
         // 가짜 confirmationResult 객체 생성
         setConfirmationResult({

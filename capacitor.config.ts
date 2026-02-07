@@ -32,9 +32,7 @@ const config: CapacitorConfig = {
     scheme: 'teamitaka',
     backgroundColor: '#FFFFFF',
   },
-  android: {
-    allowMixedContent: true,
-  },
+  android: {},
 };
 
 export default config;

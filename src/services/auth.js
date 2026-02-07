@@ -53,7 +53,7 @@ export const sendVerificationCode = async (email, retryCount = 0) => {
         }
 
         // 🧪 [개발용] 테스트 이메일 우회 로직
-        if (email === 'test@test.ac.kr') {
+        if (process.env.NODE_ENV !== 'production' && email === 'test@test.ac.kr') {
             await new Promise(resolve => setTimeout(resolve, 500));
             return { success: true, message: '인증 코드가 전송되었습니다. (테스트 모드)' };
         }
@@ -209,7 +209,7 @@ export const verifyCode = async (email, code) => {
         }
 
         // 🧪 [개발용] 테스트 이메일 우회 로직
-        if (email === 'test@test.ac.kr' && code === '123456') {
+        if (process.env.NODE_ENV !== 'production' && email === 'test@test.ac.kr' && code === '123456') {
             await new Promise(resolve => setTimeout(resolve, 500));
             return {
                 success: true,

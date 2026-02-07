@@ -8,14 +8,15 @@ import { auth } from '../config/firebase';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { verifyPhoneAuth } from './phoneAuth';
 
-// 테스트 전화번호 목록 (Firebase 우회)
-const TEST_PHONES = [
+// 테스트 전화번호 목록 (Firebase 우회) — 개발 모드에서만 활성화
+const IS_TEST_MODE = process.env.NODE_ENV !== 'production';
+const TEST_PHONES = IS_TEST_MODE ? [
     '010-1234-5678',
     '010-0000-0000',
     '010-9999-9999'
-];
-const TEST_CODE = '123456'; // 테스트 인증코드
-const REGISTERED_PHONE = '010-0000-0000'; // 이미 가입된 번호
+] : [];
+const TEST_CODE = IS_TEST_MODE ? '123456' : ''; // 테스트 인증코드
+const REGISTERED_PHONE = IS_TEST_MODE ? '010-0000-0000' : null; // 이미 가입된 번호
 
 // 전역 상태 (confirmationResult 저장용)
 let confirmationResult = null;
@@ -66,7 +67,7 @@ const setupRecaptcha = () => {
         try {
             window.recaptchaVerifier.clear();
         } catch (e) {
-
+            /* silent: recaptcha cleanup 실패 무시 */
         }
         window.recaptchaVerifier = null;
     }
@@ -90,7 +91,7 @@ const setupRecaptcha = () => {
                 if (window.recaptchaVerifier) {
                     try {
                         window.recaptchaVerifier.clear();
-                    } catch (e) { }
+                    } catch (e) { /* silent: cleanup 실패 무시 */ }
                     window.recaptchaVerifier = null;
                 }
             }
@@ -120,7 +121,7 @@ export const cleanupRecaptcha = () => {
  */
 export const requestPhoneVerification = async (formData) => {
     // 이미 가입된 번호 체크 (실제로는 백엔드에서 확인)
-    if (formData.phone === REGISTERED_PHONE) {
+    if (REGISTERED_PHONE && formData.phone === REGISTERED_PHONE) {
         const error = new Error('이미 가입된 번호입니다.');
         error.code = 'ALREADY_REGISTERED';
         throw error;
