@@ -3,7 +3,6 @@ import React from "react";
 import "./MainProjectCard.scss";
 
 import projectPeriodIcon from "../../assets/icons/ProjectPeriod.png";
-import meetingTimeIcon from "../../assets/icons/MeetingTime.png";
 import defaultThumbnail from "../../assets/icons/DefaultImage.png";
 import CircularProgress from "../Common/CircularProgress";
 import { formatDateRange } from "../../utils/dateFormat";
@@ -36,6 +35,13 @@ const calcDDay = (endStr) => {
   return `D+${String(Math.abs(diff)).padStart(2, "0")}`;
 };
 
+// 날짜 유효성 체크
+const isValidDate = (value) => {
+  if (!value) return false;
+  const d = new Date(value);
+  return !Number.isNaN(d.getTime());
+};
+
 const MainProjectCard = ({ project, onClick }) => {
   if (!project) return null;
 
@@ -55,8 +61,6 @@ const MainProjectCard = ({ project, onClick }) => {
     project?.end ||
     "";
 
-  const meetingTime = project?.meetingTime || project?.meeting_time || "고정 회의 시간";
-
   const thumbnail =
     project?.thumbnailUrl ||
     project?.thumbnail_url ||
@@ -71,12 +75,11 @@ const MainProjectCard = ({ project, onClick }) => {
     formattedPeriod ||
     (startDate && endDate ? `${startDate} ~ ${endDate}` : startDate ? `${startDate}` : "프로젝트 기간");
 
-  const ddayText = calcDDay(endDate);
+  // ✅ 기간이 "정해진" 프로젝트인지 (시작/종료 모두 있고, 둘 다 유효한 날짜)
+  const hasPeriod = isValidDate(startDate) && isValidDate(endDate);
 
-  const progressValue =
-    startDate && endDate
-      ? Number(calculateProgress(startDate, endDate))
-      : Number(project?.progress_percent || 0);
+  const ddayText = hasPeriod ? calcDDay(endDate) : "";
+  const progressValue = hasPeriod ? Number(calculateProgress(startDate, endDate)) : 0;
 
   return (
     <button type="button" className="main-project-card" onClick={onClick}>
@@ -93,20 +96,18 @@ const MainProjectCard = ({ project, onClick }) => {
               <img src={projectPeriodIcon} alt="" className="meta-icon" aria-hidden />
               <span className="meta-text">{periodText}</span>
             </div>
+          </div>
+        </div>
 
-            <div className="meta-row">
-              <img src={meetingTimeIcon} alt="" className="meta-icon" aria-hidden />
-              <span className="meta-text">{meetingTime}</span>
+        {/* ✅ 기간 없으면 오른쪽 원형바 자체를 렌더링 안 함 */}
+        {hasPeriod && (
+          <div className="right">
+            <div className="progress-wrap" aria-label={`진행률 ${progressValue}%`}>
+              <CircularProgress percentage={progressValue} />
+              <span className="progress-center-text">{ddayText}</span>
             </div>
           </div>
-        </div>
-
-        <div className="right">
-          <div className="progress-wrap" aria-label={`진행률 ${progressValue}%`}>
-            <CircularProgress percentage={progressValue} />
-            <span className="progress-center-text">{ddayText}</span>
-          </div>
-        </div>
+        )}
       </div>
     </button>
   );

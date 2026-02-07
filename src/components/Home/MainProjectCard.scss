@@ -4,10 +4,12 @@
 
   border: 0;
   background: #fff;
-  border-radius: 20px;
+  border-radius: 20.9px;
 
-  width: 280px;
-  min-width: 280px;
+  width: 255.3px;
+  min-width: 255.3px;
+  height: 272px;
+
   flex: 0 0 auto;
 
   overflow: hidden;
@@ -20,7 +22,7 @@
 
   .thumb {
     width: 100%;
-    height: 160px;
+    height: 154.8px;
     background: #e5e5e5;
 
     img {
@@ -40,25 +42,32 @@
   }
 
   .body {
-    padding: 14px 14px 16px;
+    flex: 1;
+    padding: 16px;
+
     display: flex;
     justify-content: space-between;
-    gap: 12px;
+    gap: 16px;
     align-items: flex-start;
+
+    min-height: 0;
   }
 
   .left {
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-
+    gap: 16px;
     text-align: left;
     align-items: flex-start;
+    min-height: 0;
   }
 
   .title {
     margin: 0;
+    padding: 0;
+    line-height: 1.25;
+
     font-size: 15px;
     font-weight: 800;
     color: #111;
@@ -72,43 +81,52 @@
   .meta {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 16px;
     color: #6b7280;
     font-size: 12px;
     width: 100%;
+    min-height: 0;
   }
 
+  /* ✅ 핵심 수정:
+     - 아이콘은 absolute로 왼쪽에 두고
+     - 텍스트는 항상 "카드 시작점(=body padding 16)"에서 시작 */
   .meta-row {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    position: relative;
+    min-width: 0;
+    display: block;
+    padding-left: 0;
+    /* 텍스트 시작점을 밀지 않음 */
+  }
+
+  .meta-icon {
+    position: absolute;
+    left: 0;
+    /* ✅ meta-row의 시작점 = body padding 16 라인 */
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+  }
+
+  /* ✅ 텍스트는 항상 같은 시작점(16px 라인) */
+  .meta-text {
+    display: block;
     min-width: 0;
 
-    /* ✅ 아이콘 칸 고정 + 중앙정렬 (두 아이콘의 x좌표 동일) */
-    .meta-icon {
-      width: 14px;
-      height: 14px;
-      flex: 0 0 14px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      object-fit: contain;
-    }
-
-    .meta-text {
-      flex: 1;
-      min-width: 0;
-
-      text-align: left;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    /* 아이콘이 텍스트를 가리지 않게, 시각적으로만 살짝 띄움 */
+    padding-left: 16px;
+    /* ✅ 아이콘과 텍스트 사이 간격을 16으로 확보 */
   }
 
-  /* ✅ 오른쪽 영역 */
+  /* 오른쪽 영역 */
   .right {
     flex-shrink: 0;
     align-self: center;
@@ -140,27 +158,15 @@
   }
 }
 
+/* 모바일 */
 @media (max-width: 375px) {
   .main-project-card {
-    width: 260px;
-    min-width: 260px;
+    width: 255.3px;
+    min-width: 255.3px;
+    height: 272px;
 
     .thumb {
-      height: 150px;
-    }
-
-    .body {
-      padding: 12px 12px 14px;
-    }
-
-    .meta-row {
-      gap: 6px;
-
-      .meta-icon {
-        width: 16px;
-        height: 16px;
-        flex: 0 0 16px;
-      }
+      height: 154.8px;
     }
 
     .progress-wrap {

@@ -22,11 +22,8 @@ $keywords-bottom-space: 16px;
 .main-page {
   background: $bg;
   min-height: 100vh;
-  min-height: 100svh;
   padding: 0 16px;
-  padding-top: calc(#{$header-h} + env(safe-area-inset-top, 0px));
-  padding-left: calc(16px + env(safe-area-inset-left, 0px));
-  padding-right: calc(16px + env(safe-area-inset-right, 0px));
+  padding-top: $header-h;
   color: $ink;
 
   .header {
@@ -35,15 +32,12 @@ $keywords-bottom-space: 16px;
     left: 0;
     right: 0;
     z-index: 100;
-    height: calc(#{$header-h} + env(safe-area-inset-top, 0px));
-    padding-top: env(safe-area-inset-top, 0px);
+    height: $header-h;
     display: flex;
     align-items: center;
     justify-content: space-between;
     background: $card;
-    padding-left: calc(20px + env(safe-area-inset-left, 0px));
-    padding-right: calc(20px + env(safe-area-inset-right, 0px));
-    padding-bottom: 0;
+    padding: 16px 20px;
     border-bottom: none;
     box-sizing: border-box;
   }
@@ -96,10 +90,8 @@ $keywords-bottom-space: 16px;
       .profile-img {
         width: 100px;
         height: 100px;
-
         border-radius: 24px;
         overflow: hidden;
-
         background: #e9e9ec;
         display: grid;
         place-items: center;
@@ -214,73 +206,44 @@ $keywords-bottom-space: 16px;
     padding: 0;
     margin-bottom: 16px;
 
-    /* ✅ 여기만 핵심 수정 */
+    /* ✅✅✅ 핵심: "끝까지 보이게" 만드는 풀블리드 캐러셀 */
     .main-project-carousel {
-      display: flex !important;
-      flex-direction: row !important;
-      gap: 12px !important;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 16px;
 
-      overflow-x: auto !important;
-      overflow-y: hidden !important;
+      overflow-x: auto;
+      overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
 
-      /* ❌ 패딩을 죽이던 코드 제거 */
-      margin-left: 0 !important;
-      margin-right: 0 !important;
+      /* ✅ main-page padding(16) 때문에 잘리는 현상 해결:
+         캐러셀을 화면 끝까지 확장(full-bleed) */
+      margin: 0 -16px;
 
-      /* ✅ “왼쪽 16px 흰 배경 여백” 보장 */
-      padding-left: 16px !important;
-      padding-right: 16px !important;
+      /* ✅ 실제 콘텐츠 시작점/끝점만 16px 인셋 */
+      padding: 0 16px;
 
-      scroll-snap-type: x mandatory;
+      /* ✅ 스크롤할 때도 16px 안쪽 기준 */
+      scroll-padding-left: 16px;
+      scroll-padding-right: 16px;
+
+      scrollbar-width: none;
 
       &::-webkit-scrollbar {
         display: none;
       }
 
-      scrollbar-width: none;
-
+      /* ✅ 카드가 늘어나거나 줄바꿈되며 잘리는 거 방지 */
       >* {
-        flex: 0 0 auto !important;
-        width: auto !important;
-        max-width: none !important;
-        scroll-snap-align: start;
+        flex: 0 0 auto;
       }
-    }
 
-    .carousel-dots {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 6px;
-
-      margin-top: 10px;
-      padding-bottom: 6px;
-
-      min-height: 14px;
-      position: relative;
-      z-index: 5;
-      pointer-events: auto;
-    }
-
-    .carousel-dots .dot {
-      border: 0;
-      padding: 0;
-      cursor: pointer;
-
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: #cfcfd4;
-      opacity: 0.95;
-
-      transition: width 0.15s ease, opacity 0.15s ease;
-    }
-
-    .carousel-dots .dot.is-active {
-      width: 16px;
-      background: #111;
-      opacity: 1;
+      /* ✅ 마지막 카드가 끝에서 또 살짝 잘리는 케이스 방지 */
+      &::after {
+        content: "";
+        flex: 0 0 16px;
+      }
     }
 
     .loading-state,

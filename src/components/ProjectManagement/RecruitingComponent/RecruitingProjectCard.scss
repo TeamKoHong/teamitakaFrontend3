@@ -1,7 +1,7 @@
 .recruiting-project-card {
   margin-bottom: 0; // Handled by margin below
   width: calc(100% - 8px); // Width - 8px (4px margin + 16px parent = 20px)
-  margin: 10px auto; // 10px top/bottom margin
+  margin-bottom: 1rem;
 
   @media (max-width: 480px) {
     width: 100%; // Use parent padding (16px) only
