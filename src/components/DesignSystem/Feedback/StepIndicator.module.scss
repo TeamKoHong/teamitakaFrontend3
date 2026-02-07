@@ -1,11 +1,43 @@
-.indicatorContainer {
+// ========================================
+// Pill 스타일 (회원가입용)
+// ========================================
+.pillContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #DADADA;
+    transition: all 0.2s ease;
+}
+
+.dot.completed {
+    background-color: #F76241;
+}
+
+.dot.current {
+    width: 22px;
+    height: 6px;
+    border-radius: 3px;
+    background-color: #F76241;
+}
+
+// ========================================
+// Numbered 스타일 (팀원 평가용)
+// ========================================
+.numberedContainer {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0;
 }
 
-.step {
+.numberedStep {
     width: 17px;
     height: 17px;
     border-radius: 8.5px;
@@ -15,20 +47,17 @@
     box-sizing: border-box;
 }
 
-// 현재 스텝 - 채워진 원 + 숫자
-.step.current {
+.numberedStep.numberedCurrent {
     background-color: #f76241;
     color: #fff;
 }
 
-// 완료된 스텝 - 테두리 원 + 체크
-.step.completed {
+.numberedStep.numberedCompleted {
     background-color: #fff;
     border: 1.5px solid #f76241;
 }
 
-// 대기중 스텝 - 회색 원 + 숫자
-.step.pending {
+.numberedStep.numberedPending {
     background-color: #d1cccb;
     color: #fff;
 }
@@ -36,11 +65,10 @@
 .stepNumber {
     font-family: 'Pretendard', sans-serif;
     font-size: 10px;
-    font-weight: 700; // Bold
+    font-weight: 700;
     line-height: 1;
 }
 
-// 점선 연결선
 .dashedLine {
     width: 16px;
     height: 0;
