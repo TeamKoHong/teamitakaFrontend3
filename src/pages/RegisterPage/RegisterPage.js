@@ -4,6 +4,7 @@ import './RegisterPage.step2.scss';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { sendVerificationCode, verifyCode, registerUser } from '../../services/auth.js';
+import { isUniversityEmail } from '../../utils/emailValidator';
 import StepIndicator from '../../components/DesignSystem/Feedback/StepIndicator';
 import DefaultHeader from '../../components/Common/DefaultHeader';
 import BackArrow from '../../components/Common/UI/BackArrow';
@@ -326,6 +327,13 @@ function RegisterPage() {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             setVerificationError('올바른 이메일 형식이 아닙니다.');
+            return;
+        }
+
+        // 대학교 이메일 도메인 검증
+        if (!isUniversityEmail(email)) {
+            setVerificationError('대학교 이메일만 사용 가능합니다. (.ac.kr 또는 .edu)');
+            setVerificationErrorCode('INVALID_DOMAIN');
             return;
         }
 
