@@ -45,7 +45,7 @@ export default function TeamMemberInfoSlide({ open, onClose, selectedMembers, pr
       }));
 
       // API 호출
-      const response = await updateProjectMembers(projectId, membersToUpdate);
+      await updateProjectMembers(projectId, membersToUpdate);
 
       // 프로젝트 상세 페이지로 이동
       navigate(`/project/${projectId}`);

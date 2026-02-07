@@ -107,12 +107,6 @@ export default function GlobalToastSystem() {
         <div
           key="global-toast"
           className={`toast-notification-v2 toast-${toast.type}`}
-          ref={(el) => {
-            if (el) {
-              const allToasts = document.querySelectorAll('.toast-notification-v2');
-
-            }
-          }}
         >
           <div className="toast-icon">
             {toast.type === 'warning' && (

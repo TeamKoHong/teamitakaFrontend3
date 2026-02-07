@@ -26,7 +26,7 @@ export default function MemberTaskSlide({ open, member, onClose, projectId }) {
       }];
 
       // API 호출
-      const response = await updateProjectMembers(projectId, memberToUpdate);
+      await updateProjectMembers(projectId, memberToUpdate);
 
       // 편집 모드 종료
       setIsEditing(false);
