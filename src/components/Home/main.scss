@@ -23,7 +23,7 @@ $keywords-bottom-space: 16px;
   background: $bg;
   min-height: 100vh;
   padding: 0 16px;
-  padding-top: $header-h;
+  padding-top: calc(#{$header-h} + env(safe-area-inset-top));
   color: $ink;
 
   .header {
@@ -32,7 +32,7 @@ $keywords-bottom-space: 16px;
     left: 0;
     right: 0;
     z-index: 100;
-    height: $header-h;
+    height: calc(#{$header-h} + env(safe-area-inset-top));
     display: flex;
     align-items: center;
     justify-content: space-between;

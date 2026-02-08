@@ -454,12 +454,12 @@ $footer-h: 74px;
 
   .modal {
     position: fixed;
-    top: 342px;
-    left: 52px;
-    width: 287px;
-    height: 161px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(287px, calc(100vw - 88px));
+    min-height: 161px;
     opacity: 1;
-    transform: none;
     background: $card-bg;
     border-radius: 18px;
     overflow: hidden;
@@ -559,10 +559,11 @@ $footer-h: 74px;
 
     .toast-box {
       position: fixed;
-      top: 404px;
-      left: 62px;
-      width: 267px;
-      height: 115px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(267px, calc(100vw - 108px));
+      min-height: 115px;
       opacity: 1;
 
       background: rgba(122, 130, 140, 0.95);
@@ -638,10 +639,12 @@ $footer-h: 74px;
 
 .modal {
   position: fixed !important;
-  top: 342px !important;
-  left: 52px !important;
-  width: 287px !important;
-  height: 161px !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(287px, calc(100vw - 88px)) !important;
+  min-height: 161px !important;
+  height: auto !important;
   opacity: 1 !important;
   background: $card-bg !important;
   border-radius: 18px !important;
@@ -740,10 +743,12 @@ $footer-h: 74px;
 
   .toast-box {
     position: fixed !important;
-    top: 404px !important;
-    left: 62px !important;
-    width: 267px !important;
-    height: 115px !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: min(267px, calc(100vw - 108px)) !important;
+    min-height: 115px !important;
+    height: auto !important;
     opacity: 1 !important;
 
     background: rgba(122, 130, 140, 0.95) !important;
@@ -776,12 +781,13 @@ $footer-h: 74px;
 
 :where(.ReactModal__Content, .MuiDialog-paper, .headlessui-dialog-panel, [role="dialog"]:not([data-rsbs-overlay])) {
   position: fixed !important;
-  top: 342px !important;
-  left: 52px !important;
-  width: 287px !important;
-  height: 161px !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(287px, calc(100vw - 88px)) !important;
+  min-height: 161px !important;
+  height: auto !important;
   opacity: 1 !important;
-  transform: none !important;
   background: $card-bg !important;
   border-radius: 18px !important;
   overflow: hidden !important;
