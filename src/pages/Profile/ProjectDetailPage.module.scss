@@ -19,6 +19,7 @@
   height: 56px; // 일반적인 헤더 높이로 조정
   border-bottom: 2px solid #F8F8F8; // weight 2 적용
   height: 80px;
+  padding-top: env(safe-area-inset-top);
 
   .headerTitle { 
     font-size: 17px; // 8번: 17px

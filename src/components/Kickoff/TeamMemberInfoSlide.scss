@@ -31,6 +31,7 @@
   z-index: 11001;
   display: flex;
   flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom);
 
   &.open {
     transform: translateX(0);
@@ -41,7 +42,7 @@
 .team-info-content {
   flex: 1;
   overflow-y: auto;
-  padding-top: 64px; // DefaultHeader 높이
+  padding-top: calc(64px + env(safe-area-inset-top)); // DefaultHeader 높이 + safe-area
 
   .team-list {
     list-style: none;
@@ -201,6 +202,7 @@
   z-index: 11003;
   display: flex;
   flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom);
   animation: slideInRight 0.3s ease;
 }
 
@@ -217,7 +219,7 @@
 .member-edit-content {
   flex: 1;
   overflow-y: auto;
-  padding: 80px 22px 20px;
+  padding: calc(80px + env(safe-area-inset-top)) 22px 20px;
 
   .member-detail-card {
     position: relative;

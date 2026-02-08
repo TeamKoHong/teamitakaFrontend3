@@ -125,7 +125,7 @@
   
   .floating-action-btn {
     position: fixed;
-    bottom: 34px;
+    bottom: calc(34px + env(safe-area-inset-bottom));
     right: 34px;
     width: 48px;
     height: 48px;

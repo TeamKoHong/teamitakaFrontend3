@@ -34,6 +34,7 @@ $header-h:     56px;            // Header height
     justify-content: space-between;
     background: $card;
     padding: 0 16px;
+    padding-top: env(safe-area-inset-top);
     border-bottom: none; // No border like MainPage
   }
 

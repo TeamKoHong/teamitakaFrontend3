@@ -1,7 +1,7 @@
 @use '../../styles/variables' as *;
 .cta {
   position: sticky;
-  bottom: 72px; // BottomNav 고려
+  bottom: calc(72px + env(safe-area-inset-bottom)); // BottomNav + safe-area 고려
   width: calc(100% - 24px);
   margin: 12px auto 0;
   padding: 14px 16px;

@@ -38,6 +38,7 @@ $keywords-bottom-space: 16px;
     justify-content: space-between;
     background: $card;
     padding: 16px 20px;
+    padding-top: calc(16px + env(safe-area-inset-top));
     border-bottom: none;
     box-sizing: border-box;
   }
