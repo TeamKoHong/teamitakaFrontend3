@@ -7,6 +7,7 @@ import {
   saveDraftToList,
   getCurrentDraftId,
 } from '../../../api/recruit';
+import { showSuccessToast, showWarningToast } from '../../../utils/toast';
 
 function TagInput({ value, onChange, placeholder, max = 5 }) {
   const [text, setText] = useState('');
@@ -118,13 +119,13 @@ export default function ProjectRecruitDetail() {
       data: single,
     });
 
-    alert('임시 저장되었어요.');
+    showSuccessToast('임시 저장되었어요.');
   };
 
   const goNext = () => {
     if (!detail.trim()) return;
     if (keywords.length === 0) {
-      alert('키워드를 최소 1개 이상 설정해주세요.');
+      showWarningToast('키워드를 최소 1개 이상 설정해주세요.');
       return;
     }
 

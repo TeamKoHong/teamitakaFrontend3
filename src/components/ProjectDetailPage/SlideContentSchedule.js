@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getProjectSchedules } from "../../services/projects";
 import "./SlideContentSchedule.scss";
+import { showErrorToast } from '../../utils/toast';
 
 const WEEKDAYS = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
@@ -64,7 +65,7 @@ export default function SlideContentSchedule({ projectId }) {
       } catch (error) {
 
         if (error.code === 'UNAUTHORIZED') {
-          alert("로그인이 필요합니다.");
+          showErrorToast("로그인이 필요합니다.");
           navigate("/login");
           return;
         }

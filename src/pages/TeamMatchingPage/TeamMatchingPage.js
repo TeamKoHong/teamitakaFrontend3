@@ -18,6 +18,7 @@ import { toggleRecruitmentScrap } from '../../services/recruitment';
 import { useAuth } from '../../contexts/AuthContext';
 import { getShortSchoolName } from '../../constants/schools';
 import { useUniversityFilter } from '../../hooks/useUniversityFilter';
+import { showErrorToast } from '../../utils/toast';
 
 const CreateProjectBanner = () => {
     const navigate = useNavigate();
@@ -158,7 +159,7 @@ export default function TeamMatchingPage() {
     }, []);
 
     const handleBookmarkToggle = async (id) => {
-        if (!currentUser) return alert('로그인이 필요합니다.');
+        if (!currentUser) { showErrorToast('로그인이 필요합니다.'); return; }
         setHotProjects(prev => prev.map(item => item.id === id ? { ...item, isBookmarked: !item.isBookmarked } : item));
         setAllPosts(prev => prev.map(item => item.id === id ? { ...item, isBookmarked: !item.isBookmarked } : item));
         try { await toggleRecruitmentScrap(id); } catch { /* 북마크 실패 무시 */ }

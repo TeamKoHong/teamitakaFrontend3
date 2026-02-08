@@ -8,6 +8,7 @@ import { isUniversityEmail } from '../../utils/emailValidator';
 import StepIndicator from '../../components/DesignSystem/Feedback/StepIndicator';
 import DefaultHeader from '../../components/Common/DefaultHeader';
 import BackArrow from '../../components/Common/UI/BackArrow';
+import { showErrorToast } from '../../utils/toast';
 
 function RegisterPage() {
     const navigate = useNavigate();
@@ -150,12 +151,12 @@ function RegisterPage() {
                         // Success -> Go to Profile Setup
                         navigate('/profile-setup');
                     } else {
-                        alert(result.message || '회원가입에 실패했습니다.');
+                        showErrorToast(result.message || '회원가입에 실패했습니다.');
                     }
 
                 } catch (error) {
 
-                    alert(error.message || '회원가입 중 오류가 발생했습니다.');
+                    showErrorToast(error.message || '회원가입 중 오류가 발생했습니다.');
                 } finally {
                     setIsVerificationLoading(false);
                 }

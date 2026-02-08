@@ -6,7 +6,8 @@ import styles from './ProjectRegisterPage.module.scss';
 // Assets
 import BackArrow from '../../../components/Common/UI/BackArrow';
 import draftInactive from '../../../assets/draft_inactive.png'; 
-import draftActive from '../../../assets/draft_active.png';     
+import draftActive from '../../../assets/draft_active.png';
+import { showSuccessToast, showErrorToast } from '../../../utils/toast';
 
 const CheckIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -77,11 +78,11 @@ export default function ProjectRegisterPage() {
             localStorage.setItem('registered_project_ids', JSON.stringify(savedIds));
         }
 
-        alert('프로젝트가 프로필에 등록되었습니다.');
+        showSuccessToast('프로젝트가 프로필에 등록되었습니다.');
         navigate('/profile'); 
     } catch (error) {
 
-        alert("오류가 발생했습니다.");
+        showErrorToast("오류가 발생했습니다.");
     }
   };
 

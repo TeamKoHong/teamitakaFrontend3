@@ -6,6 +6,7 @@ import RecruitingProjectSlide from "../../RecruitingProjectSlide";
 import ApplicantListSlide from "../../ApplicantListSlide";
 import { useNavigate } from "react-router-dom";
 import { getMyRecruitments, deleteRecruitment } from "../../../services/recruitment";
+import { showSuccessToast, showErrorToast } from "../../../utils/toast";
 
 const RecruitingComponent = () => {
   const navigate = useNavigate();
@@ -78,20 +79,20 @@ const RecruitingComponent = () => {
       if (result.success) {
         // 삭제 성공 시 목록 새로고침
         await load(0);
-        alert('모집글이 삭제되었습니다.');
+        showSuccessToast('모집글이 삭제되었습니다.');
       }
     } catch (error) {
 
       if (error.code === 'UNAUTHORIZED') {
-        alert('로그인이 필요합니다.');
+        showErrorToast('로그인이 필요합니다.');
         localStorage.removeItem('authToken');
         localStorage.removeItem('user');
         navigate('/login', { replace: true });
       } else if (error.code === 'NOT_FOUND') {
-        alert('모집글을 찾을 수 없습니다.');
+        showErrorToast('모집글을 찾을 수 없습니다.');
         await load(0); // 목록 새로고침
       } else {
-        alert(error.message || '모집글 삭제에 실패했습니다.');
+        showErrorToast(error.message || '모집글 삭제에 실패했습니다.');
       }
     }
   };

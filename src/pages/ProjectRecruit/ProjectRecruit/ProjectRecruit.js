@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import './ProjectRecruit.scss';
 import { loadRecruitDraft, saveRecruitDraft } from '../../../api/recruit';
+import { showSuccessToast, showWarningToast } from '../../../utils/toast';
 import DateRangePickerSheet from '../../../components/ProjectRecruit/DateRangePicker/DateRangePickerSheet';
 
 export default function ProjectRecruit() {
@@ -60,12 +61,12 @@ export default function ProjectRecruit() {
 
   const handleSaveDraft = () => {
     saveRecruitDraft({ title, desc, type, start, end });
-    alert('임시 저장되었어요.');
+    showSuccessToast('임시 저장되었어요.');
   };
 
   const handleLoadDraft = () => {
     const d = loadRecruitDraft();
-    if (!d) return alert('불러올 내용이 없어요.');
+    if (!d) { showWarningToast('불러올 내용이 없어요.'); return; }
     setTitle(d.title || '');
     setDesc(d.desc || '');
     setType(d.type || null);

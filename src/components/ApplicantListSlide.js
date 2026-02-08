@@ -8,6 +8,7 @@ import userDefaultImg from "../assets/icons/user_default_img.svg";
 import deleteIcon from "../assets/icons/deleteIcon.svg";
 import arrowIcon from "../assets/icons/arrow_back_ios.svg";
 import "./ApplicantListSlide.scss";
+import { showErrorToast } from '../utils/toast';
 
 export default function ApplicantListSlide({ open, onClose, recruitmentId }) {
   const navigate = useNavigate();
@@ -102,7 +103,7 @@ export default function ApplicantListSlide({ open, onClose, recruitmentId }) {
       } catch (err) {
 
         if (err.code === 'UNAUTHORIZED') {
-          alert("로그인이 필요합니다.");
+          showErrorToast("로그인이 필요합니다.");
           navigate("/login");
         } else {
           setError("지원자 목록을 불러오는데 실패했습니다.");

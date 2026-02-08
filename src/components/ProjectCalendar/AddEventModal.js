@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import axios from "axios";
 import "./AddEventModal.scss";
 import { getApiConfig } from "../../services/auth";
+import { showErrorToast } from "../../utils/toast";
 import userDefaultImg from "../../assets/icons/user_default_img.svg";
 
 export default function AddEventModal({ isOpen, onClose, projectId, selectedDate, onEventCreated }) {
@@ -22,7 +23,7 @@ export default function AddEventModal({ isOpen, onClose, projectId, selectedDate
     }
 
     if (!projectId) {
-      alert("프로젝트 정보가 없습니다.");
+      showErrorToast("프로젝트 정보가 없습니다.");
       return;
     }
 
@@ -74,9 +75,9 @@ export default function AddEventModal({ isOpen, onClose, projectId, selectedDate
     } catch (error) {
 
       if (error.response) {
-        alert(`저장 실패 (${error.response.status}): ${error.response.data.message || "오류 발생"}`);
+        showErrorToast(error.response.data.message || "일정 저장에 실패했습니다.");
       } else {
-        alert("서버와 통신할 수 없습니다.");
+        showErrorToast("서버와 통신할 수 없습니다.");
       }
     } finally {
       setLoading(false);

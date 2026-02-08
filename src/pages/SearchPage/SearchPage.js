@@ -5,6 +5,7 @@ import BackArrow from "../../components/Common/UI/BackArrow";
 import './SearchPage.scss';
 import { getAllRecruitments } from '../../api/recruit';
 import { useUniversityFilter } from '../../hooks/useUniversityFilter';
+import { showWarningToast } from '../../utils/toast';
 
 export default function SearchPage() {
   const navigate = useNavigate();
@@ -74,7 +75,7 @@ export default function SearchPage() {
     const query = keyword || searchText; 
 
     if (!query.trim()) {
-      alert("검색어를 입력해주세요.");
+      showWarningToast("검색어를 입력해주세요.");
       return;
     }
 

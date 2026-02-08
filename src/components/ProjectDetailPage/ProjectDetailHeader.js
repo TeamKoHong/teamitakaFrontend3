@@ -4,6 +4,7 @@ import "./ProjectDetailHeader.scss";
 import React, { useState, useRef } from "react";
 import BottomSheet from "../Common/BottomSheet";
 import ReportModal from "../Common/ReportModal";
+import { showErrorToast, showWarningToast } from '../../utils/toast';
 
 function ProjectDetailHeader({ projectName, projectId }) {
   const navigate = useNavigate();
@@ -37,11 +38,11 @@ function ProjectDetailHeader({ projectName, projectId }) {
 
     // 유효성 검사
     if (!file.type.startsWith('image/')) {
-      alert('이미지 파일만 업로드할 수 있어요.');
+      showWarningToast('이미지 파일만 업로드할 수 있어요.');
       return;
     }
     if (file.size > 10 * 1024 * 1024) {
-      alert('10MB 이하 이미지만 업로드할 수 있어요.');
+      showWarningToast('10MB 이하 이미지만 업로드할 수 있어요.');
       return;
     }
 
@@ -54,7 +55,7 @@ function ProjectDetailHeader({ projectName, projectId }) {
       // TODO: 여기서 서버로 이미지를 전송하거나 상위 컴포넌트에 전달하는 로직 추가
 
     };
-    reader.onerror = () => alert('이미지를 불러오지 못했어요. 다시 시도해주세요.');
+    reader.onerror = () => showErrorToast('이미지를 불러오지 못했어요. 다시 시도해주세요.');
     reader.readAsDataURL(file);
 
     // 같은 파일을 다시 선택할 수 있도록 value 초기화

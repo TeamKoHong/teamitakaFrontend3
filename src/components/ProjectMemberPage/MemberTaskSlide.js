@@ -4,6 +4,7 @@ import DefaultHeader from "../Common/DefaultHeader";
 import MemberDetailCard from "./MemberDetailCard"; // 기존 카드 컴포넌트
 import "./MemberTaskSlide.scss";
 import { updateProjectMembers } from "../../services/projects";
+import { showErrorToast, showWarningToast } from '../../utils/toast';
 
 export default function MemberTaskSlide({ open, member, onClose, projectId }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -37,13 +38,13 @@ export default function MemberTaskSlide({ open, member, onClose, projectId }) {
 
       // 에러 메시지 표시
       if (error.code === 'NOT_PROJECT_LEADER') {
-        alert('팀장만 멤버 역할을 수정할 수 있습니다.');
+        showErrorToast('팀장만 멤버 역할을 수정할 수 있습니다.');
       } else if (error.code === 'MEMBER_NOT_FOUND') {
-        alert('해당 멤버를 찾을 수 없습니다.');
+        showErrorToast('해당 멤버를 찾을 수 없습니다.');
       } else if (error.code === 'VALIDATION_ERROR') {
-        alert('입력값이 올바르지 않습니다.');
+        showWarningToast('입력값이 올바르지 않습니다.');
       } else {
-        alert('팀원 정보 수정에 실패했습니다. 다시 시도해주세요.');
+        showErrorToast('팀원 정보 수정에 실패했습니다. 다시 시도해주세요.');
       }
     }
   };

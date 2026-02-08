@@ -6,6 +6,7 @@ import DefaultHeader from '../Common/DefaultHeader';
 import DateRangePickerSheet from '../ProjectRecruit/DateRangePicker/DateRangePickerSheet';
 import TeamMemberInfoSlide from './TeamMemberInfoSlide';
 import { createProjectFromRecruitment } from '../../services/recruitment';
+import { showErrorToast, showWarningToast } from '../../utils/toast';
 
 export default function KickoffSlide({ open, onClose, selectedMembers, recruitmentId }) {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ export default function KickoffSlide({ open, onClose, selectedMembers, recruitme
     if (!isReady) return;
     
     if (!recruitmentId || !selectedMembers || selectedMembers.length === 0) {
-      alert('필수 정보가 누락되었습니다.');
+      showWarningToast('필수 정보가 누락되었습니다.');
       return;
     }
 
@@ -74,13 +75,13 @@ export default function KickoffSlide({ open, onClose, selectedMembers, recruitme
     } catch (err) {
 
       if (err.code === 'UNAUTHORIZED') {
-        alert('로그인이 필요합니다.');
+        showErrorToast('로그인이 필요합니다.');
         navigate('/login');
       } else if (err.code === 'ALREADY_CONVERTED') {
-        alert('이미 프로젝트로 전환된 모집글입니다.');
+        showWarningToast('이미 프로젝트로 전환된 모집글입니다.');
         onClose();
       } else {
-        alert(err.message || '프로젝트 생성에 실패했습니다.');
+        showErrorToast(err.message || '프로젝트 생성에 실패했습니다.');
       }
     } finally {
       setLoading(false);

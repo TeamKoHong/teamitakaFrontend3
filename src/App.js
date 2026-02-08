@@ -76,6 +76,7 @@ import AuthEventBridge from './components/Common/AuthEventBridge';
 import ErrorBoundary from './components/Common/ErrorBoundary';
 import OfflineBanner from './components/Common/OfflineBanner';
 import { useDeepLink } from './hooks/useDeepLink';
+import useAnalytics from './hooks/useAnalytics';
 import ProtectedRoute, { PublicRoute } from './components/ProtectedRoute';
 import ProfileVerificationPage from './pages/Profile/ProfileVerificationPage';
 
@@ -284,6 +285,12 @@ const DeepLinkHandler = () => {
   return null;
 };
 
+// ===== Firebase Analytics 화면 추적 =====
+const AnalyticsTracker = () => {
+  useAnalytics();
+  return null;
+};
+
 // ===== 메인 앱 컴포넌트 =====
 
 const App = () => {
@@ -293,6 +300,7 @@ const App = () => {
       <NativeAppInitializer>
       <OfflineBanner />
       <DeepLinkHandler />
+      <AnalyticsTracker />
       <PushNotificationProvider>
       <AuthProvider>
         <UniversityFilterProvider>

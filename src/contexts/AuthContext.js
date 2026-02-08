@@ -9,6 +9,7 @@ import {
     shouldRefreshToken
 } from '../utils/tokenManager';
 import { refreshToken } from '../services/auth';
+import { setUserId as setAnalyticsUserId } from '../services/analytics';
 
 // 액션 타입 정의
 const AUTH_ACTIONS = {
@@ -156,6 +157,7 @@ export const AuthProvider = ({ children }) => {
                         type: AUTH_ACTIONS.SET_USER,
                         payload: { user, token }
                     });
+                    setAnalyticsUserId(user.id);
 
                     if (process.env.NODE_ENV === 'development') {
 
@@ -218,6 +220,7 @@ export const AuthProvider = ({ children }) => {
                     type: AUTH_ACTIONS.LOGIN_SUCCESS,
                     payload: { user, token }
                 });
+                setAnalyticsUserId(user.id);
 
                 return true;
             } else {
@@ -237,6 +240,7 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         try {
             removeToken();
+            setAnalyticsUserId(null);
             dispatch({ type: AUTH_ACTIONS.LOGOUT });
 
         } catch (error) {

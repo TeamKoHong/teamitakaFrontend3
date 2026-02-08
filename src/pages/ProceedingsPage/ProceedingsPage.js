@@ -5,6 +5,7 @@ import addNoteIcon from "../../assets/icons/add_note.png";
 import userDefaultImg from "../../assets/icons/user_default_img.svg";
 import { getProjectMeetings } from "../../services/projects";
 import "./ProceedingPage.scss";
+import { showErrorToast } from '../../utils/toast';
 
 export default function ProceedingsPage() {
   const navigate = useNavigate();
@@ -72,7 +73,7 @@ export default function ProceedingsPage() {
     } catch (err) {
 
       if (err.code === 'UNAUTHORIZED') {
-        alert("로그인이 필요합니다.");
+        showErrorToast("로그인이 필요합니다.");
         navigate("/login");
         return;
       }

@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "./ProjectRecruitPublish.scss";
 import { loadRecruitDraft, clearRecruitDraft } from "../../../api/recruit";
 import { createRecruitment, uploadRecruitmentImage } from "../../../services/recruitment";
+import { showErrorToast } from '../../../utils/toast';
 
 // Helper function to convert dataURL to File
 const dataURLtoFile = (dataurl, filename) => {
@@ -75,7 +76,7 @@ export default function ProjectRecruitPublish() {
 
         // 에러 처리
         if (err.code === "UNAUTHORIZED") {
-          alert("로그인이 필요합니다.");
+          showErrorToast("로그인이 필요합니다.");
           nav("/login", { state: { from: "/recruit/publish" } });
         } else {
           setError(err.message || "모집글 생성에 실패했습니다.");

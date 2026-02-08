@@ -2,6 +2,7 @@ import React from 'react';
 import './CompletedProjectSimpleCard.module.scss';
 import styles from './CompletedProjectSimpleCard.module.scss';
 import { IoStar, IoStarOutline } from "react-icons/io5";
+import { showErrorToast } from '../../../utils/toast';
 
 const CompletedProjectSimpleCard = ({ project, onClick }) => {
     // TODO: Connect to actual bookmark API
@@ -27,7 +28,7 @@ const CompletedProjectSimpleCard = ({ project, onClick }) => {
 
             // 3. Rollback on failure
             setIsStarred(previousState);
-            alert('즐겨찾기 변경에 실패했습니다.');
+            showErrorToast('즐겨찾기 변경에 실패했습니다.');
         }
     };
 

@@ -6,6 +6,7 @@ import defaultProfile from '../../assets/default_profile.png';
 import NextArrow from '../Common/UI/NextArrow';
 import { ReactComponent as EditIcon } from '../../assets/icons/editIcon.svg';
 import { updateProjectMembers } from '../../services/projects';
+import { showErrorToast, showWarningToast } from '../../utils/toast';
 
 export default function TeamMemberInfoSlide({ open, onClose, selectedMembers, projectId }) {
   const navigate = useNavigate();
@@ -54,13 +55,13 @@ export default function TeamMemberInfoSlide({ open, onClose, selectedMembers, pr
 
       // 에러 메시지 표시
       if (error.code === 'NOT_PROJECT_LEADER') {
-        alert('팀장만 멤버 역할을 수정할 수 있습니다.');
+        showErrorToast('팀장만 멤버 역할을 수정할 수 있습니다.');
       } else if (error.code === 'MEMBER_NOT_FOUND') {
-        alert('해당 멤버를 찾을 수 없습니다.');
+        showErrorToast('해당 멤버를 찾을 수 없습니다.');
       } else if (error.code === 'VALIDATION_ERROR') {
-        alert('입력값이 올바르지 않습니다.');
+        showWarningToast('입력값이 올바르지 않습니다.');
       } else {
-        alert('팀원 정보 저장에 실패했습니다. 다시 시도해주세요.');
+        showErrorToast('팀원 정보 저장에 실패했습니다. 다시 시도해주세요.');
       }
     }
   };

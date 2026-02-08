@@ -28,7 +28,7 @@
     height: 100%;
     border: none;
     outline: none;
-    font-size: $font-size-body;
+    font-size: 16px; // iOS auto-zoom 방지 (16px 미만 시 줌 발생)
     font-family: $font-family-base;
     color: $text-primary;
     background: transparent;
@@ -49,7 +49,7 @@
     height: 100%;
     border: none;
     outline: none;
-    font-size: $font-size-body;
+    font-size: 16px; // iOS auto-zoom 방지
     font-family: $font-family-base;
     color: $text-primary;
     background: transparent;

@@ -19,6 +19,7 @@ import ApplicantListSlide from '../../components/ApplicantListSlide';
 import ReportModal from '../../components/Common/ReportModal';
 import AlertModal from '../../components/Common/AlertModal';
 import { blockUser } from '../../services/report';
+import { showErrorToast, showSuccessToast, showWarningToast } from '../../utils/toast';
 
 export default function RecruitmentViewPage() {
     const { id } = useParams();
@@ -107,7 +108,7 @@ export default function RecruitmentViewPage() {
     const handleApply = () => {
         if (!post) return;
         if (!currentUser) {
-            alert("로그인이 필요합니다.");
+            showErrorToast("로그인이 필요합니다.");
             navigate('/login');
             return;
         }
@@ -120,7 +121,7 @@ export default function RecruitmentViewPage() {
 
     const handleBookmarkToggle = async () => {
         if (!currentUser) {
-            alert("로그인이 필요합니다.");
+            showErrorToast("로그인이 필요합니다.");
             return;
         }
 
@@ -153,7 +154,7 @@ export default function RecruitmentViewPage() {
 
     const handleEdit = () => {
         setShowMoreMenu(false);
-        alert('게시글 수정 페이지는 아직 준비 중입니다.');
+        showWarningToast('게시글 수정 페이지는 아직 준비 중입니다.');
     };
 
     const handleDelete = async () => {
@@ -161,17 +162,17 @@ export default function RecruitmentViewPage() {
         if (!window.confirm('정말 삭제하시겠습니까?')) return;
         try {
             await deleteRecruitment(id);
-            alert('게시글이 삭제되었습니다.');
+            showSuccessToast('게시글이 삭제되었습니다.');
             navigate('/team-matching');
         } catch (err) {
-            alert('삭제에 실패했습니다.');
+            showErrorToast('삭제에 실패했습니다.');
         }
     };
 
     const handleReport = () => {
         setShowMoreMenu(false);
         if (!currentUser) {
-            alert("로그인이 필요합니다.");
+            showErrorToast("로그인이 필요합니다.");
             navigate('/login');
             return;
         }
@@ -181,7 +182,7 @@ export default function RecruitmentViewPage() {
     const handleBlockUser = () => {
         setShowMoreMenu(false);
         if (!currentUser) {
-            alert("로그인이 필요합니다.");
+            showErrorToast("로그인이 필요합니다.");
             navigate('/login');
             return;
         }
@@ -196,7 +197,7 @@ export default function RecruitmentViewPage() {
             setShowToast(true);
             setTimeout(() => setShowToast(false), 2000);
         } catch (err) {
-            alert(err.message || '차단에 실패했습니다.');
+            showErrorToast(err.message || '차단에 실패했습니다.');
             setShowBlockConfirm(false);
         }
     };

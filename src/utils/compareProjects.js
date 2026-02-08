@@ -91,6 +91,7 @@ export function compareProjectLists(serverList, uiList, {
  * @param {string} label - Label for console group
  */
 export function logComparisonReport(report, label = "Project Comparison") {
+  if (process.env.NODE_ENV !== 'development') return;
   console.group(`🔍 ${label}`);
 
   // Always show counts

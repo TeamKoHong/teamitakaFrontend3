@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import DefaultHeader from "../../components/Common/DefaultHeader";
 import { createMeeting } from "../../services/projects";
 import "./CreateMeetingPage.scss";
+import { showErrorToast, showWarningToast } from '../../utils/toast';
 
 export default function CreateMeetingPage() {
   const navigate = useNavigate();
@@ -47,17 +48,17 @@ export default function CreateMeetingPage() {
     } catch (err) {
 
       if (err.code === 'UNAUTHORIZED') {
-        alert("로그인이 필요합니다.");
+        showErrorToast("로그인이 필요합니다.");
         navigate("/login");
         return;
       }
       
       if (err.code === 'VALIDATION_ERROR') {
-        alert(err.message || "입력 내용을 확인해주세요.");
+        showWarningToast(err.message || "입력 내용을 확인해주세요.");
         return;
       }
       
-      alert("회의록 생성에 실패했습니다. 다시 시도해주세요.");
+      showErrorToast("회의록 생성에 실패했습니다. 다시 시도해주세요.");
     } finally {
       setIsSubmitting(false);
     }

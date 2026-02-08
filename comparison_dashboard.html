@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>티미타카 React - Figma vs App 비교 대시보드</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#F76241;--bg:#0f1117;--sidebar:#1a1d27;--card:#22252f;--card-hover:#2a2d38;--text:#e4e4e7;--text-dim:#9ca3af;--border:#2e3140;--green:#22c55e;--yellow:#eab308;--red:#ef4444;--blue:#3b82f6;--surface:#FFFDFC}
+body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden}
+
+/* ===== Sidebar ===== */
+.sidebar{width:260px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.sidebar-header{padding:16px 20px;border-bottom:1px solid var(--border)}
+.sidebar-header h1{font-size:16px;color:var(--primary);font-weight:800;letter-spacing:-0.5px}
+.sidebar-header p{font-size:11px;color:var(--text-dim);margin-top:4px}
+.sidebar-stats{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.stat-pill{font-size:10px;padding:3px 8px;border-radius:12px;font-weight:600;cursor:pointer;transition:opacity 0.15s;user-select:none}
+.stat-pill.inactive{opacity:0.35;text-decoration:line-through}
+.stat-pill.green{color:var(--green);background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25)}
+.stat-pill.yellow{color:var(--yellow);background:rgba(234,179,8,0.12);border:1px solid rgba(234,179,8,0.25)}
+.stat-pill.red{color:var(--red);background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25)}
+.stat-pill.gray{color:var(--text-dim);background:rgba(156,163,175,0.12);border:1px solid rgba(156,163,175,0.25)}
+.sidebar-search{padding:10px 16px}
+.sidebar-search input{width:100%;padding:8px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none}
+.sidebar-search input:focus{border-color:var(--primary)}
+.sidebar-search input::placeholder{color:var(--text-dim)}
+.sidebar-nav{flex:1;overflow-y:auto;padding:4px 8px 16px}
+.nav-cat{margin-bottom:2px}
+.nav-cat-header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;cursor:pointer;border-radius:6px;user-select:none}
+.nav-cat-header:hover{background:var(--card)}
+.nav-cat-header .collapse-arrow{font-size:10px;margin-right:4px;display:inline-block;transition:transform 0.15s}
+.nav-cat-header .cnt{font-size:10px;background:var(--card);padding:1px 6px;border-radius:8px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 20px;font-size:13px;cursor:pointer;border-radius:6px;color:var(--text-dim);transition:all 0.12s}
+.nav-item:hover{background:var(--card);color:var(--text)}
+.nav-item.active{background:rgba(247,98,65,0.15);color:var(--primary);font-weight:600}
+.nav-item .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.dot.match{background:var(--green)}.dot.minor{background:var(--yellow)}.dot.diff{background:var(--red)}.dot.na{background:var(--text-dim)}
+
+/* ===== Main ===== */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.main-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--sidebar);padding:0 20px;flex-shrink:0}
+.main-tab{padding:12px 20px;font-size:13px;font-weight:600;color:var(--text-dim);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.12s}
+.main-tab:hover{color:var(--text)}
+.main-tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.main-content{flex:1;overflow-y:auto;padding:24px}
+
+/* ===== Comparison Tab ===== */
+.comp-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.comp-header h2{font-size:20px;font-weight:700}
+.tag{font-size:11px;padding:4px 10px;border-radius:6px;font-weight:600}
+.tag.cat{background:rgba(59,130,246,0.15);color:var(--blue)}
+.tag.st-match{background:rgba(34,197,94,0.15);color:var(--green)}
+.tag.st-minor{background:rgba(234,179,8,0.15);color:var(--yellow)}
+.tag.st-diff{background:rgba(239,68,68,0.15);color:var(--red)}
+.tag.st-na{background:rgba(156,163,175,0.15);color:var(--text-dim)}
+.file-info{font-size:11px;color:var(--text-dim);background:var(--card);padding:6px 12px;border-radius:6px;margin-bottom:16px;font-family:'SF Mono',Monaco,'Fira Code',monospace}
+.file-info a{color:var(--primary);text-decoration:none}
+.file-info a:hover{text-decoration:underline}
+.controls{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.ctrl-btn{padding:6px 14px;font-size:12px;font-weight:600;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text-dim);cursor:pointer;transition:all 0.12s}
+.ctrl-btn:hover{background:var(--card-hover);color:var(--text)}
+.ctrl-btn.active{background:rgba(247,98,65,0.15);border-color:var(--primary);color:var(--primary)}
+.opacity-slider{display:flex;align-items:center;gap:8px;margin-left:16px}
+.opacity-slider input[type=range]{width:120px;accent-color:var(--primary)}
+.opacity-slider label{font-size:11px;color:var(--text-dim)}
+.zoom-controls{display:flex;gap:4px;margin-left:auto}
+.zoom-btn{width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--border);border-radius:6px;color:var(--text-dim);cursor:pointer;font-size:14px;font-weight:700}
+.zoom-btn:hover{color:var(--text);background:var(--card-hover)}
+.comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.comp-grid.overlay-mode{grid-template-columns:1fr}
+.comp-panel{background:var(--card);border-radius:12px;border:1px solid var(--border);overflow:hidden}
+.comp-panel-head{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:600}
+.comp-panel-body{display:flex;justify-content:center;align-items:flex-start;min-height:400px;background:#18181b;position:relative;overflow:hidden}
+.comp-panel-body img{max-width:100%;max-height:700px;object-fit:contain;transition:opacity 0.2s}
+.comp-panel-body .placeholder{color:var(--text-dim);font-size:13px;display:flex;flex-direction:column;align-items:center;gap:8px;padding:40px;text-align:center}
+.overlay-wrap{position:relative;display:inline-block;width:100%}
+.overlay-wrap img{max-width:100%;max-height:700px;object-fit:contain}
+.overlay-wrap .overlay-img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;pointer-events:none}
+.notes-box{background:var(--card);border-radius:10px;border:1px solid var(--border);padding:14px;margin-bottom:16px}
+.notes-box h4{font-size:13px;font-weight:600;margin-bottom:6px;color:var(--yellow)}
+.notes-box textarea{width:100%;background:var(--card-hover);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:12px;padding:8px;resize:vertical;min-height:60px;font-family:inherit;outline:none}
+.notes-box textarea:focus{border-color:var(--primary)}
+.save-indicator{font-size:11px;color:var(--green);font-weight:400;opacity:0;transition:opacity 0.5s}
+
+/* Drop zone */
+.drop-zone{width:100%;min-height:400px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px dashed var(--border);border-radius:12px;cursor:pointer;transition:all 0.2s;gap:8px;color:var(--text-dim);padding:40px}
+.drop-zone:hover,.drop-zone.dragover{border-color:var(--primary);background:rgba(247,98,65,0.05);color:var(--primary)}
+.drop-zone .icon{font-size:40px;opacity:0.5}
+.drop-zone p{font-size:13px;text-align:center}
+.drop-zone .hint{font-size:11px}
+kbd{display:inline-block;padding:2px 6px;background:var(--card);border:1px solid var(--border);border-radius:4px;font-size:11px;font-family:monospace;color:var(--text-dim)}
+
+/* Upload btn in panel head */
+.upload-btn{padding:4px 10px;font-size:11px;background:var(--card-hover);border:1px solid var(--border);border-radius:6px;color:var(--text-dim);cursor:pointer}
+.upload-btn:hover{color:var(--text);border-color:var(--primary)}
+.delete-img-btn{padding:4px 8px;font-size:11px;font-weight:700;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);border-radius:5px;color:var(--red);cursor:pointer;transition:all 0.12s}
+.delete-img-btn:hover{background:rgba(239,68,68,0.25)}
+
+/* ===== SafeArea Tab ===== */
+.sa-stats{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.sa-stat{background:var(--card);border-radius:10px;padding:16px 20px;border:1px solid var(--border);text-align:center;min-width:140px}
+.sa-stat .num{font-size:28px;font-weight:800}
+.sa-stat .num.green{color:var(--green)}.sa-stat .num.yellow{color:var(--yellow)}.sa-stat .num.red{color:var(--red)}
+.sa-stat .lbl{font-size:11px;color:var(--text-dim);margin-top:4px}
+.sa-table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.sa-table th{text-align:left;padding:10px 14px;background:var(--sidebar);border-bottom:1px solid var(--border);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim)}
+.sa-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+.sa-table tr:last-child td{border-bottom:none}
+.sa-table tr:hover td{background:var(--card-hover)}
+.sev-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.sev-badge.critical{background:rgba(239,68,68,0.15);color:var(--red)}
+.sev-badge.high{background:rgba(234,179,8,0.15);color:var(--yellow)}
+.sev-badge.medium{background:rgba(59,130,246,0.15);color:var(--blue)}
+.sev-badge.low{background:rgba(156,163,175,0.15);color:var(--text-dim)}
+.sev-badge.fixed{background:rgba(34,197,94,0.15);color:var(--green)}
+.sev-badge.monitoring{background:rgba(234,179,8,0.15);color:var(--yellow)}
+
+/* ===== App Store Tab ===== */
+.as-section{margin-bottom:24px}
+.as-section h3{font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.as-grid{display:grid;gap:8px}
+.as-item{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;background:var(--card);border-radius:10px;border:1px solid var(--border)}
+.as-item .ic{font-size:16px;flex-shrink:0;margin-top:2px}
+.as-item h5{font-size:13px;font-weight:600}
+.as-item p{font-size:12px;color:var(--text-dim);margin-top:2px}
+
+/* ===== Code Quality Tab ===== */
+.cq-section{margin-bottom:24px}
+.cq-section h3{font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.cq-table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.cq-table th{text-align:left;padding:10px 14px;background:var(--sidebar);border-bottom:1px solid var(--border);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim)}
+.cq-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+.cq-table tr:last-child td{border-bottom:none}
+.cq-table tr:hover td{background:var(--card-hover)}
+.cq-code{font-family:'SF Mono',Monaco,'Fira Code',monospace;font-size:11px;color:var(--primary)}
+.cq-count{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:20px;padding:0 6px;border-radius:10px;font-size:11px;font-weight:700;background:rgba(247,98,65,0.15);color:var(--primary)}
+
+/* ===== Summary Tab ===== */
+.summary-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:24px}
+.summary-card{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:20px}
+.summary-card h4{font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.summary-card .val{font-size:32px;font-weight:800}
+.summary-card .sub{font-size:12px;color:var(--text-dim);margin-top:4px}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;margin-top:8px;overflow:hidden}
+.progress-bar .fill{height:100%;border-radius:3px;transition:width 0.3s}
+.cat-bar-row{display:flex;align-items:center;gap:10px;padding:6px 0}
+.cat-bar-label{font-size:12px;color:var(--text-dim);width:120px;flex-shrink:0}
+.cat-bar-track{flex:1;height:18px;background:var(--border);border-radius:4px;overflow:hidden;display:flex}
+.cat-bar-seg{height:100%;transition:width 0.3s}
+.cat-bar-count{font-size:11px;color:var(--text-dim);width:40px;text-align:right;flex-shrink:0}
+
+/* Status cycling button */
+.status-cycle{cursor:pointer;user-select:none;transition:transform 0.1s}
+.status-cycle:active{transform:scale(0.9)}
+
+/* ===== Figma Integration ===== */
+.data-actions{display:flex;gap:4px;margin-top:8px}
+.data-actions button{flex:1;padding:6px 8px;font-size:11px;font-weight:600;background:var(--card);border:1px solid var(--border);border-radius:6px;color:var(--text-dim);cursor:pointer;transition:all 0.12s;white-space:nowrap}
+.data-actions button:hover{background:var(--card-hover);color:var(--text);border-color:var(--primary)}
+
+.figma-connect-btn{display:flex;align-items:center;gap:6px;padding:8px 12px;margin-top:10px;background:rgba(247,98,65,0.12);border:1px solid rgba(247,98,65,0.3);border-radius:8px;color:var(--primary);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s;width:100%}
+.figma-connect-btn:hover{background:rgba(247,98,65,0.2);border-color:var(--primary)}
+.figma-connect-btn.connected{background:rgba(34,197,94,0.12);border-color:rgba(34,197,94,0.3);color:var(--green)}
+.figma-bulk-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;margin:8px 16px 0;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text-dim);font-size:11px;font-weight:600;cursor:pointer;transition:all 0.15s}
+.figma-bulk-btn:hover{background:var(--card-hover);color:var(--text);border-color:var(--primary)}
+.figma-bulk-btn:disabled{opacity:0.4;cursor:not-allowed}
+
+/* Figma Modal */
+.figma-modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:1000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.figma-modal{background:var(--sidebar);border:1px solid var(--border);border-radius:16px;padding:28px;width:420px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.figma-modal h3{font-size:16px;font-weight:700;margin-bottom:4px}
+.figma-modal .modal-desc{font-size:12px;color:var(--text-dim);margin-bottom:16px;line-height:1.5}
+.figma-modal label{font-size:12px;font-weight:600;color:var(--text-dim);display:block;margin-bottom:6px}
+.figma-modal input[type=text]{width:100%;padding:10px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;font-family:monospace}
+.figma-modal input[type=text]:focus{border-color:var(--primary)}
+.figma-modal input[type=text]::placeholder{color:var(--text-dim)}
+.figma-modal-actions{display:flex;gap:8px;margin-top:20px;justify-content:flex-end}
+.figma-modal-actions button{padding:8px 20px;font-size:13px;font-weight:600;border-radius:8px;cursor:pointer;transition:all 0.15s;border:none}
+.figma-modal-actions .btn-cancel{background:var(--card);color:var(--text-dim);border:1px solid var(--border)}
+.figma-modal-actions .btn-cancel:hover{color:var(--text)}
+.figma-modal-actions .btn-save{background:var(--primary);color:#fff}
+.figma-modal-actions .btn-save:hover{filter:brightness(1.1)}
+.figma-modal-actions .btn-danger{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.3)}
+.figma-modal-actions .btn-danger:hover{background:rgba(239,68,68,0.25)}
+.figma-modal .bulk-section{margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.figma-modal .bulk-section h4{font-size:13px;font-weight:600;margin-bottom:8px;color:var(--text)}
+.figma-modal textarea{width:100%;padding:10px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;font-family:monospace;outline:none;resize:vertical;min-height:100px;line-height:1.6}
+.figma-modal textarea:focus{border-color:var(--primary)}
+.figma-modal textarea::placeholder{color:var(--text-dim)}
+.btn-test{background:var(--card);color:var(--text-dim);border:1px solid var(--border);padding:6px 14px;font-size:12px;font-weight:600;border-radius:6px;cursor:pointer;transition:all 0.12s}
+.btn-test:hover{color:var(--text);border-color:var(--primary)}
+.test-result{font-size:12px;margin-top:8px;padding:6px 10px;border-radius:6px;display:none}
+.test-result.success{display:block;background:rgba(34,197,94,0.1);color:var(--green)}
+.test-result.fail{display:block;background:rgba(239,68,68,0.1);color:var(--red)}
+
+/* Node ID input in panel header */
+.node-id-group{display:flex;align-items:center;gap:6px}
+.node-id-input{width:110px;padding:3px 8px;background:var(--card-hover);border:1px solid var(--border);border-radius:5px;color:var(--text);font-size:11px;font-family:monospace;outline:none}
+.node-id-input:focus{border-color:var(--primary)}
+.node-id-input::placeholder{color:var(--text-dim)}
+.figma-fetch-btn{padding:3px 10px;font-size:11px;font-weight:600;background:rgba(247,98,65,0.15);border:1px solid rgba(247,98,65,0.3);border-radius:5px;color:var(--primary);cursor:pointer;transition:all 0.12s;white-space:nowrap}
+.figma-fetch-btn:hover{background:rgba(247,98,65,0.25)}
+.figma-fetch-btn:disabled{opacity:0.4;cursor:not-allowed}
+.figma-fetch-btn.loading{animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+
+/* Progress bar for bulk fetch */
+.figma-progress{margin:8px 16px 0;background:var(--card);border-radius:6px;overflow:hidden;height:4px;display:none}
+.figma-progress.active{display:block}
+.figma-progress-bar{height:100%;background:var(--primary);border-radius:6px;transition:width 0.3s;width:0%}
+
+/* Toast notification */
+.figma-toast{position:fixed;bottom:20px;right:20px;padding:12px 20px;background:var(--sidebar);border:1px solid var(--border);border-radius:10px;font-size:13px;color:var(--text);z-index:1001;box-shadow:0 8px 24px rgba(0,0,0,0.4);transform:translateY(100px);opacity:0;transition:all 0.3s ease}
+.figma-toast.show{transform:translateY(0);opacity:1}
+.figma-toast.success{border-color:rgba(34,197,94,0.4);color:var(--green)}
+.figma-toast.error{border-color:rgba(239,68,68,0.4);color:var(--red)}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--text-dim)}
+
+/* Sidebar toggle & overlay (hidden on desktop) */
+.sidebar-toggle{display:none;position:fixed;top:12px;left:12px;z-index:101;width:40px;height:40px;background:var(--sidebar);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:20px;cursor:pointer;align-items:center;justify-content:center}
+.sidebar-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:99}
+.sidebar-overlay.active{display:block}
+
+/* ===== Mobile Responsive ===== */
+@media(max-width:768px){
+  .sidebar-toggle{display:flex}
+  .sidebar{position:fixed;left:-260px;top:0;bottom:0;z-index:100;transition:left 0.25s ease}
+  .sidebar.open{left:0}
+  .comp-header{padding-top:48px}
+  .comp-grid{grid-template-columns:1fr}
+  .comp-panel-body{min-height:250px}
+  .main-tabs{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;-ms-overflow-style:none}
+  .main-tabs::-webkit-scrollbar{display:none}
+  .main-tab{white-space:nowrap;flex-shrink:0;min-height:44px}
+  .nav-item{padding:10px 12px 10px 20px;min-height:44px}
+  .ctrl-btn,.zoom-btn{min-height:44px}
+  .upload-btn,.figma-fetch-btn,.delete-img-btn{min-height:44px;padding:8px 12px}
+}
+</style>
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">☰</button>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h1>티미타카 React</h1>
+    <p>Figma vs App 비교 대시보드</p>
+    <div class="sidebar-stats" id="sidebarStats"></div>
+    <button class="figma-connect-btn" id="figmaConnectBtn" onclick="openFigmaModal()">
+      <span id="figmaConnectIcon">🔗</span>
+      <span id="figmaConnectLabel">Figma 연동</span>
+    </button>
+    <div class="data-actions">
+      <button onclick="exportAllData()" title="JSON 내보내기">📥 내보내기</button>
+      <button onclick="document.getElementById('importFile').click()" title="JSON 가져오기">📤 가져오기</button>
+      <button onclick="resetAllData()" title="데이터 초기화">🗑 초기화</button>
+    </div>
+  </div>
+  <button class="figma-bulk-btn" id="figmaBulkBtn" onclick="bulkFetchFigma()" title="figmaNode가 설정된 모든 화면의 이미지를 가져옵니다">
+    ⬇ 전체 Figma 이미지 가져오기
+  </button>
+  <div class="figma-progress" id="figmaProgress">
+    <div class="figma-progress-bar" id="figmaProgressBar"></div>
+  </div>
+  <div class="sidebar-search">
+    <input id="searchInput" placeholder="화면 검색..." oninput="renderSidebar(this.value)">
+  </div>
+  <div class="sidebar-nav" id="sidebarNav"></div>
+</div>
+
+<div class="main">
+  <div class="main-tabs" id="mainTabs">
+    <div class="main-tab active" data-tab="compare">비교</div>
+    <div class="main-tab" data-tab="safearea">SafeArea</div>
+    <div class="main-tab" data-tab="appstore">App Store</div>
+    <div class="main-tab" data-tab="codequality">코드 품질</div>
+    <div class="main-tab" data-tab="summary">종합 요약</div>
+  </div>
+  <div class="main-content" id="mainContent"></div>
+</div>
+
+<input type="file" id="figmaUpload" accept="image/*" style="display:none">
+<input type="file" id="appUpload" accept="image/*" style="display:none">
+<input type="file" id="importFile" accept=".json" style="display:none">
+
+<!-- Figma API Modal -->
+<div class="figma-modal-overlay" id="figmaModal" style="display:none" onclick="if(event.target===this)closeFigmaModal()">
+  <div class="figma-modal">
+    <h3>Figma API 연동</h3>
+    <p class="modal-desc">Figma Personal Access Token을 입력하세요. 토큰은 브라우저 localStorage에만 저장됩니다.<br>
+    <a href="https://www.figma.com/developers/api#access-tokens" target="_blank" style="color:var(--primary)">토큰 발급 방법 →</a></p>
+    <label for="figmaTokenInput">Personal Access Token</label>
+    <input type="text" id="figmaTokenInput" placeholder="figd_xxxxxxxxxxxxxxx">
+    <div style="margin-top:12px">
+      <label for="figmaFileKeyInput">File Key</label>
+      <input type="text" id="figmaFileKeyInput" placeholder="NbK90DqDB4T4KlIHsj1XY9" value="">
+    </div>
+    <div style="margin-top:10px;display:flex;align-items:center;gap:8px">
+      <button class="btn-test" onclick="testFigmaConnection()">연결 테스트</button>
+      <div class="test-result" id="figmaTestResult"></div>
+    </div>
+    <div class="bulk-section">
+      <h4>노드 ID 일괄 설정</h4>
+      <label for="figmaBulkInput">screenId=nodeId 형식으로 한 줄에 하나씩</label>
+      <textarea id="figmaBulkInput" placeholder="auth_login=123:456&#10;auth_terms=789:012&#10;home_main=345:678"></textarea>
+      <button class="btn-test" style="margin-top:8px" onclick="applyBulkNodeIds()">일괄 적용</button>
+      <div class="test-result" id="bulkApplyResult"></div>
+    </div>
+    <div class="figma-modal-actions">
+      <button class="btn-danger" id="figmaDisconnectBtn" onclick="disconnectFigma()" style="display:none;margin-right:auto">연결 해제</button>
+      <button class="btn-cancel" onclick="closeFigmaModal()">취소</button>
+      <button class="btn-save" onclick="saveFigmaToken()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="figma-toast" id="figmaToast"></div>
+
+<script>
+// ===== SCREEN DATA (51 screens, 13 categories) =====
+const SCREENS = [
+  // AUTH (10)
+  {id:"auth_login",name:"로그인",cat:"AUTH",route:"/login",figmaNode:""},
+  {id:"auth_terms",name:"약관동의",cat:"AUTH",route:"/register",figmaNode:""},
+  {id:"auth_phone",name:"휴대폰인증",cat:"AUTH",route:"/phone-verify",figmaNode:""},
+  {id:"auth_code",name:"인증번호",cat:"AUTH",route:"/phone-verify/code",figmaNode:""},
+  {id:"auth_school",name:"학교인증",cat:"AUTH",route:"/profile/verification",figmaNode:""},
+  {id:"auth_password",name:"비밀번호 설정",cat:"AUTH",route:"/register",figmaNode:""},
+  {id:"auth_profile",name:"프로필설정",cat:"AUTH",route:"/profile-setup",figmaNode:""},
+  {id:"auth_complete",name:"가입완료",cat:"AUTH",route:"/register-complete",figmaNode:""},
+  {id:"auth_findid",name:"아이디찾기",cat:"AUTH",route:"/find-id",figmaNode:""},
+  {id:"auth_findpw",name:"비밀번호찾기",cat:"AUTH",route:"/find-password",figmaNode:""},
+  // ONBOARDING (2)
+  {id:"onb_splash",name:"스플래시",cat:"ONBOARDING",route:"/onboarding",figmaNode:""},
+  {id:"onb_guide",name:"온보딩 가이드",cat:"ONBOARDING",route:"/onboarding",figmaNode:""},
+  // HOME (1)
+  {id:"home_main",name:"홈 화면",cat:"HOME",route:"/main",figmaNode:""},
+  // RECRUITMENT (9)
+  {id:"rec_list",name:"모집 목록",cat:"RECRUITMENT",route:"/recruitment",figmaNode:""},
+  {id:"rec_detail",name:"모집 상세",cat:"RECRUITMENT",route:"/recruitment/:id",figmaNode:""},
+  {id:"rec_step1",name:"작성 Step1 기본정보",cat:"RECRUITMENT",route:"/recruit",figmaNode:""},
+  {id:"rec_step2",name:"작성 Step2 상세",cat:"RECRUITMENT",route:"/recruit/detail",figmaNode:""},
+  {id:"rec_step3",name:"작성 Step3 이미지",cat:"RECRUITMENT",route:"/recruit/image",figmaNode:""},
+  {id:"rec_step4",name:"작성 Step4 미리보기",cat:"RECRUITMENT",route:"/recruit/preview",figmaNode:""},
+  {id:"rec_step5",name:"작성 Step5 게시",cat:"RECRUITMENT",route:"/recruit/publish",figmaNode:""},
+  {id:"rec_done",name:"게시완료",cat:"RECRUITMENT",route:"/recruit/publish/done",figmaNode:""},
+  // PROFILE (5)
+  {id:"prof_main",name:"프로필",cat:"PROFILE",route:"/profile",figmaNode:""},
+  {id:"prof_edit",name:"프로필 수정",cat:"PROFILE",route:"/profile/edit",figmaNode:""},
+  {id:"prof_univ",name:"대학인증",cat:"PROFILE",route:"/profile/verification",figmaNode:""},
+  {id:"prof_settings",name:"설정",cat:"PROFILE",route:"/profile",figmaNode:""},
+  {id:"prof_projreg",name:"프로젝트등록",cat:"PROFILE",route:"/profile/register-project",figmaNode:""},
+  // PROJECT_MGMT (6)
+  {id:"pm_manage",name:"프로젝트 관리",cat:"PROJECT_MGMT",route:"/project-management",figmaNode:""},
+  {id:"pm_detail",name:"프로젝트 상세",cat:"PROJECT_MGMT",route:"/project/:id",figmaNode:""},
+  {id:"pm_member",name:"멤버",cat:"PROJECT_MGMT",route:"/project/:id/member",figmaNode:""},
+  {id:"pm_minutes",name:"회의록",cat:"PROJECT_MGMT",route:"/project/:id/proceedings",figmaNode:""},
+  {id:"pm_meeting",name:"회의생성",cat:"PROJECT_MGMT",route:"/project/:id/create-meeting",figmaNode:""},
+  {id:"pm_calendar",name:"캘린더",cat:"PROJECT_MGMT",route:"/project/:id/calender",figmaNode:""},
+  // APPLICATION (3)
+  {id:"app_apply",name:"지원하기",cat:"APPLICATION",route:"/apply2",figmaNode:""},
+  {id:"app_select",name:"역할선택",cat:"APPLICATION",route:"/apply2/select",figmaNode:""},
+  {id:"app_complete",name:"지원완료",cat:"APPLICATION",route:"/apply2/complete",figmaNode:""},
+  // EVALUATION (6)
+  {id:"eval_manage",name:"평가 관리",cat:"EVALUATION",route:"/evaluation/management",figmaNode:""},
+  {id:"eval_project",name:"프로젝트평가",cat:"EVALUATION",route:"/evaluation/project/:id",figmaNode:""},
+  {id:"eval_member",name:"팀원평가",cat:"EVALUATION",route:"/evaluation/team-member/:pid/:mid",figmaNode:""},
+  {id:"eval_status",name:"평가상태",cat:"EVALUATION",route:"/evaluation/status/:id",figmaNode:""},
+  {id:"eval_feedback",name:"피드백",cat:"EVALUATION",route:"/evaluation/feedback/:id",figmaNode:""},
+  {id:"eval_complete",name:"평가완료",cat:"EVALUATION",route:"/evaluation/complete",figmaNode:""},
+  // TEAM_MATCHING (1)
+  {id:"tm_matching",name:"팀 매칭",cat:"TEAM_MATCHING",route:"/team-matching",figmaNode:""},
+  // SEARCH_BOOKMARK (2)
+  {id:"sb_search",name:"검색",cat:"SEARCH_BOOKMARK",route:"/search",figmaNode:""},
+  {id:"sb_bookmark",name:"북마크",cat:"SEARCH_BOOKMARK",route:"/bookmark",figmaNode:""},
+  // NOTIFICATIONS (2)
+  {id:"noti_list",name:"알림목록",cat:"NOTIFICATIONS",route:"/notifications",figmaNode:""},
+  {id:"noti_settings",name:"알림설정",cat:"NOTIFICATIONS",route:"/notifications/settings",figmaNode:""},
+  // TYPE_TEST (3)
+  {id:"tt_start",name:"테스트 시작",cat:"TYPE_TEST",route:"/type-test",figmaNode:""},
+  {id:"tt_quiz",name:"질문",cat:"TYPE_TEST",route:"/type-test",figmaNode:""},
+  {id:"tt_result",name:"결과",cat:"TYPE_TEST",route:"/type-test/result/:type",figmaNode:""},
+  // LEGAL (2)
+  {id:"legal_privacy",name:"개인정보처리방침",cat:"LEGAL",route:"/privacy",figmaNode:""},
+  {id:"legal_terms",name:"이용약관",cat:"LEGAL",route:"/terms",figmaNode:""},
+];
+
+const CATS = [...new Set(SCREENS.map(s => s.cat))];
+const CAT_LABELS = {
+  AUTH:"인증",ONBOARDING:"온보딩",HOME:"홈",RECRUITMENT:"모집",
+  PROFILE:"프로필",PROJECT_MGMT:"프로젝트관리",APPLICATION:"지원",
+  EVALUATION:"평가",TEAM_MATCHING:"팀매칭",SEARCH_BOOKMARK:"검색/북마크",
+  NOTIFICATIONS:"알림",TYPE_TEST:"유형테스트",LEGAL:"법적"
+};
+
+// ===== STATE =====
+let currentScreen = SCREENS[0].id;
+let currentTab = "compare";
+let viewMode = "side"; // side | overlay
+let overlayOpacity = 0.5;
+let zoomLevel = 1;
+
+// Persisted state (localStorage)
+let screenStatuses = JSON.parse(localStorage.getItem("tir_statuses") || "{}");
+let screenNotes = JSON.parse(localStorage.getItem("tir_notes") || "{}");
+let figmaImages = JSON.parse(localStorage.getItem("tir_figma") || "{}");
+let appImages = JSON.parse(localStorage.getItem("tir_app") || "{}");
+
+// Sidebar filter state
+let collapsedCats = JSON.parse(localStorage.getItem("tir_collapsed_cats") || "{}");
+let statusFilter = { match:true, minor:true, diff:true, na:true };
+
+// Figma API state
+const FIGMA_FILE_KEY_DEFAULT = "NbK90DqDB4T4KlIHsj1XY9";
+let figmaToken = localStorage.getItem("tir_figma_token") || "";
+let figmaFileKey = localStorage.getItem("tir_figma_filekey") || FIGMA_FILE_KEY_DEFAULT;
+let figmaNodeIds = JSON.parse(localStorage.getItem("tir_figma_nodes") || "{}");
+
+function saveFigmaNodes() {
+  try { localStorage.setItem("tir_figma_nodes", JSON.stringify(figmaNodeIds)); } catch(e) {}
+}
+
+function saveState() {
+  try { localStorage.setItem("tir_statuses", JSON.stringify(screenStatuses)); } catch(e) {}
+  try { localStorage.setItem("tir_notes", JSON.stringify(screenNotes)); } catch(e) {}
+}
+function saveFigmaImages() {
+  try { localStorage.setItem("tir_figma", JSON.stringify(figmaImages)); } catch(e) {}
+}
+function saveAppImages() {
+  try { localStorage.setItem("tir_app", JSON.stringify(appImages)); } catch(e) {}
+}
+
+function getStatus(id) { return screenStatuses[id] || "na"; }
+function setStatus(id, s) { screenStatuses[id] = s; saveState(); }
+
+function getCounts() {
+  let m=0, mi=0, d=0, n=0;
+  SCREENS.forEach(s => {
+    const st = getStatus(s.id);
+    if (st === "match") m++;
+    else if (st === "minor") mi++;
+    else if (st === "diff") d++;
+    else n++;
+  });
+  return { match: m, minor: mi, diff: d, na: n };
+}
+
+function cycleStatus(id) {
+  const order = ["na","match","minor","diff"];
+  const cur = getStatus(id);
+  const next = order[(order.indexOf(cur) + 1) % order.length];
+  setStatus(id, next);
+  renderAll();
+}
+
+function toggleCatCollapse(cat) {
+  collapsedCats[cat] = !collapsedCats[cat];
+  try { localStorage.setItem("tir_collapsed_cats", JSON.stringify(collapsedCats)); } catch(e) {}
+  renderSidebar(document.getElementById("searchInput").value);
+}
+
+function toggleStatusFilter(status) {
+  const activeCount = Object.values(statusFilter).filter(Boolean).length;
+  if (statusFilter[status] && activeCount <= 1) return; // keep at least 1
+  statusFilter[status] = !statusFilter[status];
+  renderSidebar(document.getElementById("searchInput").value);
+}
+
+// ===== SIDEBAR =====
+function renderSidebar(filter = "") {
+  const counts = getCounts();
+  document.getElementById("sidebarStats").innerHTML =
+    `<span class="stat-pill green${statusFilter.match?'':' inactive'}" onclick="toggleStatusFilter('match')">${counts.match} Match</span>` +
+    `<span class="stat-pill yellow${statusFilter.minor?'':' inactive'}" onclick="toggleStatusFilter('minor')">${counts.minor} Minor</span>` +
+    `<span class="stat-pill red${statusFilter.diff?'':' inactive'}" onclick="toggleStatusFilter('diff')">${counts.diff} Diff</span>` +
+    `<span class="stat-pill gray${statusFilter.na?'':' inactive'}" onclick="toggleStatusFilter('na')">${counts.na} N/A</span>`;
+
+  const nav = document.getElementById("sidebarNav");
+  let html = "";
+  const lf = filter.toLowerCase();
+
+  CATS.forEach(cat => {
+    const items = SCREENS.filter(s =>
+      s.cat === cat &&
+      (lf === "" || s.name.toLowerCase().includes(lf) || s.id.toLowerCase().includes(lf)) &&
+      statusFilter[getStatus(s.id)]
+    );
+    if (items.length === 0) return;
+
+    const collapsed = collapsedCats[cat];
+    const arrow = collapsed ? "▸" : "▾";
+    html += `<div class="nav-cat">
+      <div class="nav-cat-header" onclick="toggleCatCollapse('${cat}')"><span><span class="collapse-arrow">${arrow}</span> ${CAT_LABELS[cat] || cat}</span><span class="cnt">${items.length}</span></div>`;
+    if (!collapsed) {
+      items.forEach(s => {
+        const st = getStatus(s.id);
+        html += `<div class="nav-item${s.id === currentScreen ? " active" : ""}" data-id="${s.id}">
+          <span class="dot ${st}"></span>${s.name}</div>`;
+      });
+    }
+    html += `</div>`;
+  });
+
+  nav.innerHTML = html;
+  nav.querySelectorAll(".nav-item").forEach(el => {
+    el.onclick = () => {
+      currentScreen = el.dataset.id;
+      updateHash();
+      renderAll();
+      if (window.innerWidth <= 768) toggleSidebar();
+    };
+  });
+}
+
+// ===== TABS =====
+document.getElementById("mainTabs").querySelectorAll(".main-tab").forEach(tab => {
+  tab.onclick = () => {
+    document.querySelectorAll(".main-tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    currentTab = tab.dataset.tab;
+    updateHash();
+    renderMain();
+  };
+});
+
+// ===== RENDER MAIN =====
+function renderMain() {
+  const el = document.getElementById("mainContent");
+  if (currentTab === "compare") el.innerHTML = renderCompare();
+  else if (currentTab === "safearea") el.innerHTML = renderSafeArea();
+  else if (currentTab === "appstore") el.innerHTML = renderAppStore();
+  else if (currentTab === "codequality") el.innerHTML = renderCodeQuality();
+  else if (currentTab === "summary") el.innerHTML = renderSummary();
+  bindCompareEvents();
+}
+
+function renderAll() {
+  renderSidebar(document.getElementById("searchInput").value);
+  renderMain();
+}
+
+// ===== TAB 1: COMPARE =====
+function renderCompare() {
+  const s = SCREENS.find(x => x.id === currentScreen);
+  if (!s) return "<p>화면을 선택하세요</p>";
+  const st = getStatus(s.id);
+  const stLabel = {match:"Match",minor:"Minor",diff:"Diff",na:"N/A"}[st];
+  const noteVal = screenNotes[s.id] || "";
+
+  const figImg = figmaImages[s.id];
+  const appImg = appImages[s.id];
+
+  const nodeId = getScreenNodeId(s.id);
+  const hasFigmaApi = !!figmaToken;
+
+  const figmaContent = figImg
+    ? `<img src="${figImg}" alt="Figma" style="transform:scale(${zoomLevel})" onerror="handleImgError(this,'${s.id}','figma')">`
+    : `<div class="drop-zone" id="figmaDropZone">
+        <div class="icon">🎨</div>
+        <p>${hasFigmaApi && nodeId ? '아래 Fetch 버튼으로 Figma에서 가져오기' : 'Figma 스크린샷을 드롭하세요'}</p>
+        <p class="hint">${hasFigmaApi ? '노드 ID를 입력하고 Fetch · ' : ''}또는 클릭하여 업로드 · <kbd>Ctrl+V</kbd></p>
+      </div>`;
+
+  const appContent = appImg
+    ? `<img src="${appImg}" alt="App" style="transform:scale(${zoomLevel})" onerror="handleImgError(this,'${s.id}','app')">`
+    : `<div class="drop-zone" id="appDropZone">
+        <div class="icon">📱</div>
+        <p>앱 스크린샷을 드롭하세요</p>
+        <p class="hint">또는 클릭하여 업로드 · <kbd>Ctrl+V</kbd></p>
+      </div>`;
+
+  let compareBody;
+  if (viewMode === "overlay" && figImg && appImg) {
+    compareBody = `<div class="comp-grid overlay-mode">
+      <div class="comp-panel">
+        <div class="comp-panel-head"><span>오버레이 비교</span></div>
+        <div class="comp-panel-body">
+          <div class="overlay-wrap">
+            <img src="${figImg}" alt="Figma" style="transform:scale(${zoomLevel})" onerror="handleImgError(this,'${s.id}','figma')">
+            <img class="overlay-img" src="${appImg}" alt="App" style="opacity:${overlayOpacity};transform:scale(${zoomLevel})" onerror="handleImgError(this,'${s.id}','app')">
+          </div>
+        </div>
+      </div>
+    </div>`;
+  } else {
+    compareBody = `<div class="comp-grid">
+      <div class="comp-panel">
+        <div class="comp-panel-head">
+          <span>FIGMA DESIGN</span>
+          <div class="node-id-group">
+            <input class="node-id-input" type="text" placeholder="노드 ID (예: 123:456)" value="${nodeId}" onchange="handleNodeIdInput('${s.id}',this.value)" onkeydown="handleNodeIdKeydown(event,'${s.id}')">
+            <button class="figma-fetch-btn" data-fetch-screen="${s.id}" onclick="fetchSingleFigma('${s.id}')" ${!hasFigmaApi ? 'title="먼저 Figma 연동을 설정하세요"' : ''} ${!nodeId ? 'disabled' : ''}>Fetch</button>
+            <button class="upload-btn" onclick="document.getElementById('figmaUpload').click()">Upload</button>
+            ${figImg ? `<button class="delete-img-btn" onclick="deleteImage('${s.id}','figma')" title="이미지 삭제">✕</button>` : ''}
+          </div>
+        </div>
+        <div class="comp-panel-body" id="figmaPanelBody">${figmaContent}</div>
+      </div>
+      <div class="comp-panel">
+        <div class="comp-panel-head">
+          <span>APP 실제 구현</span>
+          <button class="upload-btn" onclick="document.getElementById('appUpload').click()">Upload</button>
+          ${appImg ? `<button class="delete-img-btn" onclick="deleteImage('${s.id}','app')" title="이미지 삭제">✕</button>` : ''}
+        </div>
+        <div class="comp-panel-body" id="appPanelBody">${appContent}</div>
+      </div>
+    </div>`;
+  }
+
+  return `
+    <div class="comp-header">
+      <h2>${s.name}</h2>
+      <span class="tag cat">${CAT_LABELS[s.cat] || s.cat}</span>
+      <span class="tag st-${st} status-cycle" onclick="cycleStatus('${s.id}')" title="클릭하여 상태 변경">${stLabel}</span>
+    </div>
+    <div class="file-info">
+      Route: ${s.route}${nodeId ? ` · <a href="https://www.figma.com/design/${figmaFileKey}?node-id=${encodeURIComponent(nodeId)}" target="_blank">Figma 열기 ↗</a>` : ""}
+    </div>
+    <div class="controls">
+      <button class="ctrl-btn${viewMode==="side"?" active":""}" onclick="setView('side')">좌우 비교</button>
+      <button class="ctrl-btn${viewMode==="overlay"?" active":""}" onclick="setView('overlay')">오버레이</button>
+      ${viewMode==="overlay"?`<div class="opacity-slider">
+        <label>투명도:</label>
+        <input type="range" min="0" max="100" value="${Math.round(overlayOpacity*100)}" oninput="setOpacity(this.value)">
+        <span id="opacityVal">${Math.round(overlayOpacity*100)}%</span>
+      </div>`:""}
+      <div class="zoom-controls">
+        <button class="zoom-btn" onclick="setZoom(zoomLevel-0.25)">−</button>
+        <span id="zoomLabel" style="font-size:12px;color:var(--text-dim);min-width:36px;text-align:center">${Math.round(zoomLevel*100)}%</span>
+        <button class="zoom-btn" onclick="setZoom(zoomLevel+0.25)">+</button>
+      </div>
+    </div>
+    ${compareBody}
+    <div class="notes-box">
+      <h4>메모 <span id="saveIndicator" class="save-indicator"></span></h4>
+      <textarea id="screenNoteInput" placeholder="이 화면에 대한 메모를 작성하세요..." oninput="saveNote('${s.id}',this.value)">${noteVal}</textarea>
+    </div>`;
+}
+
+let _saveIndicatorTimer = null;
+function saveNote(id, val) {
+  screenNotes[id] = val;
+  try { localStorage.setItem("tir_notes", JSON.stringify(screenNotes)); } catch(e) {}
+  const ind = document.getElementById("saveIndicator");
+  if (ind) {
+    ind.textContent = "저장됨";
+    ind.style.opacity = "1";
+    clearTimeout(_saveIndicatorTimer);
+    _saveIndicatorTimer = setTimeout(() => { ind.style.opacity = "0"; }, 1500);
+  }
+}
+
+function setView(mode) { viewMode = mode; renderMain(); }
+function setOpacity(val) {
+  overlayOpacity = val / 100;
+  const el = document.getElementById("opacityVal");
+  if (el) el.textContent = Math.round(val) + "%";
+  const img = document.querySelector(".overlay-img");
+  if (img) img.style.opacity = overlayOpacity;
+}
+function setZoom(level) {
+  zoomLevel = Math.max(0.25, Math.min(3, level));
+  const lbl = document.getElementById("zoomLabel");
+  if (lbl) lbl.textContent = Math.round(zoomLevel * 100) + "%";
+  document.querySelectorAll(".comp-panel-body img").forEach(img => {
+    img.style.transform = `scale(${zoomLevel})`;
+  });
+}
+
+// ===== IMAGE UPLOAD / DROP / PASTE =====
+function bindCompareEvents() {
+  if (currentTab !== "compare") return;
+
+  // Drop zones
+  document.querySelectorAll(".drop-zone, .comp-panel-body").forEach(el => {
+    el.ondragover = (e) => { e.preventDefault(); el.classList.add("dragover"); };
+    el.ondragleave = () => el.classList.remove("dragover");
+    el.ondrop = (e) => {
+      e.preventDefault();
+      el.classList.remove("dragover");
+      const files = e.dataTransfer.files;
+      if (files.length === 0) return;
+      // Determine panel
+      const panelBody = el.closest(".comp-panel-body") || el.closest(".comp-panel")?.querySelector(".comp-panel-body") || el;
+      const isFigma = panelBody.id === "figmaPanelBody" || el.id === "figmaDropZone";
+      loadImageFile(files[0], isFigma ? "figma" : "app");
+    };
+  });
+
+  // Click on drop zones
+  const fz = document.getElementById("figmaDropZone");
+  const az = document.getElementById("appDropZone");
+  if (fz) fz.onclick = () => document.getElementById("figmaUpload").click();
+  if (az) az.onclick = () => document.getElementById("appUpload").click();
+}
+
+document.getElementById("figmaUpload").onchange = (e) => {
+  if (e.target.files.length > 0) loadImageFile(e.target.files[0], "figma");
+  e.target.value = "";
+};
+document.getElementById("appUpload").onchange = (e) => {
+  if (e.target.files.length > 0) loadImageFile(e.target.files[0], "app");
+  e.target.value = "";
+};
+
+function loadImageFile(file, type) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    if (type === "figma") {
+      figmaImages[currentScreen] = dataUrl;
+      saveFigmaImages();
+    } else {
+      appImages[currentScreen] = dataUrl;
+      saveAppImages();
+    }
+    renderMain();
+  };
+  reader.readAsDataURL(file);
+}
+
+async function handleImgError(imgEl, screenId, type) {
+  // Prevent infinite loop
+  if (imgEl.dataset.retried) return;
+  imgEl.dataset.retried = "1";
+
+  const src = imgEl.src || "";
+  const isFigmaUrl = src.includes("figma") || src.includes("figmausercontent");
+
+  if (isFigmaUrl && type === "figma" && figmaToken) {
+    // Try re-fetching from Figma API
+    const nodeId = getScreenNodeId(screenId);
+    if (nodeId) {
+      try {
+        const url = await fetchFigmaImage(nodeId);
+        if (url) {
+          figmaImages[screenId] = url;
+          saveFigmaImages();
+          imgEl.src = url;
+          return;
+        }
+      } catch(e) { /* fall through to placeholder */ }
+    }
+  }
+
+  // Show placeholder
+  const panel = imgEl.closest(".comp-panel-body");
+  if (panel) {
+    const label = type === "figma" ? "Figma" : "App";
+    panel.innerHTML = `<div class="placeholder">
+      <div style="font-size:32px">⚠️</div>
+      <p>이미지가 만료되었거나 로드할 수 없습니다</p>
+      ${isFigmaUrl && type === "figma" ? '<p style="font-size:11px">Figma URL은 약 30일 후 만료됩니다. Fetch 버튼을 눌러 다시 가져오세요.</p>' : `<p style="font-size:11px">${label} 이미지를 다시 업로드하세요.</p>`}
+    </div>`;
+  }
+}
+
+function deleteImage(screenId, type) {
+  if (type === "figma") {
+    delete figmaImages[screenId];
+    saveFigmaImages();
+  } else {
+    delete appImages[screenId];
+    saveAppImages();
+  }
+  renderMain();
+}
+
+// Clipboard paste
+document.addEventListener("paste", (e) => {
+  if (currentTab !== "compare") return;
+  const items = e.clipboardData?.items;
+  if (!items) return;
+  for (let item of items) {
+    if (item.type.startsWith("image/")) {
+      const blob = item.getAsFile();
+      // Determine side by mouse position
+      const main = document.querySelector(".main");
+      const mainRect = main.getBoundingClientRect();
+      const midX = mainRect.left + mainRect.width / 2;
+      const type = (window._lastMouseX || 0) < midX ? "figma" : "app";
+      loadImageFile(blob, type);
+      break;
+    }
+  }
+});
+document.addEventListener("mousemove", (e) => { window._lastMouseX = e.clientX; });
+
+// ===== TAB 2: SAFEAREA =====
+function renderSafeArea() {
+  return `
+    <h2 style="font-size:20px;font-weight:700;margin-bottom:20px">SafeArea 점검 결과</h2>
+    <div class="sa-stats">
+      <div class="sa-stat"><div class="num" style="color:var(--text)">51</div><div class="lbl">전체 화면</div></div>
+      <div class="sa-stat"><div class="num green">3</div><div class="lbl">수정 완료</div></div>
+      <div class="sa-stat"><div class="num yellow">1</div><div class="lbl">모니터링</div></div>
+      <div class="sa-stat"><div class="num green">47</div><div class="lbl">정상</div></div>
+    </div>
+    <table class="sa-table">
+      <thead><tr><th>심각도</th><th>컴포넌트</th><th>이슈</th><th>파일</th><th>상태</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="sev-badge critical">Critical</span></td>
+          <td>RecruitmentViewPage footer</td>
+          <td>safe-area-inset-bottom 없음 → 하단 버튼 가림</td>
+          <td class="cq-code">RecruitmentViewPage.scss:158</td>
+          <td><span class="sev-badge fixed">Fixed</span></td>
+        </tr>
+        <tr>
+          <td><span class="sev-badge high">High</span></td>
+          <td>RegisterPage toast</td>
+          <td>bottom:100px 하드코딩 → 기기별 불일치</td>
+          <td class="cq-code">RegisterPage.scss:720</td>
+          <td><span class="sev-badge fixed">Fixed</span></td>
+        </tr>
+        <tr>
+          <td><span class="sev-badge medium">Medium</span></td>
+          <td>RegisterPage header</td>
+          <td>padding-top:88px 하드코딩</td>
+          <td class="cq-code">RegisterPage.scss:62</td>
+          <td><span class="sev-badge fixed">Fixed</span></td>
+        </tr>
+        <tr>
+          <td><span class="sev-badge low">Low</span></td>
+          <td>ReportModal</td>
+          <td>패딩 하드코딩 (기능 영향 미미)</td>
+          <td class="cq-code">ReportModal.scss</td>
+          <td><span class="sev-badge monitoring">Monitoring</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top:24px;font-size:16px;font-weight:700;margin-bottom:12px">정상 확인된 SafeArea 항목</h3>
+    <div class="as-grid">
+      <div class="as-item"><span class="ic">✅</span><div><h5>viewport-fit=cover</h5><p>index.html에 설정됨 (safe-area 전제조건)</p></div></div>
+      <div class="as-item"><span class="ic">✅</span><div><h5>CSS safe-area 변수/믹스인</h5><p>App.css + _variables.scss에 정의 (159+ 사용처)</p></div></div>
+      <div class="as-item"><span class="ic">✅</span><div><h5>BottomNav safe-area</h5><p>env(safe-area-inset-bottom) 적용됨</p></div></div>
+      <div class="as-item"><span class="ic">✅</span><div><h5>DefaultHeader safe-area</h5><p>env(safe-area-inset-top) 적용됨</p></div></div>
+    </div>`;
+}
+
+// ===== TAB 3: APP STORE =====
+function renderAppStore() {
+  return `
+    <h2 style="font-size:20px;font-weight:700;margin-bottom:20px">App Store 제출 점검</h2>
+
+    <div class="as-section">
+      <h3>Info.plist 설정</h3>
+      <div class="as-grid">
+        <div class="as-item"><span class="ic">✅</span><div><h5>ITSAppUsesNonExemptEncryption: false</h5><p>수출 규정 자가선언 → 매 제출마다 질문 스킵</p></div></div>
+        <div class="as-item"><span class="ic">✅</span><div><h5>GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS: false</h5><p>광고 개인화 비활성화</p></div></div>
+        <div class="as-item"><span class="ic">✅</span><div><h5>NSCameraUsageDescription</h5><p>카메라 접근 설명 추가됨</p></div></div>
+        <div class="as-item"><span class="ic">✅</span><div><h5>NSPhotoLibraryUsageDescription</h5><p>사진 라이브러리 접근 설명 추가됨</p></div></div>
+        <div class="as-item"><span class="ic">⚠️</span><div><h5>REACT_APP_FIREBASE_MEASUREMENT_ID</h5><p>비어있음 → Firebase 콘솔에서 발급 후 .env에 추가 필요</p></div></div>
+      </div>
+    </div>
+
+    <div class="as-section">
+      <h3>코드 품질</h3>
+      <div class="as-grid">
+        <div class="as-item"><span class="ic">✅</span><div><h5>console 정리 완료</h5><p>supabase.js, ErrorBoundary.js, compareProjects.js 등</p></div></div>
+        <div class="as-item"><span class="ic">✅</span><div><h5>alert → toast 72건 교체</h5><p>25개 파일에서 네이티브 alert/confirm을 GlobalToastSystem으로 교체</p></div></div>
+        <div class="as-item"><span class="ic">✅</span><div><h5>ErrorBoundary + Sentry</h5><p>프로덕션 에러 추적 시스템 구축</p></div></div>
+        <div class="as-item"><span class="ic">✅</span><div><h5>오프라인 감지 배너</h5><p>OfflineBanner.js 구현, navigator.onLine 감지</p></div></div>
+        <div class="as-item"><span class="ic">✅</span><div><h5>Input font-size 16px</h5><p>SSNInput, VerificationCodeInput → iOS 자동 줌 방지</p></div></div>
+      </div>
+    </div>
+
+    <div class="as-section">
+      <h3>인프라 & 보안</h3>
+      <div class="as-grid">
+        <div class="as-item"><span class="ic">✅</span><div><h5>viewport-fit=cover</h5><p>SafeArea CSS 변수가 작동하기 위한 전제조건</p></div></div>
+        <div class="as-item"><span class="ic">✅</span><div><h5>safe-area CSS 변수/믹스인</h5><p>_variables.scss + App.css에 정의, 159+ 사용처</p></div></div>
+        <div class="as-item"><span class="ic">✅</span><div><h5>딥링크 teamitaka://</h5><p>iOS URL scheme 설정 완료</p></div></div>
+        <div class="as-item"><span class="ic">✅</span><div><h5>GENERATE_SOURCEMAP=false</h5><p>프로덕션 번들에서 소스맵 제거</p></div></div>
+        <div class="as-item"><span class="ic">✅</span><div><h5>테스트 코드 분리</h5><p>NODE_ENV 가드 적용 → 프로덕션 번들에서 제거</p></div></div>
+        <div class="as-item"><span class="ic">✅</span><div><h5>iOS CSS 최적화</h5><p>tap-highlight, callout, overscroll 처리 완료</p></div></div>
+      </div>
+    </div>`;
+}
+
+// ===== TAB 4: CODE QUALITY =====
+function renderCodeQuality() {
+  const alertFiles = [
+    {file:"ProjectRecruit.js",count:6},{file:"ProjectRecruitDetail.js",count:5},
+    {file:"ProjectRecruitImage.js",count:3},{file:"ProjectRecruitPublish.js",count:4},
+    {file:"RecruitingComponent.js",count:4},{file:"CompletedComponent.js",count:3},
+    {file:"CompletedProjectSimpleCard.js",count:2},{file:"AddEventModal.js",count:3},
+    {file:"TodoBox.js",count:2},{file:"ProjectDetailHeader.js",count:2},
+    {file:"SlideContentSchedule.js",count:2},{file:"MemberTaskSlide.js",count:2},
+    {file:"KickoffSlide.js",count:2},{file:"TeamMemberInfoSlide.js",count:2},
+    {file:"Calendar.js",count:2},{file:"ApplicantListSlide.js",count:2},
+    {file:"ProjectApplySelect.js",count:3},{file:"BookmarkPage.js",count:2},
+    {file:"CreateMeetingPage.js",count:3},{file:"ProceedingsPage.js",count:2},
+    {file:"SearchPage.js",count:2},{file:"TeamMatchingPage.js",count:2},
+    {file:"RecruitmentViewPage.js",count:4},{file:"ProjectRegisterPage.js",count:5},
+    {file:"RegisterPage.js",count:4}
+  ];
+  const totalAlerts = alertFiles.reduce((a,b) => a + b.count, 0);
+
+  return `
+    <h2 style="font-size:20px;font-weight:700;margin-bottom:20px">코드 품질 상세</h2>
+
+    <div class="cq-section">
+      <h3>alert → toast 교체 <span class="cq-count">${totalAlerts}건</span></h3>
+      <p style="font-size:12px;color:var(--text-dim);margin-bottom:12px">25개 파일에서 네이티브 alert/confirm을 GlobalToastSystem의 showToast로 교체</p>
+      <table class="cq-table">
+        <thead><tr><th>파일</th><th>교체 수</th><th>상태</th></tr></thead>
+        <tbody>
+          ${alertFiles.map(f => `<tr>
+            <td class="cq-code">${f.file}</td>
+            <td><span class="cq-count">${f.count}</span></td>
+            <td><span class="sev-badge fixed">Done</span></td>
+          </tr>`).join("")}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cq-section">
+      <h3>Console 정리</h3>
+      <table class="cq-table">
+        <thead><tr><th>파일</th><th>내용</th><th>상태</th></tr></thead>
+        <tbody>
+          <tr><td class="cq-code">src/config/supabase.js</td><td>console.log 제거</td><td><span class="sev-badge fixed">Done</span></td></tr>
+          <tr><td class="cq-code">src/components/Common/ErrorBoundary.js</td><td>console.error → Sentry.captureException</td><td><span class="sev-badge fixed">Done</span></td></tr>
+          <tr><td class="cq-code">src/utils/compareProjects.js</td><td>console.warn 제거</td><td><span class="sev-badge fixed">Done</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cq-section">
+      <h3>Input font-size 수정</h3>
+      <table class="cq-table">
+        <thead><tr><th>파일</th><th>변경</th><th>이유</th><th>상태</th></tr></thead>
+        <tbody>
+          <tr><td class="cq-code">SSNInput.module.scss</td><td>14px → 16px</td><td>iOS Safari 자동 줌 방지</td><td><span class="sev-badge fixed">Done</span></td></tr>
+          <tr><td class="cq-code">VerificationCodeInput.module.scss</td><td>14px → 16px</td><td>iOS Safari 자동 줌 방지</td><td><span class="sev-badge fixed">Done</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cq-section">
+      <h3>SafeArea CSS 수정</h3>
+      <table class="cq-table">
+        <thead><tr><th>파일</th><th>변경 내용</th><th>상태</th></tr></thead>
+        <tbody>
+          <tr><td class="cq-code">RegisterPage.scss:62</td><td>padding-top: 88px → env(safe-area-inset-top) + 44px</td><td><span class="sev-badge fixed">Done</span></td></tr>
+          <tr><td class="cq-code">RegisterPage.scss:720</td><td>bottom: 100px → calc(env(safe-area-inset-bottom) + 80px)</td><td><span class="sev-badge fixed">Done</span></td></tr>
+          <tr><td class="cq-code">RecruitmentViewPage.scss:158</td><td>padding-bottom 추가: env(safe-area-inset-bottom)</td><td><span class="sev-badge fixed">Done</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cq-section">
+      <h3>Info.plist 변경</h3>
+      <table class="cq-table">
+        <thead><tr><th>키</th><th>값</th><th>목적</th></tr></thead>
+        <tbody>
+          <tr><td class="cq-code">ITSAppUsesNonExemptEncryption</td><td>false</td><td>수출 규정 자가선언</td></tr>
+          <tr><td class="cq-code">GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS</td><td>false</td><td>광고 개인화 비활성화</td></tr>
+        </tbody>
+      </table>
+    </div>`;
+}
+
+// ===== TAB 5: SUMMARY =====
+function renderSummary() {
+  const counts = getCounts();
+  const total = SCREENS.length;
+  const reviewed = counts.match + counts.minor + counts.diff;
+  const pct = total > 0 ? Math.round((reviewed / total) * 100) : 0;
+
+  let catRows = "";
+  CATS.forEach(cat => {
+    const items = SCREENS.filter(s => s.cat === cat);
+    const c = { match:0, minor:0, diff:0, na:0 };
+    items.forEach(s => { c[getStatus(s.id)]++; });
+    const t = items.length;
+    catRows += `<div class="cat-bar-row">
+      <span class="cat-bar-label">${CAT_LABELS[cat] || cat}</span>
+      <div class="cat-bar-track">
+        <div class="cat-bar-seg" style="width:${(c.match/t)*100}%;background:var(--green)"></div>
+        <div class="cat-bar-seg" style="width:${(c.minor/t)*100}%;background:var(--yellow)"></div>
+        <div class="cat-bar-seg" style="width:${(c.diff/t)*100}%;background:var(--red)"></div>
+        <div class="cat-bar-seg" style="width:${(c.na/t)*100}%;background:var(--border)"></div>
+      </div>
+      <span class="cat-bar-count">${t}</span>
+    </div>`;
+  });
+
+  return `
+    <h2 style="font-size:20px;font-weight:700;margin-bottom:20px">종합 요약</h2>
+
+    <div class="summary-cards">
+      <div class="summary-card">
+        <h4>전체 화면</h4>
+        <div class="val">${total}</div>
+        <div class="sub">13개 카테고리</div>
+      </div>
+      <div class="summary-card">
+        <h4>리뷰 완료</h4>
+        <div class="val" style="color:var(--green)">${reviewed}</div>
+        <div class="sub">${pct}% 완료</div>
+        <div class="progress-bar"><div class="fill" style="width:${pct}%;background:var(--green)"></div></div>
+      </div>
+      <div class="summary-card">
+        <h4>Match</h4>
+        <div class="val" style="color:var(--green)">${counts.match}</div>
+        <div class="sub">디자인 일치</div>
+      </div>
+      <div class="summary-card">
+        <h4>Minor</h4>
+        <div class="val" style="color:var(--yellow)">${counts.minor}</div>
+        <div class="sub">경미한 차이</div>
+      </div>
+      <div class="summary-card">
+        <h4>Diff</h4>
+        <div class="val" style="color:var(--red)">${counts.diff}</div>
+        <div class="sub">수정 필요</div>
+      </div>
+      <div class="summary-card">
+        <h4>N/A</h4>
+        <div class="val" style="color:var(--text-dim)">${counts.na}</div>
+        <div class="sub">미리뷰</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:16px;font-weight:700;margin-bottom:12px">카테고리별 분포</h3>
+    <div style="background:var(--card);border-radius:12px;border:1px solid var(--border);padding:16px 20px;margin-bottom:24px">
+      <div style="display:flex;gap:16px;margin-bottom:12px;font-size:11px;color:var(--text-dim)">
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--green);margin-right:4px"></span>Match</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--yellow);margin-right:4px"></span>Minor</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--red);margin-right:4px"></span>Diff</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--border);margin-right:4px"></span>N/A</span>
+      </div>
+      ${catRows}
+    </div>
+
+    <h3 style="font-size:16px;font-weight:700;margin-bottom:12px">프로젝트 정보</h3>
+    <div class="as-grid">
+      <div class="as-item"><span class="ic">📦</span><div><h5>Framework</h5><p>React (CRA) + Capacitor 7</p></div></div>
+      <div class="as-item"><span class="ic">📱</span><div><h5>Platform</h5><p>iOS / Android (Capacitor)</p></div></div>
+      <div class="as-item"><span class="ic">🔧</span><div><h5>Auth</h5><p>Firebase Phone Auth + Supabase Email OTP</p></div></div>
+      <div class="as-item"><span class="ic">🛡️</span><div><h5>Error Tracking</h5><p>Sentry + ErrorBoundary</p></div></div>
+      <div class="as-item"><span class="ic">🌐</span><div><h5>Backend</h5><p>Render + Supabase</p></div></div>
+      <div class="as-item"><span class="ic">📊</span><div><h5>Analytics</h5><p>Firebase Analytics (logEvent)</p></div></div>
+    </div>`;
+}
+
+// ===== FIGMA API INTEGRATION =====
+function getScreenNodeId(screenId) {
+  // User-set node ID takes priority, then data from SCREENS array
+  if (figmaNodeIds[screenId]) return figmaNodeIds[screenId];
+  const s = SCREENS.find(x => x.id === screenId);
+  return s?.figmaNode || "";
+}
+
+function setScreenNodeId(screenId, nodeId) {
+  nodeId = nodeId.trim().replace(/-/g, ':');
+  figmaNodeIds[screenId] = nodeId;
+  // Also update SCREENS array for Figma link
+  const s = SCREENS.find(x => x.id === screenId);
+  if (s) s.figmaNode = nodeId;
+  saveFigmaNodes();
+}
+
+function openFigmaModal() {
+  const modal = document.getElementById("figmaModal");
+  const tokenInput = document.getElementById("figmaTokenInput");
+  const fileKeyInput = document.getElementById("figmaFileKeyInput");
+  const disconnectBtn = document.getElementById("figmaDisconnectBtn");
+  tokenInput.value = figmaToken;
+  fileKeyInput.value = figmaFileKey;
+  disconnectBtn.style.display = figmaToken ? "block" : "none";
+  modal.style.display = "flex";
+  tokenInput.focus();
+}
+
+function closeFigmaModal() {
+  document.getElementById("figmaModal").style.display = "none";
+}
+
+function saveFigmaToken() {
+  const token = document.getElementById("figmaTokenInput").value.trim();
+  const fileKey = document.getElementById("figmaFileKeyInput").value.trim();
+  figmaToken = token;
+  figmaFileKey = fileKey || FIGMA_FILE_KEY_DEFAULT;
+  try {
+    localStorage.setItem("tir_figma_token", figmaToken);
+    localStorage.setItem("tir_figma_filekey", figmaFileKey);
+  } catch(e) {}
+  closeFigmaModal();
+  updateFigmaConnectBtn();
+  if (figmaToken) showToast("Figma 연동 완료", "success");
+}
+
+function disconnectFigma() {
+  figmaToken = "";
+  try {
+    localStorage.removeItem("tir_figma_token");
+  } catch(e) {}
+  closeFigmaModal();
+  updateFigmaConnectBtn();
+  showToast("Figma 연결 해제됨", "");
+}
+
+function applyBulkNodeIds() {
+  const textarea = document.getElementById("figmaBulkInput");
+  const resultEl = document.getElementById("bulkApplyResult");
+  const lines = textarea.value.trim().split("\n").filter(l => l.trim());
+  if (lines.length === 0) {
+    resultEl.className = "test-result fail";
+    resultEl.textContent = "입력된 내용이 없습니다";
+    return;
+  }
+  let applied = 0, skipped = [];
+  lines.forEach(line => {
+    const [key, val] = line.split("=").map(s => s.trim());
+    if (!key || !val) { skipped.push(line); return; }
+    const screen = SCREENS.find(s => s.id === key);
+    if (!screen) { skipped.push(key + " (존재하지 않는 ID)"); return; }
+    setScreenNodeId(key, val);
+    applied++;
+  });
+  resultEl.className = "test-result success";
+  resultEl.textContent = `${applied}개 적용 완료` + (skipped.length ? ` · ${skipped.length}개 건너뜀` : "");
+  if (applied > 0) renderAll();
+}
+
+async function testFigmaConnection() {
+  const token = document.getElementById("figmaTokenInput").value.trim();
+  const resultEl = document.getElementById("figmaTestResult");
+  if (!token) {
+    resultEl.className = "test-result fail";
+    resultEl.textContent = "토큰을 입력하세요";
+    return;
+  }
+  resultEl.className = "test-result";
+  resultEl.style.display = "block";
+  resultEl.style.color = "var(--text-dim)";
+  resultEl.textContent = "테스트 중...";
+  try {
+    const resp = await fetch("https://api.figma.com/v1/me", {
+      headers: { "X-Figma-Token": token }
+    });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    resultEl.className = "test-result success";
+    resultEl.textContent = `✓ 연결됨 (${data.email || data.handle || "OK"})`;
+  } catch (err) {
+    resultEl.className = "test-result fail";
+    const msg = err.message.includes("Failed to fetch")
+      ? "연결 실패 — 로컬에서 여셨다면 npx serve . 로 서버를 실행하세요"
+      : `연결 실패: ${err.message}`;
+    resultEl.textContent = msg;
+  }
+}
+
+function updateFigmaConnectBtn() {
+  const btn = document.getElementById("figmaConnectBtn");
+  const icon = document.getElementById("figmaConnectIcon");
+  const label = document.getElementById("figmaConnectLabel");
+  if (figmaToken) {
+    btn.classList.add("connected");
+    icon.textContent = "✓";
+    label.textContent = "Figma 연동됨";
+  } else {
+    btn.classList.remove("connected");
+    icon.textContent = "🔗";
+    label.textContent = "Figma 연동";
+  }
+}
+
+function showToast(msg, type) {
+  const toast = document.getElementById("figmaToast");
+  toast.textContent = msg;
+  toast.className = "figma-toast" + (type ? " " + type : "");
+  requestAnimationFrame(() => toast.classList.add("show"));
+  setTimeout(() => toast.classList.remove("show"), 3000);
+}
+
+async function fetchFigmaImage(nodeId) {
+  if (!figmaToken) { openFigmaModal(); return null; }
+  if (!nodeId) return null;
+
+  const resp = await fetch(
+    `https://api.figma.com/v1/images/${figmaFileKey}?ids=${encodeURIComponent(nodeId)}&format=png&scale=2`,
+    { headers: { "X-Figma-Token": figmaToken } }
+  );
+  if (!resp.ok) {
+    const errText = resp.status === 403 ? "토큰이 유효하지 않습니다" : resp.status === 0 ? "CORS 오류 — npx serve . 로 로컬 서버에서 열어주세요" : `API 에러 (${resp.status})`;
+    throw new Error(errText);
+  }
+  const data = await resp.json();
+  if (data.err) throw new Error(data.err);
+  const images = data.images || {};
+  const url = Object.values(images)[0];
+  if (!url) throw new Error("이미지를 찾을 수 없습니다");
+  return url;
+}
+
+async function fetchAndSetFigmaImage(screenId) {
+  const nodeId = getScreenNodeId(screenId);
+  if (!nodeId) {
+    showToast("노드 ID를 먼저 입력하세요", "error");
+    return false;
+  }
+  try {
+    const url = await fetchFigmaImage(nodeId);
+    if (url) {
+      figmaImages[screenId] = url;
+      saveFigmaImages();
+      return true;
+    }
+  } catch (err) {
+    const isCors = err.message.includes("Failed to fetch");
+    const msg = isCors
+      ? "CORS 오류 — file:// 대신 로컬 서버로 열어주세요 (npx serve . 또는 python -m http.server)"
+      : `${SCREENS.find(s=>s.id===screenId)?.name || screenId}: ${err.message}`;
+    showToast(msg, "error");
+  }
+  return false;
+}
+
+async function fetchSingleFigma(screenId) {
+  const btn = document.querySelector(`[data-fetch-screen="${screenId}"]`);
+  if (btn) { btn.disabled = true; btn.classList.add("loading"); btn.textContent = "..."; }
+  const ok = await fetchAndSetFigmaImage(screenId);
+  if (ok) {
+    showToast(`${SCREENS.find(s=>s.id===screenId)?.name} 이미지 로드 완료`, "success");
+    renderMain();
+  } else if (btn) {
+    btn.disabled = false; btn.classList.remove("loading"); btn.textContent = "Fetch";
+  }
+}
+
+async function bulkFetchFigma() {
+  if (!figmaToken) { openFigmaModal(); return; }
+
+  const targets = SCREENS.filter(s => getScreenNodeId(s.id));
+  if (targets.length === 0) {
+    showToast("노드 ID가 설정된 화면이 없습니다", "error");
+    return;
+  }
+
+  const progress = document.getElementById("figmaProgress");
+  const bar = document.getElementById("figmaProgressBar");
+  const bulkBtn = document.getElementById("figmaBulkBtn");
+  progress.classList.add("active");
+  bulkBtn.disabled = true;
+  bulkBtn.textContent = `⬇ 가져오는 중... (0/${targets.length})`;
+
+  let done = 0, success = 0;
+  const failedNames = [];
+  const batchSize = 10;
+  try {
+    for (let i = 0; i < targets.length; i += batchSize) {
+      const batch = targets.slice(i, i + batchSize);
+      const nodeIds = batch.map(s => getScreenNodeId(s.id)).join(",");
+      try {
+        const resp = await fetch(
+          `https://api.figma.com/v1/images/${figmaFileKey}?ids=${encodeURIComponent(nodeIds)}&format=png&scale=2`,
+          { headers: { "X-Figma-Token": figmaToken } }
+        );
+        if (!resp.ok) {
+          const errMsg = resp.status === 403 ? "토큰 만료" : `API ${resp.status}`;
+          throw new Error(errMsg);
+        }
+        const data = await resp.json();
+        const images = data.images || {};
+        batch.forEach(s => {
+          const nid = getScreenNodeId(s.id);
+          if (images[nid]) {
+            figmaImages[s.id] = images[nid];
+            success++;
+          } else {
+            failedNames.push(s.name);
+          }
+          done++;
+          bar.style.width = `${(done / targets.length) * 100}%`;
+          bulkBtn.textContent = `⬇ 가져오는 중... (${done}/${targets.length})`;
+        });
+      } catch (err) {
+        batch.forEach(s => {
+          done++;
+          failedNames.push(s.name);
+          bar.style.width = `${(done / targets.length) * 100}%`;
+        });
+        const isCors = err.message.includes("Failed to fetch");
+        if (isCors) {
+          showToast("CORS 오류 — 로컬 서버로 열어주세요 (npx serve . 또는 python -m http.server)", "error");
+          break;
+        }
+      }
+    }
+    saveFigmaImages();
+    let msg = `${success}/${targets.length} 이미지 로드 완료`;
+    if (failedNames.length > 0 && failedNames.length <= 5) {
+      msg += ` · 실패: ${failedNames.join(", ")}`;
+    } else if (failedNames.length > 5) {
+      msg += ` · ${failedNames.length}개 실패`;
+    }
+    showToast(msg, success > 0 ? "success" : "error");
+    renderMain();
+  } finally {
+    bulkBtn.disabled = false;
+    bulkBtn.textContent = "⬇ 전체 Figma 이미지 가져오기";
+    setTimeout(() => { progress.classList.remove("active"); bar.style.width = "0%"; }, 1500);
+  }
+}
+
+function handleNodeIdInput(screenId, value) {
+  setScreenNodeId(screenId, value);
+  renderMain();
+}
+
+function handleNodeIdKeydown(e, screenId) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    const nodeId = getScreenNodeId(screenId);
+    if (nodeId && figmaToken) {
+      fetchSingleFigma(screenId);
+    }
+  }
+}
+
+// Init: update Figma connect button state
+updateFigmaConnectBtn();
+
+// Restore node IDs from localStorage into SCREENS
+SCREENS.forEach(s => {
+  if (figmaNodeIds[s.id] && !s.figmaNode) {
+    s.figmaNode = figmaNodeIds[s.id];
+  }
+});
+
+// ===== SIDEBAR TOGGLE (MOBILE) =====
+function toggleSidebar() {
+  document.getElementById("sidebar").classList.toggle("open");
+  document.getElementById("sidebarOverlay").classList.toggle("active");
+}
+
+// ===== HASH ROUTER =====
+function updateHash() {
+  const hash = `screen=${currentScreen}&tab=${currentTab}`;
+  if (location.hash.slice(1) !== hash) {
+    history.pushState(null, "", "#" + hash);
+  }
+}
+
+function readHash() {
+  const h = location.hash.slice(1);
+  if (!h) return;
+  const params = new URLSearchParams(h);
+  const screen = params.get("screen");
+  const tab = params.get("tab");
+  if (screen && SCREENS.find(s => s.id === screen)) {
+    currentScreen = screen;
+  }
+  if (tab && ["compare","safearea","appstore","codequality","summary"].includes(tab)) {
+    currentTab = tab;
+    document.querySelectorAll(".main-tab").forEach(t => {
+      t.classList.toggle("active", t.dataset.tab === currentTab);
+    });
+  }
+}
+
+window.addEventListener("popstate", () => { readHash(); renderAll(); });
+
+// ===== DATA MANAGEMENT =====
+function exportAllData() {
+  const data = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    statuses: screenStatuses,
+    notes: screenNotes,
+    figmaNodeIds: figmaNodeIds
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const dateStr = new Date().toISOString().slice(0,10).replace(/-/g,"");
+  a.href = url;
+  a.download = `tir-dashboard-${dateStr}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast("JSON 파일 다운로드 완료", "success");
+}
+
+document.getElementById("importFile").onchange = function(e) {
+  if (!e.target.files.length) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!data.version) throw new Error("유효하지 않은 파일");
+      let statusCount = 0, noteCount = 0;
+      if (data.statuses) {
+        Object.assign(screenStatuses, data.statuses);
+        statusCount = Object.keys(data.statuses).length;
+      }
+      if (data.notes) {
+        Object.assign(screenNotes, data.notes);
+        noteCount = Object.keys(data.notes).length;
+      }
+      if (data.figmaNodeIds) {
+        Object.assign(figmaNodeIds, data.figmaNodeIds);
+        saveFigmaNodes();
+        SCREENS.forEach(s => {
+          if (figmaNodeIds[s.id]) s.figmaNode = figmaNodeIds[s.id];
+        });
+      }
+      saveState();
+      renderAll();
+      showToast(`${statusCount}개 상태, ${noteCount}개 메모 가져오기 완료`, "success");
+    } catch (err) {
+      showToast("파일 파싱 실패: " + err.message, "error");
+    }
+  };
+  reader.readAsText(e.target.files[0]);
+  e.target.value = "";
+};
+
+function resetAllData() {
+  if (!confirm("모든 데이터를 초기화하시겠습니까?\n상태, 메모, 이미지, 노드 ID가 모두 삭제됩니다.")) return;
+  const keys = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith("tir_")) keys.push(k);
+  }
+  keys.forEach(k => localStorage.removeItem(k));
+  screenStatuses = {};
+  screenNotes = {};
+  figmaImages = {};
+  appImages = {};
+  figmaNodeIds = {};
+  figmaToken = "";
+  SCREENS.forEach(s => { s.figmaNode = ""; });
+  updateFigmaConnectBtn();
+  renderAll();
+  showToast("모든 데이터가 초기화되었습니다", "success");
+}
+
+// ===== KEYBOARD SHORTCUTS =====
+document.addEventListener("keydown", (e) => {
+  // Close Figma modal on Escape from anywhere
+  if (e.key === "Escape") {
+    const modal = document.getElementById("figmaModal");
+    if (modal && modal.style.display !== "none") { closeFigmaModal(); return; }
+  }
+  if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+
+  const idx = SCREENS.findIndex(s => s.id === currentScreen);
+
+  if (e.key === "ArrowDown" || e.key === "j") {
+    if (idx < SCREENS.length - 1) { currentScreen = SCREENS[idx + 1].id; updateHash(); renderAll(); }
+    e.preventDefault();
+  }
+  else if (e.key === "ArrowUp" || e.key === "k") {
+    if (idx > 0) { currentScreen = SCREENS[idx - 1].id; updateHash(); renderAll(); }
+    e.preventDefault();
+  }
+  else if (e.key === "1") { setView("side"); }
+  else if (e.key === "2") { setView("overlay"); }
+  else if (e.key === "+" || e.key === "=") { setZoom(zoomLevel + 0.25); }
+  else if (e.key === "-") { setZoom(zoomLevel - 0.25); }
+  else if (e.key === "0") { setZoom(1); }
+});
+
+// ===== INIT =====
+readHash();
+renderAll();
+</script>
+</body>
+</html>

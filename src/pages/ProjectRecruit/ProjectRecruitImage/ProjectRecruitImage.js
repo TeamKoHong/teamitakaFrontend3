@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import './ProjectRecruitImage.scss';
 import { loadRecruitDraft, saveRecruitDraft } from '../../../api/recruit';
+import { showSuccessToast, showWarningToast, showErrorToast } from '../../../utils/toast';
 import { useNavigate } from 'react-router-dom';
 
 import addImageIcon from '../../../assets/icons/add_image.png';
@@ -27,16 +28,16 @@ export default function ProjectRecruitImage() {
 
     if (!file.type.startsWith('image/')) {
       e.target.value = '';
-      return alert('이미지 파일만 업로드할 수 있어요.');
+      showWarningToast('이미지 파일만 업로드할 수 있어요.'); return;
     }
     if (file.size > 10 * 1024 * 1024) {
       e.target.value = '';
-      return alert('10MB 이하 이미지만 업로드할 수 있어요.');
+      showWarningToast('10MB 이하 이미지만 업로드할 수 있어요.'); return;
     }
 
     const reader = new FileReader();
     reader.onload = () => setImageDataUrl(reader.result);
-    reader.onerror = () => alert('이미지를 불러오지 못했어요. 다시 시도해주세요.');
+    reader.onerror = () => showErrorToast('이미지를 불러오지 못했어요. 다시 시도해주세요.');
     reader.readAsDataURL(file);
 
     // 같은 파일 다시 선택 가능하게
@@ -51,7 +52,7 @@ export default function ProjectRecruitImage() {
   const saveDraft = () => {
     const base = loadRecruitDraft() || {};
     saveRecruitDraft({ ...base, coverImage: imageDataUrl ? { dataUrl: imageDataUrl } : null });
-    alert('임시 저장되었어요.');
+    showSuccessToast('임시 저장되었어요.');
   };
 
   const goNext = () => nav('/recruit/preview');

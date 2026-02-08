@@ -5,6 +5,7 @@ import projectDefaultImg from "../../assets/icons/project_default_img.png";
 import ApplicationHistorySlide from "../../components/BookmarkPage/ApplicationHistorySlide";
 import { getBookmarkedRecruitments, toggleRecruitmentScrap } from "../../services/recruitment";
 import "./BookmarkPage.scss";
+import { showErrorToast } from '../../utils/toast';
 
 function BookmarkPage() {
   const navigate = useNavigate();
@@ -76,7 +77,7 @@ function BookmarkPage() {
       await toggleRecruitmentScrap(recruitmentId);
       setBookmarks(prev => prev.filter(b => b.recruitment_id !== recruitmentId));
     } catch (err) {
-      alert('북마크 해제에 실패했습니다.');
+      showErrorToast('북마크 해제에 실패했습니다.');
     }
   };
 

@@ -9,6 +9,7 @@ import selectIcon from "../../assets/select.png";
 // ✅ API 추가
 import { submitApplication } from "../../services/recruitment";
 import { getMyProjects } from "../../services/projects";
+import { showErrorToast, showWarningToast } from '../../utils/toast';
 
 export default function ProjectApplySelect() {
   const nav = useNavigate();
@@ -48,7 +49,7 @@ export default function ProjectApplySelect() {
         setProjects(formattedProjects);
       } catch (error) {
 
-        alert('프로젝트 목록을 불러오는데 실패했습니다.');
+        showErrorToast('프로젝트 목록을 불러오는데 실패했습니다.');
         setProjects([]);
       } finally {
         setLoadingProjects(false);
@@ -71,19 +72,19 @@ export default function ProjectApplySelect() {
 
     // Validation
     if (!recruitmentId) {
-      alert('모집글 정보가 없습니다. 다시 시도해주세요.');
+      showErrorToast('모집글 정보가 없습니다. 다시 시도해주세요.');
       nav(-1);
       return;
     }
 
     if (!introduction || introduction.trim().length === 0) {
-      alert('자기소개를 작성해주세요.');
+      showWarningToast('자기소개를 작성해주세요.');
       nav(-1);
       return;
     }
 
     if (introduction.length > 500) {
-      alert('자기소개는 500자 이하로 작성해주세요.');
+      showWarningToast('자기소개는 500자 이하로 작성해주세요.');
       nav(-1);
       return;
     }
@@ -108,33 +109,33 @@ export default function ProjectApplySelect() {
       // Handle specific error codes
       switch (error.code) {
         case 'ALREADY_APPLIED':
-          alert('이미 지원한 모집글입니다.');
+          showWarningToast('이미 지원한 모집글입니다.');
           nav(-1);
           break;
         case 'SELF_APPLICATION':
-          alert('본인이 작성한 모집글에는 지원할 수 없습니다.');
+          showWarningToast('본인이 작성한 모집글에는 지원할 수 없습니다.');
           nav(-1);
           break;
         case 'RECRUITMENT_CLOSED':
-          alert('마감된 모집글입니다.');
+          showWarningToast('마감된 모집글입니다.');
           nav(-1);
           break;
         case 'INVALID_PORTFOLIO':
-          alert('유효하지 않은 포트폴리오 프로젝트가 포함되어 있습니다.');
+          showWarningToast('유효하지 않은 포트폴리오 프로젝트가 포함되어 있습니다.');
           break;
         case 'UNAUTHORIZED':
-          alert('로그인이 필요합니다.');
+          showErrorToast('로그인이 필요합니다.');
           nav('/login');
           break;
         case 'RECRUITMENT_NOT_FOUND':
-          alert('모집글을 찾을 수 없습니다.');
+          showErrorToast('모집글을 찾을 수 없습니다.');
           nav(-1);
           break;
         case 'INVALID_INPUT':
-          alert(error.message || '입력 정보가 올바르지 않습니다.');
+          showWarningToast(error.message || '입력 정보가 올바르지 않습니다.');
           break;
         default:
-          alert('지원서 제출에 실패했습니다. 다시 시도해주세요.');
+          showErrorToast('지원서 제출에 실패했습니다. 다시 시도해주세요.');
       }
     } finally {
       setLoading(false);

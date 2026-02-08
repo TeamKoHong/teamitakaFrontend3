@@ -7,6 +7,7 @@ import userDefaultImg from "../../assets/icons/user_default_img.svg";
 import AddEventModal from "./AddEventModal";
 
 import { getProjectSchedules } from "../../services/projects";
+import { showErrorToast } from '../../utils/toast';
 
 const WEEKDAYS = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
@@ -47,7 +48,7 @@ export default function Calendar({ projectId, onDayClick, isModalOpen, onCloseMo
       } catch (error) {
 
         if (error.code === 'UNAUTHORIZED') {
-          alert("로그인이 필요합니다.");
+          showErrorToast("로그인이 필요합니다.");
           navigate("/login");
         }
       } finally {

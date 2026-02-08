@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import "./TodoBox.scss";
+import { showErrorToast } from '../../utils/toast';
 
 import { getProjectActivityLogs, getProjectTodos, createProjectTodo, updateProjectTodo } from "../../services/projects";
 
@@ -138,7 +139,7 @@ function TodoBox({ showFeed = true, projectId }) {
 
     } catch (error) {
 
-      alert("상태 변경에 실패했습니다.");
+      showErrorToast("상태 변경에 실패했습니다.");
     }
   };
 
@@ -191,13 +192,13 @@ function TodoBox({ showFeed = true, projectId }) {
         const errorMsg = error.errors && error.errors.length > 0
           ? error.errors.map(e => e.message).join('\n')
           : error.message || "내용을 입력해주세요.";
-        alert(errorMsg);
+        showErrorToast(errorMsg);
       } else if (error.code === 'NOT_PROJECT_MEMBER') {
-        alert("프로젝트 멤버만 Todo를 추가할 수 있습니다.");
+        showErrorToast("프로젝트 멤버만 Todo를 추가할 수 있습니다.");
       } else if (error.code === 'UNAUTHORIZED') {
-        alert("인증이 필요합니다. 다시 로그인해주세요.");
+        showErrorToast("인증이 필요합니다. 다시 로그인해주세요.");
       } else {
-        alert(error.message || "Todo 추가에 실패했습니다. 다시 시도해주세요.");
+        showErrorToast(error.message || "Todo 추가에 실패했습니다. 다시 시도해주세요.");
       }
     } finally {
       setIsCreatingTodo(false);

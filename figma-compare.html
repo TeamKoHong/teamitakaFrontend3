@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>티미타카 - Figma vs App 디자인 비교 도구</title>
+<style>
+  :root {
+    --ios-blue: #007AFF;
+    --accent-orange: #F76241;
+    --bg: #F5F5F7;
+    --card: #FFFFFF;
+    --text: #1D1D1F;
+    --text-secondary: #86868B;
+    --border: #E5E5EA;
+    --success: #34C759;
+    --warning: #FF9500;
+    --danger: #FF3B30;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .btn:hover { background: #F0F0F5; }
+  .btn.primary { background: var(--ios-blue); color: white; border-color: var(--ios-blue); }
+  .btn.primary:hover { background: #0066D6; }
+  .btn.danger { background: var(--danger); color: white; border-color: var(--danger); }
+
+  /* Main Layout */
+  .main {
+    display: flex;
+    height: calc(100vh - 57px);
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 280px;
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+
+  .sidebar-section {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-section h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+
+  .page-item {
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.15s;
+    margin-bottom: 2px;
+  }
+
+  .page-item:hover { background: #F0F0F5; }
+  .page-item.active { background: #E8F0FE; color: var(--ios-blue); font-weight: 600; }
+
+  .page-item .badge {
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #F0F0F5;
+    color: var(--text-secondary);
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .page-item .badge.done { background: #E8F8ED; color: var(--success); }
+  .page-item .badge.issue { background: #FFF3E0; color: var(--warning); }
+
+  /* Comparison Area */
+  .compare-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Toolbar */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .toolbar label {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .toolbar select, .toolbar input[type="range"] {
+    font-size: 13px;
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: white;
+  }
+
+  .zoom-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+  }
+
+  .zoom-control span { font-size: 12px; color: var(--text-secondary); min-width: 40px; text-align: center; }
+
+  /* Split View */
+  .split-view {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .panel + .panel { border-left: 2px solid var(--ios-blue); }
+
+  .panel-header {
+    padding: 8px 16px;
+    background: #FAFAFA;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .panel-content {
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 20px;
+    background: #E8E8ED;
+  }
+
+  .phone-frame {
+    width: 393px;
+    min-height: 852px;
+    background: var(--card);
+    border-radius: 44px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.15), inset 0 0 0 3px #1D1D1F;
+    overflow: hidden;
+    position: relative;
+    transform-origin: top center;
+  }
+
+  .phone-frame::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 126px;
+    height: 37px;
+    background: #1D1D1F;
+    border-radius: 0 0 24px 24px;
+    z-index: 10;
+  }
+
+  .phone-screen {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .phone-screen iframe {
+    width: 100%;
+    height: 852px;
+    border: none;
+  }
+
+  /* Drop Zone */
+  .drop-zone {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed var(--border);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    gap: 12px;
+    color: var(--text-secondary);
+    padding: 40px;
+  }
+
+  .drop-zone:hover, .drop-zone.dragover {
+    border-color: var(--ios-blue);
+    background: rgba(0,122,255,0.05);
+    color: var(--ios-blue);
+  }
+
+  .drop-zone .icon { font-size: 48px; opacity: 0.5; }
+  .drop-zone p { font-size: 14px; text-align: center; }
+  .drop-zone .hint { font-size: 12px; }
+
+  .figma-img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Overlay Mode */
+  .overlay-mode .panel:last-child {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+  }
+
+  .overlay-slider {
+    display: none;
+  }
+
+  .overlay-mode .overlay-slider {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Diff Mode */
+  .diff-mode .panel-content { mix-blend-mode: difference; }
+
+  /* Notes Panel */
+  .notes-panel {
+    width: 300px;
+    background: var(--card);
+    border-left: 1px solid var(--border);
+    display: none;
+    flex-direction: column;
+  }
+
+  .notes-panel.open { display: flex; }
+
+  .notes-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .notes-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+  }
+
+  .note-item {
+    padding: 10px 12px;
+    background: #FAFAFA;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    position: relative;
+  }
+
+  .note-item .severity {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+  }
+
+  .note-item .severity.critical { background: var(--danger); }
+  .note-item .severity.high { background: var(--warning); }
+  .note-item .severity.medium { background: #FFCC00; }
+  .note-item .severity.low { background: var(--success); }
+
+  .note-item .meta { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+
+  .note-input {
+    padding: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  .note-input textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    resize: vertical;
+    min-height: 60px;
+    font-family: inherit;
+  }
+
+  .note-input .note-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .note-input select {
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 12px;
+  }
+
+  /* Audit Summary */
+  .audit-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .audit-overlay.open { display: flex; }
+
+  .audit-modal {
+    background: var(--card);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 32px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+
+  .audit-modal h2 { font-size: 22px; margin-bottom: 20px; }
+
+  .audit-section {
+    margin-bottom: 24px;
+  }
+
+  .audit-section h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .audit-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .audit-table th {
+    text-align: left;
+    padding: 8px 12px;
+    background: #FAFAFA;
+    border-bottom: 2px solid var(--border);
+    font-weight: 600;
+  }
+
+  .audit-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .audit-table tr:hover td { background: #F8F8FA; }
+
+  .sev-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .sev-badge.critical { background: #FFE5E5; color: var(--danger); }
+  .sev-badge.high { background: #FFF3E0; color: var(--warning); }
+  .sev-badge.medium { background: #FFF9E0; color: #B8860B; }
+  .sev-badge.low { background: #E8F8ED; color: var(--success); }
+  .sev-badge.pass { background: #E8F8ED; color: var(--success); }
+
+  /* Color Picker */
+  .color-picker-tool {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--card);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    padding: 16px;
+    z-index: 50;
+    min-width: 220px;
+  }
+
+  .color-picker-tool.open { display: block; }
+
+  .color-picker-tool h4 { font-size: 13px; margin-bottom: 8px; }
+
+  .color-sample {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .color-swatch {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .color-value { font-family: monospace; font-size: 13px; }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    gap: 16px;
+    padding: 8px 20px;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .stats-bar .stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .progress-bar {
+    width: 100px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--success);
+    border-radius: 2px;
+    transition: width 0.3s;
+  }
+
+  /* Keyboard shortcut hints */
+  kbd {
+    display: inline-block;
+    padding: 2px 6px;
+    background: #F0F0F5;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: monospace;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+    티미타카 디자인 비교 도구
+  </h1>
+  <div class="header-actions">
+    <button class="btn" onclick="toggleAudit()">Audit Report</button>
+    <button class="btn" onclick="toggleNotes()">Notes</button>
+    <button class="btn" onclick="exportReport()">Export</button>
+  </div>
+</div>
+
+<div class="main">
+  <!-- Sidebar: Page List -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <h3>Auth & Onboarding</h3>
+      <div class="page-item" data-route="/" data-page="OnboardingPage" onclick="selectPage(this)">Onboarding</div>
+      <div class="page-item" data-route="/login" data-page="LoginPage" onclick="selectPage(this)">Login</div>
+      <div class="page-item" data-route="/register" data-page="RegisterPage" onclick="selectPage(this)">
+        Register
+        <span class="badge issue">safe-area</span>
+      </div>
+      <div class="page-item" data-route="/register-complete" data-page="RegisterCompletePage" onclick="selectPage(this)">Register Complete</div>
+      <div class="page-item" data-route="/find-id" data-page="FindIdPage" onclick="selectPage(this)">Find ID</div>
+      <div class="page-item" data-route="/find-password" data-page="FindPasswordPage" onclick="selectPage(this)">Find Password</div>
+      <div class="page-item" data-route="/phone-verify" data-page="PhoneVerifyPage" onclick="selectPage(this)">Phone Verify</div>
+      <div class="page-item" data-route="/phone-verify/code" data-page="VerificationCodePage" onclick="selectPage(this)">Verification Code</div>
+      <div class="page-item" data-route="/profile-setup" data-page="ProfileSetupPage" onclick="selectPage(this)">Profile Setup</div>
+      <div class="page-item" data-route="/welcome" data-page="WelcomePage" onclick="selectPage(this)">Welcome</div>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Main Tabs</h3>
+      <div class="page-item" data-route="/main" data-page="MainPage" onclick="selectPage(this)">Main (Home)</div>
+      <div class="page-item" data-route="/project-management" data-page="ProjectManagement" onclick="selectPage(this)">Project Management</div>
+      <div class="page-item" data-route="/team-matching" data-page="TeamMatchingPage" onclick="selectPage(this)">Team Matching</div>
+      <div class="page-item" data-route="/profile" data-page="ProfileMainPage" onclick="selectPage(this)">Profile</div>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Recruitment</h3>
+      <div class="page-item" data-route="/recruitment" data-page="RecruitmentPage" onclick="selectPage(this)">Recruitment List</div>
+      <div class="page-item" data-route="/recruitment/:id" data-page="RecruitmentViewPage" onclick="selectPage(this)">
+        Recruitment Detail
+        <span class="badge issue">safe-area</span>
+      </div>
+      <div class="page-item" data-route="/recruitment/:id/team-select" data-page="TeamSelectPage" onclick="selectPage(this)">Team Select</div>
+      <div class="page-item" data-route="/search" data-page="SearchPage" onclick="selectPage(this)">Search</div>
+      <div class="page-item" data-route="/bookmark" data-page="BookmarkPage" onclick="selectPage(this)">Bookmark</div>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Project Create</h3>
+      <div class="page-item" data-route="/recruit" data-page="ProjectRecruit" onclick="selectPage(this)">Step 1: Basic Info</div>
+      <div class="page-item" data-route="/recruit/detail" data-page="ProjectRecruitDetail" onclick="selectPage(this)">Step 2: Details</div>
+      <div class="page-item" data-route="/recruit/image" data-page="ProjectRecruitImage" onclick="selectPage(this)">Step 3: Image</div>
+      <div class="page-item" data-route="/recruit/preview" data-page="ProjectRecruitPreview" onclick="selectPage(this)">Step 4: Preview</div>
+      <div class="page-item" data-route="/recruit/publish" data-page="ProjectRecruitPublish" onclick="selectPage(this)">Step 5: Publish</div>
+      <div class="page-item" data-route="/recruit/drafts" data-page="ProjectDrafts" onclick="selectPage(this)">Drafts</div>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Project Detail</h3>
+      <div class="page-item" data-route="/project/:id" data-page="ProjectDetailPage" onclick="selectPage(this)">Project Detail</div>
+      <div class="page-item" data-route="/project/:id/member" data-page="ProjectMemberPage" onclick="selectPage(this)">Project Member</div>
+      <div class="page-item" data-route="/project/:id/proceedings" data-page="ProceedingsPage" onclick="selectPage(this)">Proceedings</div>
+      <div class="page-item" data-route="/project/:id/calender" data-page="ProjectCalendar" onclick="selectPage(this)">Calendar</div>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Apply</h3>
+      <div class="page-item" data-route="/apply2" data-page="ProjectApply" onclick="selectPage(this)">Apply Form</div>
+      <div class="page-item" data-route="/apply2/select" data-page="ProjectApplySelect" onclick="selectPage(this)">Apply Select</div>
+      <div class="page-item" data-route="/apply2/complete" data-page="ProjectApplyComplete" onclick="selectPage(this)">Apply Complete</div>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Evaluation</h3>
+      <div class="page-item" data-route="/evaluation/management" data-page="RatingManagementPage" onclick="selectPage(this)">Rating Management</div>
+      <div class="page-item" data-route="/evaluation/project/:id" data-page="RatingProjectPage" onclick="selectPage(this)">Rating Project</div>
+      <div class="page-item" data-route="/evaluation/team-member/:pid/:mid" data-page="TeamMemberEvaluationPage" onclick="selectPage(this)">Member Evaluation</div>
+      <div class="page-item" data-route="/evaluation/status/:id" data-page="RatingProjectStatusPage" onclick="selectPage(this)">Rating Status</div>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Profile</h3>
+      <div class="page-item" data-route="/profile/edit" data-page="ProfileEditPage" onclick="selectPage(this)">Profile Edit</div>
+      <div class="page-item" data-route="/profile/verification" data-page="ProfileVerificationPage" onclick="selectPage(this)">Profile Verify</div>
+      <div class="page-item" data-route="/profile/register-project" data-page="ProjectRegisterPage" onclick="selectPage(this)">Register Project</div>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Notifications</h3>
+      <div class="page-item" data-route="/notifications" data-page="NotificationsPage" onclick="selectPage(this)">Notifications</div>
+      <div class="page-item" data-route="/notifications/settings" data-page="NotificationSettings" onclick="selectPage(this)">Notification Settings</div>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Type Test</h3>
+      <div class="page-item" data-route="/type-test" data-page="QuizPage" onclick="selectPage(this)">Quiz</div>
+      <div class="page-item" data-route="/type-test/complete" data-page="AnalysisCompletePage" onclick="selectPage(this)">Analysis Complete</div>
+      <div class="page-item" data-route="/type-test/result/:type" data-page="ResultPage" onclick="selectPage(this)">Result</div>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Legal</h3>
+      <div class="page-item" data-route="/privacy" data-page="PrivacyPolicyPage" onclick="selectPage(this)">Privacy Policy</div>
+      <div class="page-item" data-route="/terms" data-page="TermsOfServicePage" onclick="selectPage(this)">Terms of Service</div>
+    </div>
+  </div>
+
+  <!-- Main Compare Area -->
+  <div class="compare-area">
+    <div class="toolbar">
+      <label>Mode:</label>
+      <select id="viewMode" onchange="changeViewMode(this.value)">
+        <option value="side-by-side">Side by Side</option>
+        <option value="overlay">Overlay</option>
+        <option value="diff">Difference</option>
+      </select>
+
+      <div class="overlay-slider" id="overlaySlider">
+        <label>Opacity:</label>
+        <input type="range" id="overlayOpacity" min="0" max="100" value="50" oninput="updateOverlayOpacity(this.value)">
+        <span id="opacityValue">50%</span>
+      </div>
+
+      <label style="margin-left:16px">Device:</label>
+      <select id="deviceSelect" onchange="changeDevice(this.value)">
+        <option value="iphone15pro">iPhone 15 Pro (393x852)</option>
+        <option value="iphone15promax">iPhone 15 Pro Max (430x932)</option>
+        <option value="iphoneSE">iPhone SE (375x667)</option>
+        <option value="ipad">iPad (820x1180)</option>
+      </select>
+
+      <div class="zoom-control">
+        <label>Zoom:</label>
+        <input type="range" id="zoomSlider" min="30" max="150" value="80" oninput="updateZoom(this.value)">
+        <span id="zoomValue">80%</span>
+      </div>
+    </div>
+
+    <div class="split-view" id="splitView">
+      <!-- Figma Panel -->
+      <div class="panel" id="figmaPanel">
+        <div class="panel-header">
+          <span>FIGMA DESIGN</span>
+          <button class="btn" style="padding:4px 10px;font-size:11px" onclick="document.getElementById('figmaUpload').click()">Upload</button>
+          <input type="file" id="figmaUpload" accept="image/*" multiple style="display:none" onchange="handleFigmaUpload(event)">
+        </div>
+        <div class="panel-content" id="figmaContent">
+          <div class="phone-frame" id="figmaPhone">
+            <div class="phone-screen" id="figmaScreen">
+              <div class="drop-zone" id="figmaDropZone" ondrop="handleDrop(event,'figma')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="document.getElementById('figmaUpload').click()">
+                <div class="icon">🎨</div>
+                <p>Figma 스크린샷을 여기에 드롭하세요</p>
+                <p class="hint">또는 클릭하여 업로드 (PNG, JPG)</p>
+                <p class="hint"><kbd>Ctrl+V</kbd> 붙여넣기도 가능</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- App Panel -->
+      <div class="panel" id="appPanel">
+        <div class="panel-header">
+          <span>APP (실제 구현)</span>
+          <button class="btn" style="padding:4px 10px;font-size:11px" onclick="document.getElementById('appUpload').click()">Upload</button>
+          <input type="file" id="appUpload" accept="image/*" multiple style="display:none" onchange="handleAppUpload(event)">
+        </div>
+        <div class="panel-content" id="appContent">
+          <div class="phone-frame" id="appPhone">
+            <div class="phone-screen" id="appScreen">
+              <div class="drop-zone" id="appDropZone" ondrop="handleDrop(event,'app')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="document.getElementById('appUpload').click()">
+                <div class="icon">📱</div>
+                <p>앱 스크린샷을 여기에 드롭하세요</p>
+                <p class="hint">시뮬레이터에서 <kbd>Cmd+S</kbd>로 캡처</p>
+                <p class="hint"><kbd>Ctrl+V</kbd> 붙여넣기도 가능</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat">Pages: <strong id="totalPages">0</strong>/50</div>
+      <div class="stat">Reviewed: <strong id="reviewedPages">0</strong></div>
+      <div class="stat">Issues: <strong id="issueCount">0</strong></div>
+      <div class="stat">
+        Progress:
+        <div class="progress-bar"><div class="fill" id="progressFill" style="width:0%"></div></div>
+        <span id="progressPercent">0%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes Panel -->
+  <div class="notes-panel" id="notesPanel">
+    <div class="notes-header">
+      <span>Notes</span>
+      <button class="btn" style="padding:2px 8px;font-size:11px" onclick="toggleNotes()">Close</button>
+    </div>
+    <div class="notes-list" id="notesList"></div>
+    <div class="note-input">
+      <textarea id="noteText" placeholder="이 페이지에 대한 메모를 작성하세요..."></textarea>
+      <div class="note-actions">
+        <select id="noteSeverity">
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+          <option value="critical">Critical</option>
+        </select>
+        <button class="btn primary" style="padding:4px 12px;font-size:12px" onclick="addNote()">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Audit Report Modal -->
+<div class="audit-overlay" id="auditOverlay" onclick="if(event.target===this)toggleAudit()">
+  <div class="audit-modal">
+    <h2>App Store 제출 전 최종 점검 결과</h2>
+
+    <div class="audit-section">
+      <h3><span class="sev-badge critical">CRITICAL</span> 즉시 수정 필요</h3>
+      <table class="audit-table">
+        <thead><tr><th>항목</th><th>파일</th><th>내용</th><th>상태</th></tr></thead>
+        <tbody>
+          <tr><td>Info.plist 암호화 선언</td><td>ios/App/App/Info.plist</td><td>ITSAppUsesNonExemptEncryption 누락</td><td><span class="sev-badge pass">FIXED</span></td></tr>
+          <tr><td>Footer Safe-Area</td><td>RecruitmentViewPage.scss:158</td><td>하단 footer에 safe-area-inset-bottom 없음</td><td><span class="sev-badge pass">FIXED</span></td></tr>
+          <tr><td>console.log 잔류</td><td>6개 파일 (services, config, utils)</td><td>프로덕션 코드에 console.* 문 잔류</td><td><span class="sev-badge high">TODO</span></td></tr>
+          <tr><td>alert() 사용</td><td>AddEventModal.js, RecruitingComponent.js</td><td>네이티브 alert/confirm 사용 (iOS에서 보기 안 좋음)</td><td><span class="sev-badge high">TODO</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="audit-section">
+      <h3><span class="sev-badge high">HIGH</span> 높은 우선순위</h3>
+      <table class="audit-table">
+        <thead><tr><th>항목</th><th>파일</th><th>내용</th><th>상태</th></tr></thead>
+        <tbody>
+          <tr><td>토스트 Safe-Area</td><td>RegisterPage.scss:720</td><td>bottom: 100px 하드코딩</td><td><span class="sev-badge pass">FIXED</span></td></tr>
+          <tr><td>Input 폰트 크기</td><td>SSNInput, VerificationCodeInput</td><td>14px → iOS 자동 줌 발생</td><td><span class="sev-badge high">TODO</span></td></tr>
+          <tr><td>window.innerHeight</td><td>ApplicantListSlide.js:233</td><td>iOS Safari에서 주소바 상태에 따라 불안정</td><td><span class="sev-badge medium">LOW RISK</span></td></tr>
+          <tr><td>Firebase Measurement ID</td><td>.env.local, .env.production</td><td>REACT_APP_FIREBASE_MEASUREMENT_ID 비어있음</td><td><span class="sev-badge high">USER ACTION</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="audit-section">
+      <h3><span class="sev-badge medium">MEDIUM</span> 중간 우선순위</h3>
+      <table class="audit-table">
+        <thead><tr><th>항목</th><th>파일</th><th>내용</th><th>상태</th></tr></thead>
+        <tbody>
+          <tr><td>헤더 패딩 Safe-Area</td><td>RegisterPage.scss:62</td><td>padding-top: 88px 하드코딩</td><td><span class="sev-badge pass">FIXED</span></td></tr>
+          <tr><td>광고 개인화 비활성화</td><td>ios/App/App/Info.plist</td><td>GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS</td><td><span class="sev-badge pass">FIXED</span></td></tr>
+          <tr><td>100vh → 100svh</td><td>OnboardingPage, TeamMatchingPage 등 6개</td><td>100svh 폴백 미적용</td><td><span class="sev-badge medium">MINOR</span></td></tr>
+          <tr><td>Z-Index 관리</td><td>전체 SCSS 파일</td><td>값 범위 0~11003으로 과도 (권장: 0~500)</td><td><span class="sev-badge medium">MINOR</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="audit-section">
+      <h3><span class="sev-badge pass">PASS</span> 정상 확인된 항목</h3>
+      <table class="audit-table">
+        <thead><tr><th>항목</th><th>상태</th></tr></thead>
+        <tbody>
+          <tr><td>viewport-fit=cover (safe-area 전제조건)</td><td>index.html에 설정됨</td></tr>
+          <tr><td>CSS safe-area 변수/믹스인</td><td>App.css + _variables.scss에 정의됨 (159+ 사용처)</td></tr>
+          <tr><td>Error Boundary</td><td>ErrorBoundary.js 구현됨</td></tr>
+          <tr><td>오프라인 감지</td><td>OfflineBanner.js 구현됨</td></tr>
+          <tr><td>로딩 상태</td><td>주요 컴포넌트에 구현됨</td></tr>
+          <tr><td>빈 상태 UI</td><td>리스트 컴포넌트에 구현됨</td></tr>
+          <tr><td>React 패턴</td><td>deprecated 패턴 없음 (hooks 사용)</td></tr>
+          <tr><td>useEffect 정리</td><td>이벤트 리스너 정리 확인됨</td></tr>
+          <tr><td>테스트 코드 분리</td><td>NODE_ENV 가드 적용됨</td></tr>
+          <tr><td>딥링크</td><td>teamitaka:// URL scheme 설정됨</td></tr>
+          <tr><td>HTTPS 강제</td><td>NSAppTransportSecurity 설정됨</td></tr>
+          <tr><td>소스맵 비활성화</td><td>GENERATE_SOURCEMAP=false</td></tr>
+          <tr><td>iOS CSS 최적화</td><td>tap-highlight, callout, overscroll 처리됨</td></tr>
+          <tr><td>BottomNav Safe-Area</td><td>env(safe-area-inset-bottom) 적용됨</td></tr>
+          <tr><td>DefaultHeader Safe-Area</td><td>env(safe-area-inset-top) 적용됨</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="text-align:center;margin-top:24px">
+      <button class="btn primary" onclick="toggleAudit()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- Color Picker Tool -->
+<div class="color-picker-tool" id="colorPicker">
+  <h4>Color Picker</h4>
+  <div class="color-sample">
+    <div class="color-swatch" id="pickedColor" style="background:#007AFF"></div>
+    <span class="color-value" id="pickedColorValue">#007AFF</span>
+  </div>
+  <div style="font-size:11px;color:var(--text-secondary);margin-top:8px">
+    Design System Colors:
+    <div style="display:flex;gap:4px;margin-top:4px">
+      <div style="width:24px;height:24px;border-radius:6px;background:#007AFF" title="#007AFF iOS Blue"></div>
+      <div style="width:24px;height:24px;border-radius:6px;background:#F76241" title="#F76241 Accent Orange"></div>
+      <div style="width:24px;height:24px;border-radius:6px;background:#34C759" title="#34C759 Success"></div>
+      <div style="width:24px;height:24px;border-radius:6px;background:#FF3B30" title="#FF3B30 Danger"></div>
+      <div style="width:24px;height:24px;border-radius:6px;background:#FF9500" title="#FF9500 Warning"></div>
+      <div style="width:24px;height:24px;border-radius:6px;background:#1D1D1F" title="#1D1D1F Text"></div>
+      <div style="width:24px;height:24px;border-radius:6px;background:#86868B;border:1px solid #ddd" title="#86868B Secondary"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// State
+const state = {
+  currentPage: null,
+  notes: JSON.parse(localStorage.getItem('teamitaka_notes') || '{}'),
+  reviewed: JSON.parse(localStorage.getItem('teamitaka_reviewed') || '[]'),
+  figmaImages: JSON.parse(localStorage.getItem('teamitaka_figma') || '{}'),
+  appImages: JSON.parse(localStorage.getItem('teamitaka_app') || '{}'),
+};
+
+// Page selection
+function selectPage(el) {
+  document.querySelectorAll('.page-item').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  state.currentPage = el.dataset.page;
+
+  // Load saved images
+  loadSavedImages();
+  renderNotes();
+  updateStats();
+}
+
+function loadSavedImages() {
+  const page = state.currentPage;
+  if (!page) return;
+
+  // Figma
+  const figmaScreen = document.getElementById('figmaScreen');
+  if (state.figmaImages[page]) {
+    figmaScreen.innerHTML = `<img class="figma-img" src="${state.figmaImages[page]}" alt="Figma design">`;
+  } else {
+    figmaScreen.innerHTML = document.getElementById('figmaDropZone') ?
+      figmaScreen.innerHTML :
+      createDropZone('figma');
+  }
+
+  // App
+  const appScreen = document.getElementById('appScreen');
+  if (state.appImages[page]) {
+    appScreen.innerHTML = `<img class="figma-img" src="${state.appImages[page]}" alt="App screenshot">`;
+  } else {
+    appScreen.innerHTML = document.getElementById('appDropZone') ?
+      appScreen.innerHTML :
+      createDropZone('app');
+  }
+}
+
+function createDropZone(type) {
+  const icon = type === 'figma' ? '🎨' : '📱';
+  const label = type === 'figma' ? 'Figma 스크린샷' : '앱 스크린샷';
+  return `<div class="drop-zone" ondrop="handleDrop(event,'${type}')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="document.getElementById('${type}Upload').click()">
+    <div class="icon">${icon}</div>
+    <p>${label}을 여기에 드롭하세요</p>
+    <p class="hint"><kbd>Ctrl+V</kbd> 붙여넣기도 가능</p>
+  </div>`;
+}
+
+// File handling
+function handleDragOver(e) {
+  e.preventDefault();
+  e.currentTarget.classList.add('dragover');
+}
+
+function handleDragLeave(e) {
+  e.currentTarget.classList.remove('dragover');
+}
+
+function handleDrop(e, type) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('dragover');
+  const files = e.dataTransfer.files;
+  if (files.length > 0) {
+    loadImage(files[0], type);
+  }
+}
+
+function handleFigmaUpload(e) {
+  if (e.target.files.length > 0) loadImage(e.target.files[0], 'figma');
+}
+
+function handleAppUpload(e) {
+  if (e.target.files.length > 0) loadImage(e.target.files[0], 'app');
+}
+
+function loadImage(file, type) {
+  if (!state.currentPage) {
+    alert('먼저 좌측에서 페이지를 선택하세요.');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    const screenId = type === 'figma' ? 'figmaScreen' : 'appScreen';
+    document.getElementById(screenId).innerHTML = `<img class="figma-img" src="${dataUrl}" alt="${type} screenshot">`;
+
+    // Save
+    if (type === 'figma') {
+      state.figmaImages[state.currentPage] = dataUrl;
+      try { localStorage.setItem('teamitaka_figma', JSON.stringify(state.figmaImages)); } catch(e) {}
+    } else {
+      state.appImages[state.currentPage] = dataUrl;
+      try { localStorage.setItem('teamitaka_app', JSON.stringify(state.appImages)); } catch(e) {}
+    }
+
+    // Mark as reviewed if both images present
+    if (state.figmaImages[state.currentPage] && state.appImages[state.currentPage]) {
+      if (!state.reviewed.includes(state.currentPage)) {
+        state.reviewed.push(state.currentPage);
+        localStorage.setItem('teamitaka_reviewed', JSON.stringify(state.reviewed));
+      }
+    }
+    updateStats();
+  };
+  reader.readAsDataURL(file);
+}
+
+// Clipboard paste
+document.addEventListener('paste', (e) => {
+  const items = e.clipboardData?.items;
+  if (!items) return;
+
+  for (let item of items) {
+    if (item.type.startsWith('image/')) {
+      const blob = item.getAsFile();
+      // Determine which panel to paste into based on mouse position
+      const figmaRect = document.getElementById('figmaPanel').getBoundingClientRect();
+      const mouseX = window._lastMouseX || 0;
+      const type = mouseX < figmaRect.right ? 'figma' : 'app';
+      loadImage(blob, type);
+      break;
+    }
+  }
+});
+
+document.addEventListener('mousemove', (e) => { window._lastMouseX = e.clientX; });
+
+// View modes
+function changeViewMode(mode) {
+  const splitView = document.getElementById('splitView');
+  splitView.classList.remove('overlay-mode', 'diff-mode');
+
+  if (mode === 'overlay') splitView.classList.add('overlay-mode');
+  if (mode === 'diff') splitView.classList.add('diff-mode');
+
+  document.getElementById('overlaySlider').style.display = mode === 'overlay' ? 'flex' : 'none';
+}
+
+function updateOverlayOpacity(val) {
+  document.getElementById('opacityValue').textContent = val + '%';
+  const appPanel = document.getElementById('appPanel');
+  appPanel.style.opacity = val / 100;
+}
+
+// Device
+function changeDevice(device) {
+  const sizes = {
+    iphone15pro: { w: 393, h: 852 },
+    iphone15promax: { w: 430, h: 932 },
+    iphoneSE: { w: 375, h: 667 },
+    ipad: { w: 820, h: 1180 },
+  };
+  const s = sizes[device];
+  document.querySelectorAll('.phone-frame').forEach(f => {
+    f.style.width = s.w + 'px';
+    f.style.minHeight = s.h + 'px';
+    f.querySelector('.phone-screen iframe')?.setAttribute('height', s.h);
+  });
+}
+
+// Zoom
+function updateZoom(val) {
+  document.getElementById('zoomValue').textContent = val + '%';
+  document.querySelectorAll('.phone-frame').forEach(f => {
+    f.style.transform = `scale(${val / 100})`;
+  });
+}
+
+// Notes
+function toggleNotes() {
+  document.getElementById('notesPanel').classList.toggle('open');
+}
+
+function addNote() {
+  if (!state.currentPage) return;
+  const text = document.getElementById('noteText').value.trim();
+  if (!text) return;
+
+  const severity = document.getElementById('noteSeverity').value;
+  if (!state.notes[state.currentPage]) state.notes[state.currentPage] = [];
+  state.notes[state.currentPage].push({
+    text, severity, time: new Date().toLocaleTimeString('ko-KR')
+  });
+
+  localStorage.setItem('teamitaka_notes', JSON.stringify(state.notes));
+  document.getElementById('noteText').value = '';
+  renderNotes();
+  updateStats();
+}
+
+function renderNotes() {
+  const list = document.getElementById('notesList');
+  const notes = state.notes[state.currentPage] || [];
+  list.innerHTML = notes.length === 0
+    ? '<p style="color:var(--text-secondary);font-size:13px;text-align:center;padding:20px">아직 메모가 없습니다</p>'
+    : notes.map((n, i) => `
+      <div class="note-item">
+        <span class="severity ${n.severity}"></span>
+        ${n.text}
+        <div class="meta">${n.time} | ${n.severity}</div>
+      </div>
+    `).join('');
+}
+
+// Stats
+function updateStats() {
+  const totalPages = document.querySelectorAll('.page-item').length;
+  document.getElementById('totalPages').textContent = totalPages;
+  document.getElementById('reviewedPages').textContent = state.reviewed.length;
+
+  let issueCount = 0;
+  Object.values(state.notes).forEach(notes => {
+    issueCount += notes.filter(n => n.severity === 'critical' || n.severity === 'high').length;
+  });
+  document.getElementById('issueCount').textContent = issueCount;
+
+  const pct = Math.round((state.reviewed.length / totalPages) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPercent').textContent = pct + '%';
+
+  // Update sidebar badges
+  state.reviewed.forEach(page => {
+    const item = document.querySelector(`.page-item[data-page="${page}"]`);
+    if (item && !item.querySelector('.badge.done')) {
+      const existingBadge = item.querySelector('.badge:not(.issue)');
+      if (!existingBadge) {
+        const badge = document.createElement('span');
+        badge.className = 'badge done';
+        badge.textContent = 'done';
+        item.appendChild(badge);
+      }
+    }
+  });
+}
+
+// Audit modal
+function toggleAudit() {
+  document.getElementById('auditOverlay').classList.toggle('open');
+}
+
+// Export
+function exportReport() {
+  const report = {
+    date: new Date().toISOString(),
+    reviewed: state.reviewed,
+    notes: state.notes,
+    stats: {
+      totalPages: document.querySelectorAll('.page-item').length,
+      reviewed: state.reviewed.length,
+      issues: Object.values(state.notes).flat().length,
+    }
+  };
+
+  const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `teamitaka-design-review-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Init
+updateStats();
+updateZoom(80);
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'a' && e.ctrlKey) { toggleAudit(); e.preventDefault(); }
+  if (e.key === 'n' && e.ctrlKey) { toggleNotes(); e.preventDefault(); }
+});
+</script>
+</body>
+</html>

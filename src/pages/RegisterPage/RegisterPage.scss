@@ -59,7 +59,7 @@
 .main-content {
     flex: 1;
     padding: 0 22px;
-    padding-top: 88px; // Header height + extra spacing
+    padding-top: calc(64px + env(safe-area-inset-top, 0px) + 24px); // Header height + safe-area + extra spacing
     display: flex;
     flex-direction: column;
 }
@@ -717,7 +717,7 @@
 .register-toast-message {
     width: 350px;
     position: fixed;
-    bottom: 100px;
+    bottom: calc(100px + env(safe-area-inset-bottom, 0px));
     left: 50%;
     transform: translateX(-50%);
     display: flex;

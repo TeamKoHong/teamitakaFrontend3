@@ -9,6 +9,7 @@ import { fetchEvaluationTargets } from '../../../services/rating';
 import { useAuth } from '../../../contexts/AuthContext';
 import { getMyProjects } from '../../../services/projects';
 import { deriveCompletedProjects, splitByEvaluationStatus } from '../../../utils/projectFilters';
+import { showErrorToast } from '../../../utils/toast';
 import { getTeamMemberEvaluationUrl } from '../../../constants/routes';
 import { transformProjectForEvaluation } from '../../../utils/projectTransform';
 
@@ -47,7 +48,7 @@ const CompletedComponent = () => {
     try {
       if (!user || !user.userId) {
 
-        alert('로그인이 필요합니다.');
+        showErrorToast('로그인이 필요합니다.');
         navigate('/login');
         return;
       }
@@ -78,7 +79,7 @@ const CompletedComponent = () => {
     } catch (error) {
 
       // 에러 발생 시 사용자에게 알림
-      alert('평가 정보를 불러오는데 실패했습니다. 다시 시도해주세요.');
+      showErrorToast('평가 정보를 불러오는데 실패했습니다. 다시 시도해주세요.');
     }
   };
 
