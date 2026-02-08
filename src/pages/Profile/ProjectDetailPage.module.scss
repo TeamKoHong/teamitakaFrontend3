@@ -106,6 +106,16 @@
   margin: 0;
 }
 
+.loading,
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 20px;
+  font-size: 14px;
+  color: #999;
+}
+
 .ratingSection {
   padding: 40px 20px;
   text-align: center;

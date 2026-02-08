@@ -55,8 +55,30 @@ export default function ProjectDetailPage() {
     if (projectId) loadAllData();
   }, [projectId]);
 
-  if (isLoading) return <div className={styles.loading}>데이터를 불러오는 중입니다...</div>;
-  if (!projectData) return <div className={styles.error}>프로젝트 정보를 찾을 수 없습니다.</div>;
+  if (isLoading) return (
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <button onClick={() => navigate(-1)} className={styles.backButton}>
+          <BackArrow />
+        </button>
+        <h1 className={styles.headerTitle}>나의 프로젝트</h1>
+        <div style={{ width: '15px' }} />
+      </header>
+      <div className={styles.loading}>데이터를 불러오는 중입니다...</div>
+    </div>
+  );
+  if (!projectData) return (
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <button onClick={() => navigate(-1)} className={styles.backButton}>
+          <BackArrow />
+        </button>
+        <h1 className={styles.headerTitle}>나의 프로젝트</h1>
+        <div style={{ width: '15px' }} />
+      </header>
+      <div className={styles.error}>프로젝트 정보를 찾을 수 없습니다.</div>
+    </div>
+  );
 
   // 🔥 이미지 존재 여부 확인
   const projectImg = projectData.photo_url || projectData.thumbnail;
