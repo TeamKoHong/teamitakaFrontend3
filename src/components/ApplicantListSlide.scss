@@ -41,7 +41,7 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  margin-top: 48px;
+  margin-top: calc(64px + env(safe-area-inset-top, 0px));
   padding: 1rem 1rem 0 1rem; // 위 16px, 좌우 16px, 아래는 버튼이 차지
   box-sizing: border-box;
   scrollbar-width: none;
@@ -279,7 +279,6 @@
       gap: 9px; /* 아바타 간격 9 */
       overflow-x: auto; /* 가로 스크롤 */
       flex-wrap: nowrap; /* 줄바꿈 금지 */
-      -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
       padding-bottom: 2px; /* 스크롤바 여백 */
 
       /* 스크롤바 숨김 (웹킷 기반) */

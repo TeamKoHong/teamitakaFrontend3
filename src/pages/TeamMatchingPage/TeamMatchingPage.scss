@@ -27,7 +27,6 @@
     padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px) + 40px);
     flex-grow: 1;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
 }
 
 // --- 공통 섹션 스타일 ---
