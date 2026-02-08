@@ -18,7 +18,7 @@ const ProjectRatingCard = ({ project, onClick }) => {
           </span>
         </div>
         <div className={styles.projectImageWrapper}>
-          <img src={imageUrl || "https://via.placeholder.com/80/cccccc/ffffff?text=P"} alt={`${name} thumbnail`} className={styles.projectImage} />
+          <img src={imageUrl || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%23ccc'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' fill='%23fff' font-size='24' font-family='sans-serif'%3EP%3C/text%3E%3C/svg%3E"} alt={`${name} thumbnail`} className={styles.projectImage} />
         </div>
       </div>
       <div className={styles.cardBody}>

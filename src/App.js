@@ -58,9 +58,6 @@ import ProjectRecruitPreview from './pages/ProjectRecruit/ProjectRecruitPreview/
 import ProjectRecruitPublish from "./pages/ProjectRecruit/ProjectRecruitPublish/ProjectRecruitPublish";
 import ProjectRecruitPublishDone from "./pages/ProjectRecruit/ProjectRecruitPublish/ProjectRecruitPublishDone";
 
-// Firebase 전화번호 인증 테스트 페이지
-import PhoneAuthTestPage from './pages/PhoneAuthTestPage/PhoneAuthTestPage';
-
 // 휴대폰 본인인증 페이지
 import PhoneVerifyPage from './pages/PhoneVerifyPage/PhoneVerifyPage';
 import VerificationCodePage from './pages/VerificationCodePage/VerificationCodePage';
@@ -351,7 +348,6 @@ const App = () => {
 
             {/* ===== 데모 및 개발 도구 라우트 (개발용) ===== */}
             <Route path={DEMO_ROUTES.CATEGORY_SLIDER} element={<CategorySliderDemo />} />
-            <Route path="/phone-auth-test" element={<PhoneAuthTestPage />} />
 
             {/* ===== 휴대폰 본인인증 라우트 ===== */}
             <Route path="/phone-verify" element={<PublicRoute><PhoneVerifyPage /></PublicRoute>} />
