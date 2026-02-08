@@ -2,7 +2,7 @@
   padding: 16px;
   background-color: #F2F2F2;
   // min-height: 100vh; // Removed to allow proper flex scrolling within parent
-  padding-bottom: 100px; // Add padding to clear BottomNav
+  padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px)); // Add padding to clear BottomNav
   width: 100%; // Ensure full width on smaller devices
   max-width: 480px; // Relaxed max-width (covers Pro Max/Fold) instead of rigid 375px
   margin: 0 auto; // Center layout

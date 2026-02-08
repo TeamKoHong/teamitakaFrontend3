@@ -308,9 +308,6 @@ const App = () => {
             <Route path="/profile/register-project" element={<ProtectedRoute><ProjectRegisterPage /></ProtectedRoute>} />
             <Route path="/profile/project/view/:projectId" element={<ProjectDetailPage />} />
 
-            {/* ===== 테스트용 메인 (로그인 불필요) ===== */}
-            <Route path="/main" element={<MainPage />} />
-
             {/* ===== 프로젝트 관리 라우트 (로그인 제한 없음) ===== */}
             <Route path={PROJECT_ROUTES.MANAGEMENT} element={<ProjectManagement />} />
             <Route path={PROJECT_ROUTES.DETAIL} element={<ProjectDetailPage />} />

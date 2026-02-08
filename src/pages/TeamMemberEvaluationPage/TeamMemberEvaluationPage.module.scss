@@ -17,7 +17,7 @@ $track-bg: #ececec;
   flex-direction: column;
   align-items: center;
   padding-top: 69px; // Header(47px) + margin(22px)
-  padding-bottom: 80px; // BottomNav space
+  padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)); // BottomNav space
   box-sizing: border-box;
 }
 

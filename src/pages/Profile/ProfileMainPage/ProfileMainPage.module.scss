@@ -46,7 +46,7 @@
   flex: 1;
   padding: 0 16px;
   overflow-y: auto;
-  padding-bottom: 100px; // Enough space for BottomNav (88px) + extra
+  padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px)); // Enough space for BottomNav (88px) + extra
 }
 
 // 프로필 카드 (컴팩트 가로 배치)

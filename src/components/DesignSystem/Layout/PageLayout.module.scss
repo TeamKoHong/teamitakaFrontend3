@@ -6,7 +6,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 69px; // Header(47px) + margin(22px)
+    padding-top: calc(69px + env(safe-area-inset-top, 0px)); // Header(47px) + margin(22px) + safe-area
     padding-bottom: calc(88px + env(safe-area-inset-bottom) + 16px); // BottomNav(88px) + Safe Area + Buffer
     box-sizing: border-box;
 }
