@@ -12,6 +12,7 @@ $primary: #F76241;
 
   .topbar {
     position: sticky; top: 0; z-index: 10;
+    padding-top: env(safe-area-inset-top);
     height: 56px; display:flex; align-items:center; justify-content:center; background:#fff;
     .back { position:absolute; left:12px; width:44px; height:44px; display:flex; align-items:center; justify-content:center; background:none; border:0; cursor:pointer;
       .chevron { width:9px; height:9px; border-left:2px solid #2b2b2b; border-bottom:2px solid #2b2b2b; transform:rotate(45deg); opacity:.9; } }

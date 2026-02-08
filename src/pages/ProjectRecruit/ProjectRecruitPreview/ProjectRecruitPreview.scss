@@ -19,6 +19,7 @@ $cta: #f76241;
   position: sticky;
   top: 0;
   z-index: 10;
+  padding-top: env(safe-area-inset-top);
   height: 56px;
   display: flex;
   align-items: center;

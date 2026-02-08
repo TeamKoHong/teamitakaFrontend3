@@ -25,6 +25,7 @@ $footer-h: 74px;
     position: sticky;
     top: 0;
     z-index: 10;
+    padding-top: env(safe-area-inset-top);
     height: $topbar-h;
     display: grid;
     grid-template-columns: 64px 1fr 64px;
