@@ -77,11 +77,11 @@ export const CARRIER_OPTIONS = [
  * @type {Array<{id: string, label: string, required: boolean}>}
  */
 export const TERMS_LIST = [
-    { id: 'personalInfo', label: '개인정보 이용 동의', required: true },
-    { id: 'thirdParty', label: '제3자 정보제공 동의', required: true },
-    { id: 'timitakaPrivacy', label: '개인정보 수집 및 이용 동의 (티미타카)', required: true },
-    { id: 'timitakaThirdParty', label: '개인정보 제 3자 정보제공 동의 (티미타카)', required: true },
-    { id: 'uniqueId', label: '고유식별정보 수집 및 이용 동의 (티미타카)', required: true },
+    { id: 'personalInfo', label: '개인정보 이용 동의', required: true, url: '/privacy' },
+    { id: 'thirdParty', label: '제3자 정보제공 동의', required: true, url: '/privacy' },
+    { id: 'timitakaPrivacy', label: '개인정보 수집 및 이용 동의 (티미타카)', required: true, url: '/privacy' },
+    { id: 'timitakaThirdParty', label: '개인정보 제 3자 정보제공 동의 (티미타카)', required: true, url: '/privacy' },
+    { id: 'uniqueId', label: '고유식별정보 수집 및 이용 동의 (티미타카)', required: true, url: '/terms' },
 ];
 
 /**

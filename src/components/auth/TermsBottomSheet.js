@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import BottomSheet from '../Common/BottomSheet';
 import Button from '../DesignSystem/Button/Button';
 import { TERMS_LIST } from '../../types/auth';
@@ -12,6 +13,7 @@ import styles from './TermsBottomSheet.module.scss';
  * @param {Function} props.onAgree - 동의 완료 콜백
  */
 const TermsBottomSheet = ({ isOpen, onClose, onAgree }) => {
+    const navigate = useNavigate();
     const [checkedItems, setCheckedItems] = useState({});
 
     // 필수 항목만 필터링
@@ -98,7 +100,10 @@ const TermsBottomSheet = ({ isOpen, onClose, onAgree }) => {
                                     <span className={styles.required}>[필수]</span> {term.label}
                                 </span>
                             </div>
-                            <button className={styles.viewButton}>
+                            <button
+                                className={styles.viewButton}
+                                onClick={() => term.url && window.open(term.url, '_blank')}
+                            >
                                 <ChevronIcon />
                             </button>
                         </li>

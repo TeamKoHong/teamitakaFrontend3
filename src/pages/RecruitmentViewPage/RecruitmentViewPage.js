@@ -16,6 +16,9 @@ import { getRecruitment, deleteRecruitment, toggleRecruitmentScrap } from '../..
 import { getCurrentUser } from '../../services/auth';
 import { formatKoreanDateRange, formatRelativeTime } from '../../utils/dateUtils';
 import ApplicantListSlide from '../../components/ApplicantListSlide';
+import ReportModal from '../../components/Common/ReportModal';
+import AlertModal from '../../components/Common/AlertModal';
+import { blockUser } from '../../services/report';
 
 export default function RecruitmentViewPage() {
     const { id } = useParams();
@@ -30,6 +33,9 @@ export default function RecruitmentViewPage() {
 
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [showToast, setShowToast] = useState(false);
+    const [showReportModal, setShowReportModal] = useState(false);
+    const [showBlockConfirm, setShowBlockConfirm] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
 
     useEffect(() => {
         const userData = getCurrentUser();
@@ -129,6 +135,7 @@ export default function RecruitmentViewPage() {
         }));
 
         if (newState) {
+            setToastMessage('현재 게시글을 스크랩 했습니다.');
             setShowToast(true);
             setTimeout(() => setShowToast(false), 2000);
         }
@@ -161,6 +168,45 @@ export default function RecruitmentViewPage() {
         }
     };
 
+    const handleReport = () => {
+        setShowMoreMenu(false);
+        if (!currentUser) {
+            alert("로그인이 필요합니다.");
+            navigate('/login');
+            return;
+        }
+        setShowReportModal(true);
+    };
+
+    const handleBlockUser = () => {
+        setShowMoreMenu(false);
+        if (!currentUser) {
+            alert("로그인이 필요합니다.");
+            navigate('/login');
+            return;
+        }
+        setShowBlockConfirm(true);
+    };
+
+    const handleBlockConfirm = async () => {
+        try {
+            await blockUser(post.createdBy);
+            setShowBlockConfirm(false);
+            setToastMessage('사용자를 차단했습니다.');
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 2000);
+        } catch (err) {
+            alert(err.message || '차단에 실패했습니다.');
+            setShowBlockConfirm(false);
+        }
+    };
+
+    const handleReportSuccess = () => {
+        setToastMessage('신고가 접수되었습니다.');
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 2000);
+    };
+
     if (error) return <div className="view-page-status">{error}</div>;
     if (!post) return <div className="view-page-status">로딩 중...</div>;
 
@@ -171,19 +217,26 @@ export default function RecruitmentViewPage() {
                     <BackArrow />
                 </button>
                 <h1 className="title">모집글</h1>
-                {isOwner && (
-                    <div className="more-menu-container">
-                        <button onClick={() => setShowMoreMenu(!showMoreMenu)} className="more-button">
-                            <BsThreeDotsVertical size={20} />
-                        </button>
-                        {showMoreMenu && (
-                            <div className="more-menu">
-                                <button onClick={handleEdit} className="menu-item">게시글 수정하기</button>
-                                <button onClick={handleDelete} className="menu-item">게시글 삭제하기</button>
-                            </div>
-                        )}
-                    </div>
-                )}
+                <div className="more-menu-container">
+                    <button onClick={() => setShowMoreMenu(!showMoreMenu)} className="more-button">
+                        <BsThreeDotsVertical size={20} />
+                    </button>
+                    {showMoreMenu && (
+                        <div className="more-menu">
+                            {isOwner ? (
+                                <>
+                                    <button onClick={handleEdit} className="menu-item">게시글 수정하기</button>
+                                    <button onClick={handleDelete} className="menu-item">게시글 삭제하기</button>
+                                </>
+                            ) : (
+                                <>
+                                    <button onClick={handleReport} className="menu-item">신고하기</button>
+                                    <button onClick={handleBlockUser} className="menu-item">작성자 차단하기</button>
+                                </>
+                            )}
+                        </div>
+                    )}
+                </div>
             </header>
             <hr className="divider" />
 
@@ -238,7 +291,7 @@ export default function RecruitmentViewPage() {
                 <div className="toast-overlay">
                     <div className="toast-box">
                         <div className="check-circle">✓</div>
-                        <p>현재 게시글을 스크랩 했습니다.</p>
+                        <p>{toastMessage || '현재 게시글을 스크랩 했습니다.'}</p>
                     </div>
                 </div>
             )}
@@ -265,6 +318,25 @@ export default function RecruitmentViewPage() {
             {showApplicantList && (
                 <ApplicantListSlide open={showApplicantList} onClose={handleCloseApplicantList} recruitmentId={id} />
             )}
+
+            <ReportModal
+                isOpen={showReportModal}
+                onClose={() => setShowReportModal(false)}
+                targetType="recruitment"
+                targetId={id}
+                onSuccess={handleReportSuccess}
+            />
+
+            <AlertModal
+                isOpen={showBlockConfirm}
+                title="사용자를 차단하시겠습니까?"
+                description="차단하면 이 사용자의 게시글이 더 이상 표시되지 않습니다."
+                primaryLabel="차단"
+                secondaryLabel="취소"
+                onPrimary={handleBlockConfirm}
+                onSecondary={() => setShowBlockConfirm(false)}
+                onClose={() => setShowBlockConfirm(false)}
+            />
         </div>
     );
 }

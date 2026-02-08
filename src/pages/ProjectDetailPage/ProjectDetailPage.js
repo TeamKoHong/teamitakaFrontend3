@@ -60,7 +60,7 @@ function ProjectDetailPage() {
 
   return (
     <div className="project-detail-page-container">
-      <ProjectDetailHeader projectName={project?.title || "프로젝트명"} />
+      <ProjectDetailHeader projectName={project?.title || "프로젝트명"} projectId={id} />
       <MainFloatingBox projectId={id} />
       <ProjectDetailSlideBox project={project} />
       <TodoBox projectId={id} />

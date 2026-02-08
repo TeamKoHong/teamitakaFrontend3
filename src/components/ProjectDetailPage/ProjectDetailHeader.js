@@ -1,18 +1,20 @@
 import BackArrow from "../Common/UI/BackArrow";
 import { useNavigate } from "react-router-dom";
 import "./ProjectDetailHeader.scss";
-import React, { useState, useRef } from "react"; // useRef 추가
+import React, { useState, useRef } from "react";
 import BottomSheet from "../Common/BottomSheet";
+import ReportModal from "../Common/ReportModal";
 
-function ProjectDetailHeader({ projectName }) {
+function ProjectDetailHeader({ projectName, projectId }) {
   const navigate = useNavigate();
-  
+
   // 1. 파일 선택을 위한 Ref 생성
   const fileRef = useRef(null);
-  
+
   const [sheetOpen, setSheetOpen] = useState(false);
   // 선택된 이미지 데이터를 저장할 state (필요하다면 상위 컴포넌트로 올리거나 API 연동)
-  const [backgroundImage, setBackgroundImage] = useState(null); 
+  const [backgroundImage, setBackgroundImage] = useState(null);
+  const [showReportModal, setShowReportModal] = useState(false);
 
   const handleBack = () => {
     navigate("/project-management");
@@ -87,7 +89,13 @@ function ProjectDetailHeader({ projectName }) {
         </div>
 
         <p>{projectName}</p>
-        <div className="header-spacer"></div>
+        <div className="header-report-btn" onClick={() => setShowReportModal(true)} style={{ cursor: 'pointer', padding: '4px' }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="5" r="1.5" fill="#1A1A1A"/>
+            <circle cx="12" cy="12" r="1.5" fill="#1A1A1A"/>
+            <circle cx="12" cy="19" r="1.5" fill="#1A1A1A"/>
+          </svg>
+        </div>
       </div>
 
       {/* 이미지 클릭 영역 (바텀시트 열기) */}
@@ -112,6 +120,13 @@ function ProjectDetailHeader({ projectName }) {
           </ul>
         </div>
       </BottomSheet>
+
+      <ReportModal
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        targetType="project"
+        targetId={projectId}
+      />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { apiFetch } from './api';
+import { apiFetch, apiFetchJson } from './api';
 
 export const getMe = async () => {
     const res = await apiFetch('/api/auth/me');
@@ -69,6 +69,31 @@ export const updateProfile = async (profileData) => {
  * @param {Object} resultData - { type: string, answers: boolean[] }
  * @returns {Promise<Object>}
  */
+/**
+ * 회원 탈퇴 (계정 삭제)
+ * @param {string} password - 비밀번호 재확인
+ * @returns {Promise<{success: boolean}>}
+ */
+export const deleteAccount = async (password) => {
+    const res = await apiFetch('/api/auth/withdraw', {
+        method: 'POST',
+        body: JSON.stringify({ password }),
+    });
+
+    if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        if (res.status === 401) {
+            const err = new Error('비밀번호가 일치하지 않습니다.');
+            err.code = 'INVALID_PASSWORD';
+            throw err;
+        }
+        const err = new Error(errorData.message || '회원 탈퇴에 실패했습니다.');
+        err.code = errorData.code || 'SERVER_ERROR';
+        throw err;
+    }
+    return res.json();
+};
+
 export const saveTypeResult = async (resultData) => {
     const res = await apiFetch('/api/user/type-result', {
         method: 'POST',
