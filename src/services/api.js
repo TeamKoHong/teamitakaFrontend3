@@ -13,21 +13,43 @@ import { getAuthHeader } from '../utils/tokenManager';
  * 전역 에러 처리가 포함된 fetch 래퍼
  * @param {string} endpoint - API 엔드포인트 (예: '/api/auth/login')
  * @param {RequestInit} options - fetch 옵션
+ * @param {number} _retryCount - 내부 재시도 카운터 (직접 사용하지 마세요)
  * @returns {Promise<Response>}
  */
-export const apiFetch = async (endpoint, options = {}) => {
+export const apiFetch = async (endpoint, options = {}, _retryCount = 0) => {
     const { API_BASE_URL, headers: defaultHeaders } = getApiConfig();
 
     const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
 
-    const response = await fetch(url, {
-        ...options,
-        headers: {
-            ...defaultHeaders,
-            ...getAuthHeader(),
-            ...options.headers,
-        },
-    });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 45000);
+
+    let response;
+    try {
+        response = await fetch(url, {
+            ...options,
+            signal: controller.signal,
+            headers: {
+                ...defaultHeaders,
+                ...getAuthHeader(),
+                ...options.headers,
+            },
+        });
+    } catch (error) {
+        clearTimeout(timeoutId);
+
+        // 네트워크/타임아웃 에러 시 재시도 (최대 2회, 지수 백오프)
+        const isRetryable = error.name === 'AbortError' || error.name === 'TypeError' ||
+            (error.message && (error.message.includes('fetch') || error.message.includes('network')));
+        if (isRetryable && _retryCount < 2) {
+            await new Promise(resolve => setTimeout(resolve, 2000 * (_retryCount + 1)));
+            return apiFetch(endpoint, options, _retryCount + 1);
+        }
+
+        throw error;
+    }
+
+    clearTimeout(timeoutId);
 
     // 응답 처리
     if (!response.ok) {
@@ -35,13 +57,11 @@ export const apiFetch = async (endpoint, options = {}) => {
 
         // 사용자 미발견 시 로그인 페이지로 리다이렉트
         if (errorData.message === '사용자를 찾을 수 없습니다.') {
-
             handleAuthError();
         }
 
         // 인증 실패 (401) 시 로그인 페이지로 리다이렉트
         if (response.status === 401) {
-
             handleAuthError();
         }
     }

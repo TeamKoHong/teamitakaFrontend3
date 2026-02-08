@@ -5,9 +5,14 @@ const config: CapacitorConfig = {
   appName: '티미타카',
   webDir: 'build',
   server: {
-    androidScheme: 'https'
+    androidScheme: 'https',
+    iosScheme: 'https',
+    allowNavigation: ['teamitakabackend.onrender.com'],
   },
   plugins: {
+    CapacitorHttp: {
+      enabled: true,
+    },
     SplashScreen: {
       launchShowDuration: 2000,
       launchAutoHide: true,

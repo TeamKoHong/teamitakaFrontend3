@@ -60,7 +60,7 @@ export const sendVerificationCode = async (email, retryCount = 0) => {
 
         // 백엔드에서 이메일 중복 체크
         const { API_BASE_URL, headers } = getApiConfig();
-        const checkResponse = await fetch(`${API_BASE_URL}/api/auth/check-email`, {
+        const checkResponse = await fetchWithTimeout(`${API_BASE_URL}/api/auth/check-email`, {
             method: 'POST',
             headers,
             body: JSON.stringify({ email }),
@@ -118,9 +118,19 @@ const isValidEmail = (email) => {
 // 네트워크 에러 판단 함수
 const isNetworkError = (error) => {
     return error.name === 'TypeError' ||
+        error.name === 'AbortError' ||
         error.message.includes('fetch') ||
         error.message.includes('network') ||
-        error.message.includes('Failed to fetch');
+        error.message.includes('Failed to fetch') ||
+        error.message.includes('aborted');
+};
+
+// 타임아웃 포함 fetch (Render cold start 대응, 기본 30초)
+const fetchWithTimeout = (url, options = {}, timeoutMs = 30000) => {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeoutMs);
+    return fetch(url, { ...options, signal: controller.signal })
+        .finally(() => clearTimeout(id));
 };
 
 // 로딩 상태 관리 함수들
@@ -257,7 +267,7 @@ export const checkVerificationStatus = async (email) => {
     try {
         const { API_BASE_URL, headers } = getApiConfig();
 
-        const response = await fetch(`${API_BASE_URL}/api/auth/status?email=${encodeURIComponent(email)}`, {
+        const response = await fetchWithTimeout(`${API_BASE_URL}/api/auth/status?email=${encodeURIComponent(email)}`, {
             method: 'GET',
             headers,
         });
@@ -284,7 +294,7 @@ export const registerUser = async (userData) => {
     try {
         const { API_BASE_URL, headers } = getApiConfig();
 
-        const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+        const response = await fetchWithTimeout(`${API_BASE_URL}/api/auth/register`, {
             method: 'POST',
             headers,
             body: JSON.stringify(userData),
@@ -343,16 +353,16 @@ const mapLoginErrorMessage = (status, errorData) => {
     return message || '로그인에 실패했습니다.';
 };
 
-// 사용자 로그인
-export const loginUser = async (loginData) => {
+// 사용자 로그인 (Render cold start 대응: 재시도 + 타임아웃)
+export const loginUser = async (loginData, retryCount = 0) => {
     try {
         const { API_BASE_URL, headers } = getApiConfig();
 
-        const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+        const response = await fetchWithTimeout(`${API_BASE_URL}/api/auth/login`, {
             method: 'POST',
             headers,
             body: JSON.stringify(loginData),
-        });
+        }, 30000);
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({ message: '응답을 파싱할 수 없습니다.' }));
@@ -381,8 +391,14 @@ export const loginUser = async (loginData) => {
         return result;
     } catch (error) {
 
+        // 네트워크 에러 시 재시도 (최대 2회, 지수 백오프)
+        if (isNetworkError(error) && retryCount < 2) {
+            await new Promise(resolve => setTimeout(resolve, 2000 * (retryCount + 1)));
+            return loginUser(loginData, retryCount + 1);
+        }
+
         if (isNetworkError(error)) {
-            const err = new Error('네트워크 오류가 발생했습니다. 연결을 확인하고 다시 시도해주세요.');
+            const err = new Error('서버 연결에 실패했습니다. 잠시 후 다시 시도해주세요.');
             err.code = 'NETWORK_ERROR';
             throw err;
         }
@@ -445,7 +461,7 @@ export const refreshToken = async () => {
             throw new Error('저장된 토큰이 없습니다.');
         }
 
-        const response = await fetch(`${API_BASE_URL}/api/auth/refresh`, {
+        const response = await fetchWithTimeout(`${API_BASE_URL}/api/auth/refresh`, {
             method: 'POST',
             headers: {
                 ...headers,
