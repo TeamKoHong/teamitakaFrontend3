@@ -8,6 +8,7 @@
 
 import { getApiConfig } from './auth';
 import { getAuthHeader } from '../utils/tokenManager';
+import { Sentry } from '../config/sentry';
 
 /**
  * 전역 에러 처리가 포함된 fetch 래퍼
@@ -37,6 +38,14 @@ export const apiFetch = async (endpoint, options = {}, _retryCount = 0) => {
         });
     } catch (error) {
         clearTimeout(timeoutId);
+
+        if (Sentry?.addBreadcrumb) {
+            Sentry.addBreadcrumb({
+                category: 'network',
+                message: `${options.method || 'GET'} ${endpoint} failed: ${error.message}`,
+                level: 'error',
+            });
+        }
 
         // 네트워크/타임아웃 에러 시 재시도 (최대 2회, 지수 백오프)
         const isRetryable = error.name === 'AbortError' || error.name === 'TypeError' ||

@@ -19,13 +19,15 @@ export const PushNotificationProvider = ({ children }) => {
 
   // 알림 탭 핸들러
   const handleNotificationTapped = useCallback((notification, actionId) => {
-
-    // 알림 데이터에 따라 적절한 화면으로 네비게이션
     const data = notification.data;
-    if (data?.type === 'project') {
-      // navigate(`/project/${data.projectId}`);
-    } else if (data?.type === 'message') {
-      // navigate('/messages');
+    if (data?.type === 'project' && data?.projectId) {
+      window.location.href = `/project/${data.projectId}/detail`;
+    } else if (data?.type === 'recruitment' && data?.recruitmentId) {
+      window.location.href = `/recruitment/${data.recruitmentId}`;
+    } else if (data?.type === 'evaluation' && data?.projectId) {
+      window.location.href = `/evaluation/${data.projectId}`;
+    } else {
+      window.location.href = '/notifications';
     }
   }, []);
 

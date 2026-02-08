@@ -74,6 +74,8 @@ import { PushNotificationProvider } from './contexts/PushNotificationContext';
 import GlobalToastSystem from './components/Common/GlobalToastSystem';
 import AuthEventBridge from './components/Common/AuthEventBridge';
 import ErrorBoundary from './components/Common/ErrorBoundary';
+import OfflineBanner from './components/Common/OfflineBanner';
+import { useDeepLink } from './hooks/useDeepLink';
 import ProtectedRoute, { PublicRoute } from './components/ProtectedRoute';
 import ProfileVerificationPage from './pages/Profile/ProfileVerificationPage';
 
@@ -276,6 +278,12 @@ const NativeAppInitializer = ({ children }) => {
   return children;
 };
 
+// ===== 딥링크 핸들러 =====
+const DeepLinkHandler = () => {
+  useDeepLink();
+  return null;
+};
+
 // ===== 메인 앱 컴포넌트 =====
 
 const App = () => {
@@ -283,6 +291,8 @@ const App = () => {
     <ErrorBoundary>
     <Router>
       <NativeAppInitializer>
+      <OfflineBanner />
+      <DeepLinkHandler />
       <PushNotificationProvider>
       <AuthProvider>
         <UniversityFilterProvider>
